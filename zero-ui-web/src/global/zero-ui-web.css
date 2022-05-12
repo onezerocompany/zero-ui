@@ -1,0 +1,40 @@
+/* import fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* reset css */
+@import '../../../node_modules/normalize.css/normalize.css';
+
+/* set default size of website */
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background: black;
+  background: var(--color-background, #fff);
+}
+
+:root {
+  /* colors */
+  --color-text-primary: #3e3d3f;
+  /* header */
+  --color-header: #f2f2fe;
+  --color-header-text: #362f2f;
+  /* background */
+  --color-background: #edeef1;
+  --color-bar-background: #f6f6f6b3;
+  --color-code-background: #544e5d4d;
+  /* typography */
+  --font-heading: 'Inter', sans-serif;
+  --font-content: 'Inter', sans-serif;
+  --input-background: #f6f6f6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text-primary: #dddddd;
+    --color-background: #060606;
+    --color-header: #1f1f1f;
+    --color-header-text: #f6f6f6;
+    --color-bar-background: #1a1a1ab3;
+  }
+}

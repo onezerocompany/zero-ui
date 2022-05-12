@@ -1,0 +1,96 @@
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+label,
+p.value {
+  color: var(--color-text-primary);
+  font-family: var(--font-content);
+  font-weight: 600;
+  letter-spacing: 0.02rem;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  margin: 0;
+  padding: 0;
+}
+
+input {
+  appearance: none;
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  width: 100%;
+  max-width: var(--max-width, 100%);
+  box-sizing: border-box;
+  outline: none;
+  font-family: var(--font-content);
+}
+
+/* color */
+input[type='color'] {
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 1rem;
+  appearance: none;
+}
+
+input[type='color']::-webkit-color-swatch {
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+/* range slider */
+input[type='range'] {
+  margin: 0;
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 1rem;
+  background: var(--color-background, #dfdcdc);
+  margin-top: 0.5rem;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  appearance: none;
+  background: var(--color-text-primary, #000);
+  border-radius: 100%;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+/* checkbox */
+input[type='checkbox'] {
+  position: relative;
+  margin: 0;
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 2px solid var(--color-checkbox-checked, #000);
+  appearance: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+input[type='checkbox']:checked::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 28%;
+  border-width: 0 2px 2px 0;
+  border-color: var(--color-checkbox-checked, #000);
+  border-style: solid;
+  height: 45%;
+  width: 30%;
+  transform: rotate(45deg);
+}
+
+/* hide file select button */
+input[type='file'] {
+  display: none;
+}

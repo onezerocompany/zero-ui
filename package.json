@@ -1,0 +1,6 @@
+{
+  "workspaces": [
+    "zero-ui-web",
+    "zero-ui-react"
+  ]
+}

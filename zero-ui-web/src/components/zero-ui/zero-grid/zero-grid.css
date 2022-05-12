@@ -1,0 +1,8 @@
+.zero-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(var(--min-width, 300px), 1fr)
+  );
+  gap: var(--spacing, 1rem);
+}

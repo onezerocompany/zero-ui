@@ -1,0 +1,46 @@
+.header {
+  z-index: 10;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-header, #2a2a2a);
+  color: var(--color-header-text, #fff);
+}
+
+.content {
+  position: relative;
+  z-index: 100;
+  max-height: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12rem 2rem;
+  margin-top: 4rem;
+  box-sizing: border-box;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+}
+
+.background img,
+.background video,
+.background iframe,
+.background object,
+::slotted(img),
+::slotted(video),
+::slotted(iframe),
+::slotted(object) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}

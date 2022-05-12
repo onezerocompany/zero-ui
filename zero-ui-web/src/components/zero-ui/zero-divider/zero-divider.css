@@ -1,0 +1,9 @@
+.divider {
+  display: block;
+  width: 100%;
+  background: linear-gradient(to right, var(--colors, #000));
+  height: var(--thickness, 1px);
+  margin: var(--spacing, 1rem) 0;
+  opacity: var(--opacity, 1);
+  border-radius: 2px;
+}

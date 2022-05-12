@@ -1,0 +1,106 @@
+p {
+  color: var(--color, #000);
+  display: block;
+  font-family: var(--font-content, sans-serif);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+  text-size-adjust: 100%;
+  padding: 0;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+p.uppercase {
+  text-transform: uppercase;
+}
+
+p.gradient {
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+.style-normal {
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.style-input-title {
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.02rem;
+  text-transform: capitalize;
+}
+
+/* display headings */
+
+.style-display-1 {
+  font-weight: 700;
+  font-size: 5.5rem;
+}
+
+.style-display-2 {
+  font-weight: 700;
+  font-size: 5rem;
+}
+
+.style-display-3 {
+  font-weight: 700;
+  font-size: 4.5rem;
+}
+
+.style-display-4 {
+  font-weight: 700;
+  font-size: 4rem;
+}
+
+/* regular headings */
+
+.style-heading-1 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 0.2rem 0;
+}
+
+.style-heading-2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 0.4rem 0;
+}
+
+.style-heading-3 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 0.4rem 0;
+}
+
+.style-heading-4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 0.4rem 0;
+}
+
+.style-heading-5 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 0.4rem 0;
+}
+
+.style-heading-6 {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  padding: 0.4rem 0;
+}
+
+/* special styles */
+.style-bar-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}

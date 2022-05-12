@@ -1,0 +1,22 @@
+.top-bar {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+  transition: padding 0.3s ease-in-out;
+}
+
+:host-context(.scrolled) .top-bar {
+  padding: 0;
+  --corner-radius: 0 !important;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
