@@ -6,6 +6,8 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface ButtonsSection {
+    }
     interface ContainerSection {
     }
     interface InputsSection {
@@ -15,6 +17,11 @@ export namespace Components {
     interface ZeroBar {
         "elevation": number;
         "titleText"?: string;
+    }
+    interface ZeroButton {
+        "label": string;
+    }
+    interface ZeroCard {
     }
     interface ZeroContainer {
         "background": string;
@@ -73,6 +80,12 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLButtonsSectionElement extends Components.ButtonsSection, HTMLStencilElement {
+    }
+    var HTMLButtonsSectionElement: {
+        prototype: HTMLButtonsSectionElement;
+        new (): HTMLButtonsSectionElement;
+    };
     interface HTMLContainerSectionElement extends Components.ContainerSection, HTMLStencilElement {
     }
     var HTMLContainerSectionElement: {
@@ -96,6 +109,18 @@ declare global {
     var HTMLZeroBarElement: {
         prototype: HTMLZeroBarElement;
         new (): HTMLZeroBarElement;
+    };
+    interface HTMLZeroButtonElement extends Components.ZeroButton, HTMLStencilElement {
+    }
+    var HTMLZeroButtonElement: {
+        prototype: HTMLZeroButtonElement;
+        new (): HTMLZeroButtonElement;
+    };
+    interface HTMLZeroCardElement extends Components.ZeroCard, HTMLStencilElement {
+    }
+    var HTMLZeroCardElement: {
+        prototype: HTMLZeroCardElement;
+        new (): HTMLZeroCardElement;
     };
     interface HTMLZeroContainerElement extends Components.ZeroContainer, HTMLStencilElement {
     }
@@ -146,10 +171,13 @@ declare global {
         new (): HTMLZeroTextElement;
     };
     interface HTMLElementTagNameMap {
+        "buttons-section": HTMLButtonsSectionElement;
         "container-section": HTMLContainerSectionElement;
         "inputs-section": HTMLInputsSectionElement;
         "typography-section": HTMLTypographySectionElement;
         "zero-bar": HTMLZeroBarElement;
+        "zero-button": HTMLZeroButtonElement;
+        "zero-card": HTMLZeroCardElement;
         "zero-container": HTMLZeroContainerElement;
         "zero-divider": HTMLZeroDividerElement;
         "zero-grid": HTMLZeroGridElement;
@@ -161,6 +189,8 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface ButtonsSection {
+    }
     interface ContainerSection {
     }
     interface InputsSection {
@@ -170,6 +200,11 @@ declare namespace LocalJSX {
     interface ZeroBar {
         "elevation"?: number;
         "titleText"?: string;
+    }
+    interface ZeroButton {
+        "label"?: string;
+    }
+    interface ZeroCard {
     }
     interface ZeroContainer {
         "background"?: string;
@@ -207,6 +242,7 @@ declare namespace LocalJSX {
         "max"?: number;
         "min"?: number;
         "name"?: string;
+        "onValueChanged"?: (event: CustomEvent<string>) => void;
         "placeholder"?: string;
         "step"?: number;
         "type"?: string;
@@ -227,10 +263,13 @@ declare namespace LocalJSX {
         "uppercase"?: boolean;
     }
     interface IntrinsicElements {
+        "buttons-section": ButtonsSection;
         "container-section": ContainerSection;
         "inputs-section": InputsSection;
         "typography-section": TypographySection;
         "zero-bar": ZeroBar;
+        "zero-button": ZeroButton;
+        "zero-card": ZeroCard;
         "zero-container": ZeroContainer;
         "zero-divider": ZeroDivider;
         "zero-grid": ZeroGrid;
@@ -245,10 +284,13 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "buttons-section": LocalJSX.ButtonsSection & JSXBase.HTMLAttributes<HTMLButtonsSectionElement>;
             "container-section": LocalJSX.ContainerSection & JSXBase.HTMLAttributes<HTMLContainerSectionElement>;
             "inputs-section": LocalJSX.InputsSection & JSXBase.HTMLAttributes<HTMLInputsSectionElement>;
             "typography-section": LocalJSX.TypographySection & JSXBase.HTMLAttributes<HTMLTypographySectionElement>;
             "zero-bar": LocalJSX.ZeroBar & JSXBase.HTMLAttributes<HTMLZeroBarElement>;
+            "zero-button": LocalJSX.ZeroButton & JSXBase.HTMLAttributes<HTMLZeroButtonElement>;
+            "zero-card": LocalJSX.ZeroCard & JSXBase.HTMLAttributes<HTMLZeroCardElement>;
             "zero-container": LocalJSX.ZeroContainer & JSXBase.HTMLAttributes<HTMLZeroContainerElement>;
             "zero-divider": LocalJSX.ZeroDivider & JSXBase.HTMLAttributes<HTMLZeroDividerElement>;
             "zero-grid": LocalJSX.ZeroGrid & JSXBase.HTMLAttributes<HTMLZeroGridElement>;

@@ -1,4 +1,4 @@
-import { Component, Prop, h } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, h } from '@stencil/core';
 
 @Component({
   tag: 'zero-input',
@@ -20,6 +20,8 @@ export class ZeroInput {
     attribute: 'value',
   })
   value: string;
+
+  @Event() valueChanged: EventEmitter<string>;
 
   private horizontalInputs = ['color', 'checkbox'];
 
@@ -59,7 +61,10 @@ export class ZeroInput {
           min={this.min}
           max={this.max}
           step={this.step}
-          onInput={(e) => (this.value = (e.target as HTMLInputElement).value)}
+          onInput={(e) => {
+            this.value = (e.target as HTMLInputElement).value;
+            this.valueChanged.emit(this.value);
+          }}
         />
         {this.type === 'file' ? (
           <zero-text>Insert button to select file</zero-text>

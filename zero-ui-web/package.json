@@ -35,7 +35,6 @@
     "@onezerocompany/prettier-config": "^1.3.11",
     "@onezerocompany/tsconfig": "^1.3.11",
     "@stencil/postcss": "^2.1.0",
-    "@types/autoprefixer": "^10.2.0",
     "@types/jest": "^27.0.3",
     "autoprefixer": "^10.4.7",
     "jest": "^27.4.5",

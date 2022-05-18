@@ -4,11 +4,12 @@ export default function () {
   var scrolled = false;
   document.addEventListener('scroll', () => {
     const scrollTop =
-      document.documentElement.scrollTop || document.body.scrollTop;
+      document.documentElement.scrollTop ||
+      document.body.scrollTop;
 
     const scaffolds = document.querySelectorAll('zero-scaffold');
 
-    if (scrollTop > 10 !== scrolled) {
+    if (scrollTop > 50 !== scrolled) {
       scrolled = scrollTop > 10;
       document.dispatchEvent(
         new CustomEvent('zero-scrolled', {

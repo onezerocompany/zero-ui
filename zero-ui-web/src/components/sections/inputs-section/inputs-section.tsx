@@ -1,20 +1,10 @@
-import { Component, h, State } from '@stencil/core';
+import { Component, h } from '@stencil/core';
 
 @Component({
   tag: 'inputs-section',
   shadow: true,
 })
 export class InputsSection {
-  @State() cornerRadius = 1;
-  @State() elevation = 10;
-  @State() edge = 0.2;
-  @State() neu = 0;
-  @State() shadow = 0.2;
-  @State() glow = 0.1;
-  @State() edgeGlow = 0.6;
-  @State() backgroundBlur = 0;
-  @State() padding = 2;
-  @State() spacing = 1;
 
   types() {
     return [
@@ -42,16 +32,15 @@ export class InputsSection {
     return (
       <zero-section sectionTitle="Inputs" colors="var(--inputs-gradient, #000)">
         <zero-container
-          elevation={this.elevation}
-          edge={this.edge}
-          edge-glow={this.edgeGlow}
-          neu={this.neu}
-          corner-radius={this.cornerRadius}
-          shadow={this.shadow}
-          glow={this.glow}
-          background-blur={this.backgroundBlur}
-          padding={this.padding}
-          spacing={this.spacing}
+          elevation={10}
+          edge={0.5}
+          edge-glow={1}
+          neu={0}
+          corner-radius={2}
+          shadow={0.6}
+          glow={0.6}
+          padding={2}
+          spacing={2}
         >
           <zero-grid>
             {this.types().map((type) => (

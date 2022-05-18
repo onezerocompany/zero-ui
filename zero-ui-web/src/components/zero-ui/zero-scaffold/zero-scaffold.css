@@ -7,8 +7,8 @@
   transition: padding 0.3s ease-in-out;
 }
 
-:host-context(.scrolled) .top-bar {
-  padding: 0;
+:host(.scrolled) .top-bar {
+  padding: 0 !important;
   --corner-radius: 0 !important;
 }
 

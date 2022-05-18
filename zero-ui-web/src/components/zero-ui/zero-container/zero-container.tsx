@@ -19,7 +19,7 @@ export class ZeroContainer {
   // elevation
   @Prop() elevation = 0;
   @Prop() neu = 0;
-  @Prop() shadow = 0;
+  @Prop() shadow = 0.5;
 
   // glow
   @Prop() edge = 0;

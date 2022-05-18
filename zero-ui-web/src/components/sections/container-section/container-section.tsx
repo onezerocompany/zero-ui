@@ -109,6 +109,9 @@ export class ContainerSection {
                 min={variable.min}
                 max={variable.max}
                 value={this[variable.value]}
+                onValueChanged={(e) => {
+                  this[variable.value] = e.detail;
+                }}
               ></zero-input>
             ))}
           </zero-grid>

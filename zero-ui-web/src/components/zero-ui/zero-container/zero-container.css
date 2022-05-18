@@ -3,7 +3,7 @@
   box-sizing: border-box;
   border-radius: var(--corner-radius, 0.5rem);
   padding: 1px;
-  transition: border-radius 0.2s ease-in-out 0.15s;
+  transition: border-radius 0.2s ease-in-out 0.15s, box-shadow 120ms;
 }
 
 .zero-container.blurred {
