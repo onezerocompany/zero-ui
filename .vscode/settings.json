@@ -7,8 +7,9 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/node_modules": true,
-    "**/dist": false,
-    "**/loader": true
+    "**/dist": true,
+    "**/loader": true,
+    "**/www": true
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",

@@ -2,5 +2,8 @@
   "workspaces": [
     "zero-ui-web",
     "zero-ui-react"
-  ]
+  ],
+  "scripts": {
+    "build": "npm run -ws build"
+  }
 }

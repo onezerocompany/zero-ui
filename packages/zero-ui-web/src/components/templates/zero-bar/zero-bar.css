@@ -1,0 +1,16 @@
+:host {
+  width: 100%;
+}
+
+.bar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.left-content {
+  padding: 0.5rem;
+  flex: 1;
+}
