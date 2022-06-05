@@ -15,5 +15,8 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[dart]": {
+    "editor.defaultFormatter": "ms-vsliveshare.vsliveshare"
   }
 }
