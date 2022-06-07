@@ -14,8 +14,11 @@ class ZeroApp extends StatefulWidget {
 class _ZeroAppState extends State<ZeroApp> {
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-        textDirection: TextDirection.ltr,
-        child: ZeroScaffold(theme: widget.theme, body: widget.body));
+    return WidgetsApp(
+      color: widget.theme?.colors.surface.color ?? const Color(0x00000000),
+      builder: (context, child) {
+        return widget.body ?? ZeroScaffold(theme: widget.theme);
+      },
+    );
   }
 }

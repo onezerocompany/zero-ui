@@ -4,21 +4,29 @@ import 'package:zero_ui/zero_ui.dart';
 class ZeroContainer extends StatelessWidget {
   const ZeroContainer({
     Key? key,
-    this.content,
+    this.style,
     this.theme,
+    this.content,
   }) : super(
           key: key,
         );
 
+  final ZeroStyle? style;
   final ZeroTheme? theme;
   final Widget? content;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints.expand(),
-      color: Color(theme?.colors.surface.color ?? 0x00000000),
-      child: Center(child: content),
+      width: style?.width ?? double.infinity,
+      height: style?.height ?? double.infinity,
+      margin: style?.margin,
+      padding: style?.padding,
+      constraints: style?.boxConstraints,
+      decoration: style?.boxDecoration,
+      child: Center(
+        child: content,
+      ),
     );
   }
 }
