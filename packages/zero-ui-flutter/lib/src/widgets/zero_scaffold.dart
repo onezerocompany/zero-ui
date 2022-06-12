@@ -36,7 +36,7 @@ class _ZeroScaffoldState extends State<ZeroScaffold> {
                 //   borderRadius: BorderRadius.all(Radius.circular(12)),
                 // ),
                 // constraints: const BoxConstraints.expand(height: 80),
-                content: widget.content ?? const Text('Top bar'),
+                content: widget.content ?? const ZeroText(content: 'Top bar'),
                 style: ZeroStyle(
                   height: 80,
                 ),
