@@ -69,6 +69,8 @@ export namespace Components {
         "lightScheme"?: string;
         "maxHeight": string;
         "maxWidth": string;
+        "minHeight": string;
+        "minWidth": string;
         "neuness": number;
         "padding": number;
         "paddingRatio": number;
@@ -108,7 +110,7 @@ export namespace Components {
         "type": string;
         "validate": boolean;
         "validator"?: (value: string) => boolean | string;
-        "value": string;
+        "value": string | number;
         "valueTemplate": string;
     }
     interface ZeroScaffold {
@@ -122,6 +124,7 @@ export namespace Components {
         "sectionTitle": string;
     }
     interface ZeroText {
+        "align": 'left' | 'center' | 'right';
         "capitalize": boolean;
         "color"?: string;
         "darkScheme"?: string;
@@ -323,6 +326,8 @@ declare namespace LocalJSX {
         "lightScheme"?: string;
         "maxHeight"?: string;
         "maxWidth"?: string;
+        "minHeight"?: string;
+        "minWidth"?: string;
         "neuness"?: number;
         "padding"?: number;
         "paddingRatio"?: number;
@@ -363,7 +368,7 @@ declare namespace LocalJSX {
         "type"?: string;
         "validate"?: boolean;
         "validator"?: (value: string) => boolean | string;
-        "value"?: string;
+        "value"?: string | number;
         "valueTemplate"?: string;
     }
     interface ZeroScaffold {
@@ -377,6 +382,7 @@ declare namespace LocalJSX {
         "sectionTitle": string;
     }
     interface ZeroText {
+        "align"?: 'left' | 'center' | 'right';
         "capitalize"?: boolean;
         "color"?: string;
         "darkScheme"?: string;

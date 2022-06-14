@@ -107,7 +107,6 @@ input::-webkit-search-decoration,
 input::-webkit-search-cancel-button,
 input::-webkit-search-results-button,
 input::-webkit-search-results-decoration,
-input::-webkit-textfield-decoration-container,
 input::-webkit-clear-button,
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button,
@@ -117,12 +116,12 @@ input::-webkit-calendar-picker-indicator {
 
 .error {
   height: 100%;
-  max-height: 0px;
+  max-height: 0;
   opacity: 0;
   transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
 
 .show-error .error {
-  max-height: 3rem;
+  max-height: 4rem;
   opacity: 1;
 }

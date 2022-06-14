@@ -11,6 +11,7 @@ p {
   margin: 0;
   letter-spacing: var(--letter-spacing, -0.02rem);
   line-height: var(--line-height, 1);
+  text-align: var(--text-align, left);
 }
 
 .uppercase span.content {

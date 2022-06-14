@@ -32,6 +32,8 @@ export class ZeroText {
   @Prop() lineHeight?: number;
   @Prop() letterSpacing?: number;
 
+  @Prop() align: 'left' | 'center' | 'right' = 'left';
+
   // transform
   @Prop() uppercase = false;
   @Prop() lowercase = false;
@@ -54,11 +56,13 @@ export class ZeroText {
     if (this.letterSpacing)
       vars['--letter-spacing'] = `${this.letterSpacing}rem`;
 
-    if (this.color) vars['--text-color'] = this.color;
+    if (this.color?.length > 0) vars['--text-color'] = this.color;
+
     vars['--icon-left-spacing'] =
       this.iconPosition === 'leading' ? '0' : `${this.spacing}rem`;
     vars['--icon-right-spacing'] =
       this.iconPosition === 'trailing' ? '0' : `${this.spacing}rem`;
+    vars['--text-align'] = this.align;
 
     if (this.gradient) {
       const gradient = gradientFor(this.gradient);
@@ -94,19 +98,20 @@ export class ZeroText {
         darkScheme={this.darkScheme}
         direction="horizontal"
         spacing={this.spacing}
-        style={this.cssVars}
         class={this.classes}
         padding={this.padding}
         paddingRatio={this.paddingRatio}
         fill={false}
       >
-        <p>
+        <p style={this.cssVars}>
           {this.hasIcon && this.iconPosition === 'leading' ? (
             <span style={this.cssVars} class="material-symbols-outlined">
               {this.icon}
             </span>
           ) : null}
-          <span class="content">{this.el.textContent}</span>
+          <span class="content">
+            <slot></slot>
+          </span>
           {this.hasIcon && this.iconPosition === 'trailing' ? (
             <span class="material-symbols-outlined">{this.icon}</span>
           ) : null}

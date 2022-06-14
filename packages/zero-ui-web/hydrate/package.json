@@ -1,0 +1,6 @@
+{
+  "name": "@onezerocompany/zero-ui-web/hydrate",
+  "description": "ZeroUiWeb component hydration app.",
+  "main": "index.js",
+  "types": "index.d.ts"
+}

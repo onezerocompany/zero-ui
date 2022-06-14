@@ -1,4 +1,8 @@
 import { Component, Prop, Event, EventEmitter, h, State } from '@stencil/core';
+import { validateMail } from '../../../lib/validators/mail';
+import { validatePassword } from '../../../lib/validators/password';
+import { validatePhone } from '../../../lib/validators/phone';
+import { validateUrl } from '../../../lib/validators/url';
 
 @Component({
   tag: 'zero-input',
@@ -23,7 +27,7 @@ export class ZeroInput {
     mutable: true,
     attribute: 'value',
   })
-  value: string;
+  value: string | number;
 
   @Prop() icon?: string;
 
@@ -39,20 +43,20 @@ export class ZeroInput {
 
   @State() hasTyped = false;
   @State() error?: string;
+  @State() errorLabel = '';
 
-  private updateValue(value: string) {
+  private errorValue() {
     if (!this.validator) {
-      this.error = undefined;
-      return;
+      return undefined;
     }
-    const validation = this.validator(this.value);
+    const validation = this.validator(this.value as string);
     if (!this.validate || validation === true) {
-      this.error = undefined;
+      return undefined;
     } else if (typeof validation === 'string') {
-      this.error = validation;
+      this.errorLabel = validation;
+      return validation;
     }
-    this.error = undefined;
-    console.log(this.error);
+    return undefined;
   }
 
   private horizontalInputs = ['color', 'checkbox'];
@@ -82,7 +86,46 @@ export class ZeroInput {
           return true;
         };
       }
+      if (this.type === 'password') {
+        this.validator = (value?: string) => {
+          if (
+            !validatePassword(value) ||
+            (!this.showErrorBeforeType && !this.hasTyped)
+          ) {
+            return 'Password should be at least 8 characters, contain a number and a symbol.';
+          }
+          return true;
+        };
+      }
+      if (this.type === 'email') {
+        this.validator = (value?: string) => {
+          if (
+            !validateMail(value) ||
+            (!this.showErrorBeforeType && !this.hasTyped)
+          )
+            return 'Please enter a valid email address';
+        };
+      }
+      if (this.type === 'tel') {
+        this.validator = (value?: string) => {
+          if (
+            !validatePhone(value) ||
+            (!this.showErrorBeforeType && !this.hasTyped)
+          )
+            return 'Please enter a valid phone number';
+        };
+      }
+      if (this.type === 'url') {
+        this.validator = (value?: string) => {
+          if (
+            !validateUrl(value) ||
+            (!this.showErrorBeforeType && !this.hasTyped)
+          )
+            return 'Please enter a valid URL';
+        };
+      }
     }
+    this.error = this.errorValue();
   }
 
   render() {
@@ -140,18 +183,20 @@ export class ZeroInput {
                 this.hasTyped = true;
                 this.value = (e.target as HTMLInputElement).value;
                 this.valueChanged.emit(this.value);
-                this.updateValue(this.value);
+                this.error = this.errorValue();
               }}
             />
           </zero-container>
-          <zero-text
-            lightScheme="red"
-            darkScheme="red"
-            color="var(--color-primary, #000)"
-            size={0.9}
-          >
-            {this.error}
-          </zero-text>
+          <div class="error">
+            <zero-text
+              lightScheme="red"
+              darkScheme="red"
+              color="var(--color-primary, #000)"
+              size={0.9}
+            >
+              {this.errorLabel}
+            </zero-text>
+          </div>
         </zero-container>
       </zero-container>
     );

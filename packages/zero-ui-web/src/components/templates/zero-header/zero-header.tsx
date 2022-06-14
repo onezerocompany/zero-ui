@@ -41,8 +41,11 @@ export class ZeroHeader {
               backgroundTranslucency={0.7}
               lightScheme="dark"
               followAmount={10}
+              fill={false}
+              flex={false}
+              flexFill={false}
             >
-              <div>
+              <div class="card-content">
                 <slot name="card-content" />
               </div>
             </zero-container>

@@ -62,3 +62,7 @@
   position: relative;
   /* top: calc(var(--scroll-position, 0px) * 0.25); */
 }
+
+.card-content {
+  display: inline-block;
+}
