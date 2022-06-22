@@ -2,6 +2,11 @@
   width: 100%;
 }
 
+.bar {
+  transform: translateX(0);
+  backface-visibility: visible;
+}
+
 .bar-content {
   display: flex;
   align-items: center;

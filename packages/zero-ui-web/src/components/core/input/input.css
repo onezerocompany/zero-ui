@@ -1,3 +1,7 @@
+:host {
+  appearance: none !important;
+}
+
 label,
 p.value {
   color: var(--color-text, #000);

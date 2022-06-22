@@ -102,6 +102,7 @@ export class ZeroText {
         padding={this.padding}
         paddingRatio={this.paddingRatio}
         fill={false}
+        flex="inline-flex"
       >
         <p style={this.cssVars}>
           {this.hasIcon && this.iconPosition === 'leading' ? (

@@ -13,10 +13,11 @@ export class ZeroContainer {
   @Prop() paddingRatio = 1;
   @Prop() spacing = 0;
   @Prop() fill = true;
-  @Prop() flex = true;
+  @Prop() flex: boolean | string = true;
   @Prop() flexFill = true;
   @Prop() direction: 'vertical' | 'horizontal' = 'vertical';
   @Prop() align = 'space-between';
+  @Prop() itemAlign = 'unset';
 
   // Size
   @Prop() width = 'auto';
@@ -25,6 +26,7 @@ export class ZeroContainer {
   @Prop() maxWidth = '100%';
   @Prop() minHeight = 'unset';
   @Prop() maxHeight = '100%';
+  @Prop() overflow = 'visible';
 
   // Rounded Corners
   @Prop() roundedCorners = 0;
@@ -109,9 +111,16 @@ export class ZeroContainer {
       '--padding-horizontal': `${this.padding * this.paddingRatio}rem`,
       '--spacing': `${this.spacing}rem`,
       '--display': this.fill ? 'block' : 'unset',
-      '--flex': this.flex ? 'flex' : 'block',
+      '--flex':
+        typeof this.flex === 'string'
+          ? this.flex
+          : this.flex === true
+          ? 'flex'
+          : 'block',
       '--flex-direction': this.direction === 'horizontal' ? 'row' : 'column',
       '--flex-align': this.align,
+      '--flex-item-align': this.itemAlign,
+      '--overflow': this.overflow,
 
       // rounded corners
       '--rounded-corners': `${this.roundedCorners}rem`,

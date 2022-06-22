@@ -17,18 +17,16 @@ export class ZeroScaffold {
 
   componentWillLoad() {
     document.addEventListener('scroll', () => {
-      const scrollTop =
+      const position =
         document.documentElement.scrollTop || document.body.scrollTop;
-      this.el.style.setProperty('--scroll-position', `${scrollTop}px`);
-      if (scrollTop > 10 !== this.scrolled) {
-        this.scrolled = scrollTop > 10;
+      const scrolled = position > 20;
+      if (this.scrolled !== scrolled) {
+        this.scrolled = scrolled;
         document.dispatchEvent(
           new CustomEvent('zero-scrolled', {
             detail: {
               scrolled: this.scrolled,
             },
-            bubbles: true,
-            cancelable: true,
           }),
         );
       }

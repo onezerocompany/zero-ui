@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 /*!
- Stencil Mock Doc v2.15.2 | MIT Licensed | https://stenciljs.com
+ Stencil Mock Doc v2.17.0 | MIT Licensed | https://stenciljs.com
  */
 const CONTENT_REF_ID = 'r';
 const ORG_LOCATION_ID = 'o';
@@ -1529,7 +1529,11 @@ class MockNode {
     if (otherNode === this) {
       return true;
     }
-    return this.childNodes.includes(otherNode);
+    const childNodes = Array.from(this.childNodes);
+    if (childNodes.includes(otherNode)) {
+      return true;
+    }
+    return childNodes.some((node) => this.contains.bind(node)(otherNode));
   }
   removeChild(childNode) {
     const index = this.childNodes.indexOf(childNode);
@@ -1597,6 +1601,9 @@ class MockElement extends MockNode {
     const shadowRoot = this.ownerDocument.createDocumentFragment();
     this.shadowRoot = shadowRoot;
     return shadowRoot;
+  }
+  blur() {
+    /**/
   }
   get shadowRoot() {
     return this.__shadowRoot || null;
@@ -1666,6 +1673,7 @@ class MockElement extends MockNode {
   get firstElementChild() {
     return this.children[0] || null;
   }
+  focus(_options) { }
   getAttribute(attrName) {
     if (attrName === 'style') {
       if (this.__style != null && this.__style.length > 0) {
@@ -2569,7 +2577,28 @@ function createElementNS(ownerDocument, namespaceURI, tagName) {
     return createElement(ownerDocument, tagName);
   }
   else if (namespaceURI === 'http://www.w3.org/2000/svg') {
-    return new MockSVGElement(ownerDocument, tagName);
+    switch (tagName.toLowerCase()) {
+      case 'text':
+      case 'tspan':
+      case 'tref':
+      case 'altglyph':
+      case 'textpath':
+        return new MockSVGTextContentElement(ownerDocument, tagName);
+      case 'circle':
+      case 'ellipse':
+      case 'image':
+      case 'line':
+      case 'path':
+      case 'polygon':
+      case 'polyline':
+      case 'rect':
+      case 'use':
+        return new MockSVGGraphicsElement(ownerDocument, tagName);
+      case 'svg':
+        return new MockSVGSVGElement(ownerDocument, tagName);
+      default:
+        return new MockSVGElement(ownerDocument, tagName);
+    }
   }
   else {
     return new MockElement(ownerDocument, tagName);
@@ -2716,6 +2745,98 @@ class MockScriptElement extends MockHTMLElement {
 patchPropAttributes(MockScriptElement.prototype, {
   type: String,
 });
+class MockDOMMatrix {
+  constructor() {
+    this.a = 1;
+    this.b = 0;
+    this.c = 0;
+    this.d = 1;
+    this.e = 0;
+    this.f = 0;
+    this.m11 = 1;
+    this.m12 = 0;
+    this.m13 = 0;
+    this.m14 = 0;
+    this.m21 = 0;
+    this.m22 = 1;
+    this.m23 = 0;
+    this.m24 = 0;
+    this.m31 = 0;
+    this.m32 = 0;
+    this.m33 = 1;
+    this.m34 = 0;
+    this.m41 = 0;
+    this.m42 = 0;
+    this.m43 = 0;
+    this.m44 = 1;
+    this.is2D = true;
+    this.isIdentity = true;
+  }
+  static fromMatrix() {
+    return new MockDOMMatrix();
+  }
+  inverse() {
+    return new MockDOMMatrix();
+  }
+  flipX() {
+    return new MockDOMMatrix();
+  }
+  flipY() {
+    return new MockDOMMatrix();
+  }
+  multiply() {
+    return new MockDOMMatrix();
+  }
+  rotate() {
+    return new MockDOMMatrix();
+  }
+  rotateAxisAngle() {
+    return new MockDOMMatrix();
+  }
+  rotateFromVector() {
+    return new MockDOMMatrix();
+  }
+  scale() {
+    return new MockDOMMatrix();
+  }
+  scaleNonUniform() {
+    return new MockDOMMatrix();
+  }
+  skewX() {
+    return new MockDOMMatrix();
+  }
+  skewY() {
+    return new MockDOMMatrix();
+  }
+  toJSON() { }
+  toString() { }
+  transformPoint() {
+    return new MockDOMPoint();
+  }
+  translate() {
+    return new MockDOMMatrix();
+  }
+}
+class MockDOMPoint {
+  constructor() {
+    this.w = 1;
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+  }
+  toJSON() { }
+  matrixTransform() {
+    return new MockDOMMatrix();
+  }
+}
+class MockSVGRect {
+  constructor() {
+    this.height = 10;
+    this.width = 10;
+    this.x = 0;
+    this.y = 0;
+  }
+}
 class MockStyleElement extends MockHTMLElement {
   constructor(ownerDocument) {
     super(ownerDocument, 'style');
@@ -2748,9 +2869,6 @@ class MockSVGElement extends MockElement {
   get viewportElement() {
     return null;
   }
-  focus() {
-    /**/
-  }
   onunload() {
     /**/
   }
@@ -2765,6 +2883,27 @@ class MockSVGElement extends MockElement {
     return false;
   }
   getTotalLength() {
+    return 0;
+  }
+}
+class MockSVGGraphicsElement extends MockSVGElement {
+  getBBox(_options) {
+    return new MockSVGRect();
+  }
+  getCTM() {
+    return new MockDOMMatrix();
+  }
+  getScreenCTM() {
+    return new MockDOMMatrix();
+  }
+}
+class MockSVGSVGElement extends MockSVGGraphicsElement {
+  createSVGPoint() {
+    return new MockDOMPoint();
+  }
+}
+class MockSVGTextContentElement extends MockSVGGraphicsElement {
+  getComputedTextLength() {
     return 0;
   }
 }
@@ -4264,9 +4403,11 @@ function cloneDocument(srcDoc) {
   const dstWin = cloneWindow(srcDoc.defaultView);
   return dstWin.document;
 }
+// TODO(STENCIL-345) - Evaluate reconciling MockWindow, Window differences
 /**
  * Constrain setTimeout() to 1ms, but still async. Also
  * only allow setInterval() to fire once, also constrained to 1ms.
+ * @param win the mock window instance to update
  */
 function constrainTimeouts(win) {
   win.__allowInterval = false;
@@ -4801,9 +4942,9 @@ function hydrateApp(e, t, o, n, s) {
          enumerable: !0
         });
        } else 64 & l && Object.defineProperty(e, n, {
-        value() {
-         const e = getHostRef(this), t = arguments;
-         return e.$onInstancePromise$.then((() => e.$lazyInstance$[n].apply(e.$lazyInstance$, t))).catch(consoleError);
+        value(...e) {
+         const t = getHostRef(this);
+         return t.$onInstancePromise$.then((() => t.$lazyInstance$[n](...e))).catch(consoleError);
         }
        });
       }));
@@ -4926,7 +5067,8 @@ const createTime = (e, t = "") => {
  let n = styles$1.get(e);
  n = t, styles$1.set(e, n);
 }, addStyle = (e, t, o, n) => {
- let s = getScopeId(t), l = styles$1.get(s);
+ let s = getScopeId(t);
+ const l = styles$1.get(s);
  if (e = 11 === e.nodeType ? e : doc, l) if ("string" == typeof l) {
   e = e.head || e;
   let o, a = rootAppliedStyles.get(e);
@@ -4946,8 +5088,8 @@ const createTime = (e, t = "") => {
  o.classList.add(l + "-h"), BUILD.scoped  ), 
  s();
 }, getScopeId = (e, t) => "sc-" + (e.$tagName$), EMPTY_OBJ = {}, isComplexType = e => "object" == (e = typeof e) || "function" === e, isPromise = e => !!e && ("object" == typeof e || "function" == typeof e) && "function" == typeof e.then, h = (e, t, ...o) => {
- let n = null, l = null, a = !1, r = !1, i = [];
- const d = t => {
+ let n = null, l = null, a = !1, r = !1;
+ const i = [], d = t => {
   for (let o = 0; o < t.length; o++) n = t[o], Array.isArray(n) ? d(n) : null != n && "boolean" != typeof n && ((a = "function" != typeof e && !isComplexType(n)) ? n = String(n) : BUILD.isDev  , 
   a && r ? i[i.length - 1].$text$ += n : i.push(a ? newVNode(null, n) : n), r = a);
  };
@@ -4980,7 +5122,7 @@ const createTime = (e, t = "") => {
     const i = isComplexType(n);
     if ((a || i && null !== n) && !s) try {
      if (e.tagName.includes("-")) e[t] = n; else {
-      let s = null == n ? "" : n;
+      const s = null == n ? "" : n;
       "list" === t ? a = !1 : null != o && e[t] == s || (e[t] = s);
      }
     } catch (e) {}
@@ -4999,19 +5141,20 @@ const createTime = (e, t = "") => {
 let scopeId, contentRef, hostTagName, useNativeShadowDom = !1, checkSlotFallbackVisibility = !1, checkSlotRelocate = !1, isSvgMode = !1;
 
 const createElm = (e, t, o, n) => {
- let s, l, a, r = t.$children$[o], i = 0;
- if (!useNativeShadowDom && (checkSlotRelocate = !0, "slot" === r.$tag$ && (scopeId && n.classList.add(scopeId + "-s"), 
- r.$flags$ |= r.$children$ ? 2 : 1)), null !== r.$text$) s = r.$elm$ = doc.createTextNode(r.$text$); else if (1 & r.$flags$) s = r.$elm$ = slotReferenceDebugNode(r) ; else {
-  if (s = r.$elm$ = doc.createElement(2 & r.$flags$ ? "slot-fb" : r.$tag$), 
-  updateElement(null, r, isSvgMode), 
-  null != scopeId && s["s-si"] !== scopeId && s.classList.add(s["s-si"] = scopeId), 
-  r.$children$) for (i = 0; i < r.$children$.length; ++i) l = createElm(e, r, i, s), 
-  l && s.appendChild(l);
+ const s = t.$children$[o];
+ let l, a, r, i = 0;
+ if (!useNativeShadowDom && (checkSlotRelocate = !0, "slot" === s.$tag$ && (scopeId && n.classList.add(scopeId + "-s"), 
+ s.$flags$ |= s.$children$ ? 2 : 1)), null !== s.$text$) l = s.$elm$ = doc.createTextNode(s.$text$); else if (1 & s.$flags$) l = s.$elm$ = slotReferenceDebugNode(s) ; else {
+  if (l = s.$elm$ = doc.createElement(2 & s.$flags$ ? "slot-fb" : s.$tag$), 
+  updateElement(null, s, isSvgMode), 
+  null != scopeId && l["s-si"] !== scopeId && l.classList.add(l["s-si"] = scopeId), 
+  s.$children$) for (i = 0; i < s.$children$.length; ++i) a = createElm(e, s, i, l), 
+  a && l.appendChild(a);
  }
- return (s["s-hn"] = hostTagName, 3 & r.$flags$ && (s["s-sr"] = !0, 
- s["s-cr"] = contentRef, s["s-sn"] = r.$name$ || "", a = e && e.$children$ && e.$children$[o], 
- a && a.$tag$ === r.$tag$ && e.$elm$ && putBackInOriginalLocation(e.$elm$, !1))), 
- s;
+ return (l["s-hn"] = hostTagName, 3 & s.$flags$ && (l["s-sr"] = !0, 
+ l["s-cr"] = contentRef, l["s-sn"] = s.$name$ || "", r = e && e.$children$ && e.$children$[o], 
+ r && r.$tag$ === s.$tag$ && e.$elm$ && putBackInOriginalLocation(e.$elm$, !1))), 
+ l;
 }, putBackInOriginalLocation = (e, t) => {
  plt.$flags$ |= 1;
  const o = e.childNodes;
@@ -5046,22 +5189,24 @@ const createElm = (e, t, o, n) => {
  addVnodes(o, null, t, s, 0, s.length - 1)) : null !== n && removeVnodes(n, 0, n.length - 1), 
  BUILD.svg   );
 }, updateFallbackSlotVisibility = e => {
- let t, o, n, s, l, a, r = e.childNodes;
- for (o = 0, n = r.length; o < n; o++) if (t = r[o], 1 === t.nodeType) {
-  if (t["s-sr"]) for (l = t["s-sn"], t.hidden = !1, s = 0; s < n; s++) if (a = r[s].nodeType, 
-  r[s]["s-hn"] !== t["s-hn"] || "" !== l) {
-   if (1 === a && l === r[s].getAttribute("slot")) {
-    t.hidden = !0;
+ const t = e.childNodes;
+ let o, n, s, l, a, r;
+ for (n = 0, s = t.length; n < s; n++) if (o = t[n], 1 === o.nodeType) {
+  if (o["s-sr"]) for (a = o["s-sn"], o.hidden = !1, l = 0; l < s; l++) if (r = t[l].nodeType, 
+  t[l]["s-hn"] !== o["s-hn"] || "" !== a) {
+   if (1 === r && a === t[l].getAttribute("slot")) {
+    o.hidden = !0;
     break;
    }
-  } else if (1 === a || 3 === a && "" !== r[s].textContent.trim()) {
-   t.hidden = !0;
+  } else if (1 === r || 3 === r && "" !== t[l].textContent.trim()) {
+   o.hidden = !0;
    break;
   }
-  updateFallbackSlotVisibility(t);
+  updateFallbackSlotVisibility(o);
  }
 }, relocateNodes = [], relocateSlotContent = e => {
- let t, o, n, s, l, a, r = 0, i = e.childNodes, d = i.length;
+ let t, o, n, s, l, a, r = 0;
+ const i = e.childNodes, d = i.length;
  for (;r < d; r++) {
   if (t = i[r], t["s-sr"] && (o = t["s-cr"]) && o.parentNode) for (n = o.parentNode.childNodes, 
   s = t["s-sn"], a = n.length - 1; a >= 0; a--) o = n[a], o["s-cn"] || o["s-nr"] || o["s-hn"] === t["s-hn"] || (isNodeLocatedInSlot(o, s) ? (l = relocateNodes.find((e => e.$nodeToRelocate$ === o)), 
@@ -5474,17 +5619,121 @@ const cmpModules = new Map, getModule = e => {
  e["s-p"] = [], e["s-rc"] = [], hostRefs.set(e, o);
 }, styles$1 = new Map;
 
-class ButtonsSection {
+const zeroBarCss = "/*!@:host*/.sc-zero-bar-h{width:100%}/*!@.bar*/.bar.sc-zero-bar{transform:translateX(0);-webkit-backface-visibility:visible;backface-visibility:visible}/*!@.bar-content*/.bar-content.sc-zero-bar{display:flex;align-items:center;justify-content:space-between;width:100%;box-sizing:border-box}/*!@.left-content*/.left-content.sc-zero-bar{padding:0.5rem;flex:1}";
+
+class ZeroBar {
   constructor(hostRef) {
     registerInstance(this, hostRef);
+    this.elevation = 0;
+    this.scrolled = false;
+  }
+  componentWillLoad() {
+    document.addEventListener('zero-scrolled', (event) => {
+      var _a;
+      this.scrolled = (_a = event.detail.scrolled) !== null && _a !== void 0 ? _a : false;
+    });
   }
   render() {
-    return (hAsync("zero-section", { sectionTitle: "Buttons", gradient: "red" }, hAsync("zero-container", { padding: 1, direction: "horizontal", spacing: 1, fill: false }, hAsync("zero-button", { label: "Default Button" }), hAsync("zero-button", { label: "Icon Button", icon: "favorite", lightScheme: "pink" }), hAsync("zero-button", { icon: "upload", lightScheme: "yellow" }), hAsync("zero-button", { icon: "check", label: "Accept", lightScheme: "green" }), hAsync("zero-button", { icon: "close", label: "Decline", lightScheme: "red" }), hAsync("zero-button", { icon: "arrow_upward", label: "Back to Top", lightScheme: "purple", targetElement: "#header" }), hAsync("zero-button", { icon: "delete", label: "Delete", lightScheme: "red", action: () => alert('We might delete something, but not in this demo.') }), hAsync("zero-button", { icon: "travel_explore", label: "This is a link", lightScheme: "blue", link: "https://onezero.company" }))));
+    return (hAsync("div", { class: "bar" }, hAsync("zero-container", { elevation: this.elevation, roundedCorners: this.scrolled ? 0 : 0.6, background: "var(--color-background, #fff)", backgroundTranslucency: 0.2, backgroundBlur: 8, padding: 0.8, edgeBrightness: 0.1, edgeGlow: 0.15, glowAmount: 0, fill: true }, hAsync("div", { class: "bar-content" }, hAsync("slot", { name: "leftside" }, hAsync("div", { class: "left-content" }, this.titleText ? (hAsync("zero-text", { weight: 600, size: 1.25, letterSpacing: -0.02 }, this.titleText)) : null)), hAsync("slot", { name: "rightside" })))));
   }
+  static get style() { return zeroBarCss; }
   static get cmpMeta() { return {
     "$flags$": 9,
-    "$tagName$": "buttons-section",
-    "$members$": undefined,
+    "$tagName$": "zero-bar",
+    "$members$": {
+      "elevation": [2],
+      "titleText": [1, "title-text"],
+      "scrolled": [32]
+    },
+    "$listeners$": undefined,
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+
+const buttonCss = "/*!@:host*/.sc-zero-button-h{padding:0;margin:0;font-size:0}/*!@.zero-button*/.zero-button.sc-zero-button{display:inline-block;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0;padding:0;font-size:0;box-sizing:border-box;transition:opacity 0.15s ease-in-out, transform 0.15s ease-in-out}/*!@.background*/.background.sc-zero-button{position:absolute;top:0;left:0;height:100%;width:100%;background:var(--color-primary, transparent);border-radius:var(--rounded-corners, 0);overflow:hidden;transition:transform 0.1s ease-in-out}/*!@.zero-button:hover .background*/.zero-button.sc-zero-button:hover .background.sc-zero-button{transform:scale(1.02)}/*!@.zero-button:active .background*/.zero-button.sc-zero-button:active .background.sc-zero-button{transform:scale(0.98)}/*!@.pulse*/.pulse.sc-zero-button{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);border-radius:1000px;background:radial-gradient(\n    circle,\n    rgba(220, 220, 220, 0) 0%,\n    rgba(220, 220, 220, 0.8) 100%\n  );opacity:0}/*!@.zero-button:hover .pulse*/.zero-button.sc-zero-button:hover .pulse.sc-zero-button{-webkit-animation:pulse 0.7s;animation:pulse 0.7s}@-webkit-keyframes pulse{0%{opacity:0;height:10px;width:10px}60%{opacity:0.6}100%{opacity:0;height:200px;width:200px}}@keyframes pulse{0%{opacity:0;height:10px;width:10px}60%{opacity:0.6}100%{opacity:0;height:200px;width:200px}}";
+
+class ZeroButton {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    // Button properties
+    this.fontFamily = 'Inter';
+    this.weight = 500;
+    this.size = 1;
+    // Basic Layout
+    this.padding = 0.7;
+    this.paddingRatio = 1.2;
+    this.spacing = 0;
+    this.fill = false;
+    this.flex = true;
+    this.direction = 'column';
+    // Rounded Corners
+    this.roundedCorners = 0.6;
+    // Shadows
+    this.shadowProminence = 0.2;
+    this.elevation = 0;
+    this.neuness = 0;
+    // Glow
+    this.glowAmount = 0;
+    // Edges
+    this.edgeBrightness = 0;
+    this.edgeThickness = 0;
+    this.edgeGlow = 0;
+    this.internalElevation = 0;
+  }
+  componentWillLoad() {
+    this.internalElevation = this.elevation;
+  }
+  render() {
+    return (hAsync("div", { class: "zero-button", onMouseEnter: () => (this.internalElevation = this.elevation * 1.5), onMouseLeave: () => (this.internalElevation = this.elevation), onMouseDown: () => (this.internalElevation = 0), onMouseUp: () => (this.internalElevation = this.elevation * 1.5), style: {
+        '--button-size': `${this.size}rem`,
+      }, onClick: () => {
+        if (this.action) {
+          this.action();
+        }
+        if (this.targetElement) {
+          document.querySelector(this.targetElement).scrollIntoView({
+            behavior: 'smooth',
+            inline: 'center',
+            block: 'center',
+          });
+        }
+        else if (this.link) {
+          window.open(this.link, '_blank');
+        }
+      } }, hAsync("zero-container", { roundedCorners: this.roundedCorners, lightScheme: this.lightScheme, darkScheme: this.darkScheme, elevation: this.internalElevation, shadowProminence: this.shadowProminence, neuness: this.neuness }, hAsync("div", { class: "button-content" }, hAsync("div", { class: "background" }, hAsync("div", { class: "pulse" })), hAsync("slot", null, hAsync("zero-container", { padding: this.padding, paddingRatio: this.paddingRatio, spacing: this.spacing, direction: "horizontal", background: "transparent" }, hAsync("zero-text", { family: this.fontFamily, weight: this.weight, size: this.size, icon: this.icon }, this.label)))))));
+  }
+  static get style() { return buttonCss; }
+  static get cmpMeta() { return {
+    "$flags$": 9,
+    "$tagName$": "zero-button",
+    "$members$": {
+      "fontFamily": [1, "font-family"],
+      "weight": [2],
+      "label": [1],
+      "size": [2],
+      "icon": [1],
+      "action": [16],
+      "targetElement": [1, "target-element"],
+      "link": [1],
+      "padding": [2],
+      "paddingRatio": [2, "padding-ratio"],
+      "spacing": [2],
+      "fill": [4],
+      "flex": [4],
+      "direction": [1],
+      "roundedCorners": [2, "rounded-corners"],
+      "lightScheme": [1, "light-scheme"],
+      "darkScheme": [1, "dark-scheme"],
+      "shadowProminence": [2, "shadow-prominence"],
+      "elevation": [2],
+      "neuness": [2],
+      "glowAmount": [2, "glow-amount"],
+      "edgeBrightness": [2, "edge-brightness"],
+      "edgeThickness": [2, "edge-thickness"],
+      "edgeGlow": [2, "edge-glow"],
+      "internalElevation": [32]
+    },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
     "$attrsToReflect$": []
@@ -5562,236 +5811,6 @@ class Color {
 Color.black = new Color({ hex: '#000000' });
 Color.offBlack = new Color({ hex: '#0e0e0e' });
 Color.white = new Color({ hex: '#ffffff' });
-
-class ColorScheme {
-  constructor(metadata) {
-    this.name = metadata.name;
-    this.color = metadata.color;
-    if (metadata.scaffold) {
-      this.scaffold = metadata.scaffold;
-    }
-    else {
-      this.scaffold = this.color.blend(Color.offBlack, this.color.scaffoldBlend);
-    }
-    if (metadata.background) {
-      this.background = metadata.background;
-    }
-    else {
-      this.background = this.scaffold.blend(this.color, 0.5);
-    }
-  }
-  get cssVars() {
-    return {
-      '--color-primary': this.color.hex,
-      '--color-text': this.color.blend(this.color.textColor, 0.7).hex,
-      '--color-text-primary': this.color.blend(this.color.textColor, 0.95).hex,
-      '--color-text-secondary': this.color.blend(this.color.textColor, 0.5).hex,
-      '--color-text-tertiary': this.color.blend(this.color.textColor, 0.35).hex,
-      '--color-shadows-light': this.scaffold.blend(Color.white, 0.5).rgb,
-      '--color-shadows-dark': this.scaffold.blend(Color.black, 0.5).rgb,
-      '--color-background': this.background.hex,
-      '--color-inputs': this.background.blend(Color.white, this.color.inputBlend).hex,
-      '--color-scaffold': this.scaffold.hex,
-    };
-  }
-}
-
-const colorSchemes = [
-  new ColorScheme({
-    name: 'Light',
-    color: new Color({ hex: '#fafafa' }),
-    scaffold: new Color({ hex: '#f2efef' }),
-  }),
-  new ColorScheme({
-    name: 'Dark',
-    color: new Color({ hex: '#1d1c1c' }),
-    scaffold: new Color({ hex: '#000' }),
-  }),
-  new ColorScheme({
-    name: 'Grey',
-    color: new Color({ hex: '#46475c' }),
-  }),
-  new ColorScheme({
-    name: 'Blue',
-    color: new Color({ hex: '#0066ff' }),
-  }),
-  new ColorScheme({
-    name: 'Teal',
-    color: new Color({ hex: '#00bcd4' }),
-  }),
-  new ColorScheme({
-    name: 'Green',
-    color: new Color({ hex: '#00ce59' }),
-  }),
-  new ColorScheme({
-    name: 'Orange',
-    color: new Color({ hex: '#ff9f1a' }),
-  }),
-  new ColorScheme({
-    name: 'Yellow',
-    color: new Color({ hex: '#ffd207' }),
-  }),
-  new ColorScheme({
-    name: 'Purple',
-    color: new Color({ hex: '#9b51e0' }),
-  }),
-  new ColorScheme({
-    name: 'Red',
-    color: new Color({ hex: '#ff2d55' }),
-  }),
-  new ColorScheme({
-    name: 'Pink',
-    color: new Color({ hex: '#ff2d73' }),
-  }),
-  new ColorScheme({
-    name: 'Brown',
-    color: new Color({ hex: '#71534a' }),
-  }),
-];
-function normalizeName$1(name) {
-  return name.toLowerCase().replace(/\s/g, '').trim();
-}
-function colorSchemeFor(nameOrColor) {
-  var _a;
-  if (nameOrColor.startsWith('#')) {
-    return new ColorScheme({
-      name: 'Custom',
-      color: new Color({ hex: nameOrColor }),
-    });
-  }
-  else {
-    return ((_a = colorSchemes.find((scheme) => normalizeName$1(scheme.name) === normalizeName$1(nameOrColor))) !== null && _a !== void 0 ? _a : new ColorScheme({
-      name: 'Fallback',
-      color: new Color({ hex: '#fafafa' }),
-      scaffold: new Color({ hex: '#f2efef' }),
-    }));
-  }
-}
-
-class ColorsSection {
-  constructor(hostRef) {
-    registerInstance(this, hostRef);
-  }
-  render() {
-    return (hAsync("zero-section", { sectionTitle: "Colors", icon: "palette", gradient: "mango" }, hAsync("zero-grid", { minWidth: "350px" }, colorSchemes.map((colorScheme) => (hAsync("zero-container", { lightScheme: colorScheme.name, darkScheme: colorScheme.name, roundedCorners: 2, padding: 2, background: "var(--color-primary, #fff)", backgroundTranslucency: 0, spacing: 0.2 }, hAsync("zero-text", { textStyle: "pre-heading-2" }, "Color Scheme"), hAsync("zero-text", { textStyle: "heading-2" }, colorScheme.name), hAsync("zero-text", { textStyle: "sub-heading-2", uppercase: true }, colorScheme.color.hex)))))));
-  }
-  static get cmpMeta() { return {
-    "$flags$": 9,
-    "$tagName$": "colors-section",
-    "$members$": undefined,
-    "$listeners$": undefined,
-    "$lazyBundleId$": "-",
-    "$attrsToReflect$": []
-  }; }
-}
-
-class ContainerSection {
-  constructor(hostRef) {
-    registerInstance(this, hostRef);
-    this.cornerRadius = 1;
-    this.elevation = 10;
-    this.edge = 0.1;
-    this.neu = 0;
-    this.shadow = 0.2;
-    this.glow = 0.05;
-    this.edgeGlow = 0.4;
-    this.backgroundBlur = 0;
-    this.backgroundTranslucency = 0;
-    this.padding = 2;
-    this.spacing = 1;
-    this.edgeThickness = 0.1;
-  }
-  variables() {
-    return [
-      {
-        name: 'Corner Radius',
-        value: 'cornerRadius',
-        min: 0,
-        max: 3,
-      },
-      {
-        name: 'Elevation',
-        value: 'elevation',
-        min: 0,
-        max: 20,
-      },
-      {
-        name: 'Shadow',
-        value: 'shadow',
-        min: 0,
-        max: 1,
-      },
-      {
-        name: 'Edge Thickness',
-        value: 'edgeThickness',
-        min: 0,
-        max: 1,
-      },
-      {
-        name: 'Edge',
-        value: 'edge',
-        min: 0,
-        max: 1,
-      },
-      {
-        name: 'Neu',
-        value: 'neu',
-        min: 0,
-        max: 1,
-      },
-      {
-        name: 'Glow',
-        value: 'glow',
-        min: 0,
-        max: 1,
-      },
-      {
-        name: 'Edge Glow',
-        value: 'edgeGlow',
-        min: 0,
-        max: 1,
-      },
-      {
-        name: 'Background Translucency',
-        value: 'backgroundTranslucency',
-        min: 0,
-        max: 1,
-      },
-      {
-        name: 'Spacing',
-        value: 'spacing',
-        min: 0,
-        max: 20,
-      },
-    ];
-  }
-  render() {
-    return (hAsync("zero-section", { sectionTitle: "Containers", icon: "select_all", gradient: "sunset" }, hAsync("zero-container", { elevation: this.elevation, edgeBrightness: this.edge, edgeThickness: this.edgeThickness, edgeGlow: this.edgeGlow, neuness: this.neu, roundedCorners: this.cornerRadius, shadowProminence: this.shadow, glowAmount: this.glow, backgroundTranslucency: this.backgroundTranslucency, padding: this.padding, spacing: this.spacing }, hAsync("zero-grid", null, this.variables().map((variable) => (hAsync("zero-input", { type: "range", label: variable.name, name: variable.value, min: variable.min, max: variable.max, value: this[variable.value], onValueChanged: (e) => {
-        this[variable.value] = e.detail;
-      } })))))));
-  }
-  static get cmpMeta() { return {
-    "$flags$": 9,
-    "$tagName$": "container-section",
-    "$members$": {
-      "cornerRadius": [32],
-      "elevation": [32],
-      "edge": [32],
-      "neu": [32],
-      "shadow": [32],
-      "glow": [32],
-      "edgeGlow": [32],
-      "backgroundBlur": [32],
-      "backgroundTranslucency": [32],
-      "padding": [32],
-      "spacing": [32],
-      "edgeThickness": [32]
-    },
-    "$listeners$": undefined,
-    "$lazyBundleId$": "-",
-    "$attrsToReflect$": []
-  }; }
-}
 
 const locations = [
   '0% 0%',
@@ -5903,7 +5922,7 @@ const gradients = [
     ],
   }),
 ];
-function normalizeName(name) {
+function normalizeName$1(name) {
   return name.toLowerCase().replace(/\s/g, '').trim();
 }
 function gradientFor(nameOrColors) {
@@ -5915,208 +5934,116 @@ function gradientFor(nameOrColors) {
     });
   }
   else {
-    return gradients.find((scheme) => normalizeName(scheme.name) === normalizeName(nameOrColors));
+    return gradients.find((scheme) => normalizeName$1(scheme.name) === normalizeName$1(nameOrColors));
   }
 }
 
-const gradientsSectionCss = "/*!@.color-preview*/.color-preview.sc-gradients-section{height:18px;width:18px;border-radius:0.3rem;overflow:hidden}";
-
-class GradientsSection {
-  constructor(hostRef) {
-    registerInstance(this, hostRef);
+class ColorScheme {
+  constructor(metadata) {
+    this.name = metadata.name;
+    this.color = metadata.color;
+    if (metadata.scaffold) {
+      this.scaffold = metadata.scaffold;
+    }
+    else {
+      this.scaffold = this.color.blend(Color.offBlack, this.color.scaffoldBlend);
+    }
+    if (metadata.background) {
+      this.background = metadata.background;
+    }
+    else {
+      this.background = this.scaffold.blend(this.color, 0.5);
+    }
   }
-  render() {
-    return (hAsync("zero-section", { sectionTitle: "Gradients", icon: "palette", gradient: "sunrise" }, hAsync("zero-grid", { minWidth: "350px" }, gradients.map((gradient) => (hAsync("zero-container", { roundedCorners: 2, padding: 2, background: "var(--background-gradient, #fff)", backgroundGradient: gradient.name, backgroundTranslucency: 0, spacing: 1 }, hAsync("zero-container", null, hAsync("zero-text", { textStyle: "pre-heading-2" }, "Gradient"), hAsync("zero-text", { textStyle: "heading-2" }, gradient.name)), hAsync("zero-grid", { spacing: 0.4, minWidth: "90px" }, gradient.colors.map((color) => (hAsync("zero-container", { backgroundTranslucency: 0, roundedCorners: 0.5, padding: 0.4, direction: "horizontal", lightScheme: "light", darkScheme: "dark", spacing: 0, align: "space-between" }, hAsync("div", { class: "color-preview", style: { background: color.hex } }), hAsync("zero-text", { weight: 700, color: "var(--color-text, #000)", size: 0.7, uppercase: true, padding: 0.1, paddingRatio: 4 }, color.hex)))))))))));
+  get cssVars() {
+    return {
+      '--color-primary': this.color.hex,
+      '--color-text': this.color.blend(this.color.textColor, 0.7).hex,
+      '--color-text-primary': this.color.blend(this.color.textColor, 0.95).hex,
+      '--color-text-secondary': this.color.blend(this.color.textColor, 0.5).hex,
+      '--color-text-tertiary': this.color.blend(this.color.textColor, 0.35).hex,
+      '--color-shadows-light': this.scaffold.blend(Color.white, 0.5).rgb,
+      '--color-shadows-dark': this.scaffold.blend(Color.black, 0.5).rgb,
+      '--color-background': this.background.hex,
+      '--color-inputs': this.background.blend(Color.white, this.color.inputBlend).hex,
+      '--color-scaffold': this.scaffold.hex,
+    };
   }
-  static get style() { return gradientsSectionCss; }
-  static get cmpMeta() { return {
-    "$flags$": 9,
-    "$tagName$": "gradients-section",
-    "$members$": undefined,
-    "$listeners$": undefined,
-    "$lazyBundleId$": "-",
-    "$attrsToReflect$": []
-  }; }
 }
 
-function capitalize(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
+const colorSchemes = [
+  new ColorScheme({
+    name: 'Light',
+    color: new Color({ hex: '#fafafa' }),
+    scaffold: new Color({ hex: '#f2efef' }),
+  }),
+  new ColorScheme({
+    name: 'Dark',
+    color: new Color({ hex: '#1d1c1c' }),
+    scaffold: new Color({ hex: '#000' }),
+  }),
+  new ColorScheme({
+    name: 'Grey',
+    color: new Color({ hex: '#46475c' }),
+  }),
+  new ColorScheme({
+    name: 'Blue',
+    color: new Color({ hex: '#0066ff' }),
+  }),
+  new ColorScheme({
+    name: 'Teal',
+    color: new Color({ hex: '#00bcd4' }),
+  }),
+  new ColorScheme({
+    name: 'Green',
+    color: new Color({ hex: '#00ce59' }),
+  }),
+  new ColorScheme({
+    name: 'Orange',
+    color: new Color({ hex: '#ff9f1a' }),
+  }),
+  new ColorScheme({
+    name: 'Yellow',
+    color: new Color({ hex: '#ffd207' }),
+  }),
+  new ColorScheme({
+    name: 'Purple',
+    color: new Color({ hex: '#9b51e0' }),
+  }),
+  new ColorScheme({
+    name: 'Red',
+    color: new Color({ hex: '#ff2d55' }),
+  }),
+  new ColorScheme({
+    name: 'Pink',
+    color: new Color({ hex: '#ff2d73' }),
+  }),
+  new ColorScheme({
+    name: 'Brown',
+    color: new Color({ hex: '#71534a' }),
+  }),
+];
+function normalizeName(name) {
+  return name.toLowerCase().replace(/\s/g, '').trim();
 }
-function titleCase(text) {
-  return text
-    .split(' ')
-    .map((word) => capitalize(word))
-    .join(' ');
-}
-
-class InputsSection {
-  constructor(hostRef) {
-    registerInstance(this, hostRef);
-  }
-  types() {
-    return [
-      { type: 'text', icon: 'text_fields' },
-      { type: 'password', icon: 'password' },
-      { type: 'search', icon: 'search' },
-      { type: 'tel', icon: 'phone' },
-      { type: 'email', icon: 'mail' },
-      { type: 'url', icon: 'language' },
-      { type: 'range', icon: 'linear_scale' },
-      { type: 'number', icon: 'pin' },
-      { type: 'checkbox', icon: 'done_all' },
-    ];
-  }
-  render() {
-    return (hAsync("zero-section", { sectionTitle: "Inputs" }, hAsync("zero-container", null, hAsync("zero-grid", null, this.types().map((item) => (hAsync("zero-input", { icon: item.icon, type: item.type, name: item.type, label: titleCase(item.type), validate: true, required: true })))))));
-  }
-  static get cmpMeta() { return {
-    "$flags$": 9,
-    "$tagName$": "inputs-section",
-    "$members$": undefined,
-    "$listeners$": undefined,
-    "$lazyBundleId$": "-",
-    "$attrsToReflect$": []
-  }; }
-}
-
-class TypographySection {
-  constructor(hostRef) {
-    registerInstance(this, hostRef);
-  }
-  render() {
-    return (hAsync("zero-section", { sectionTitle: "Typography", icon: "font_download", gradient: "lime" }, hAsync("zero-grid", { spacing: 2, minWidth: "460px" }, hAsync("zero-container", { backgroundTranslucency: 0, padding: 2.5, roundedCorners: 2, spacing: 1.5, followAmount: 10, edgeGlow: 0.3, edgeThickness: 0.1, elevation: 5, shadowProminence: 0.15 }, hAsync("zero-text", { textStyle: "heading-4", icon: "format_size" }, "Headings."), hAsync("zero-divider", { spacing: 1, gradient: "var(--color-text-tertiary, #000), transparent" }), hAsync("zero-container", { spacing: 0.7 }, hAsync("zero-text", { textStyle: "pre-heading-1" }, "Pre-Heading 1"), hAsync("zero-text", { textStyle: "heading-1" }, "Heading 1"), hAsync("zero-text", { textStyle: "sub-heading-1" }, "Sub-Heading 1")), hAsync("zero-container", { spacing: 0.7 }, hAsync("zero-text", { textStyle: "pre-heading-2" }, "Pre-Heading 2"), hAsync("zero-text", { textStyle: "heading-2" }, "Heading 2"), hAsync("zero-text", { textStyle: "sub-heading-2" }, "Sub-Heading 2")), hAsync("zero-container", { spacing: 0.7 }, hAsync("zero-text", { textStyle: "pre-heading-3" }, "Pre-Heading 3"), hAsync("zero-text", { textStyle: "heading-3" }, "Heading 3"), hAsync("zero-text", { textStyle: "sub-heading-3" }, "Sub-Heading 3")), hAsync("zero-container", { spacing: 0.7 }, hAsync("zero-text", { textStyle: "pre-heading-4" }, "Pre-Heading 4"), hAsync("zero-text", { textStyle: "heading-4" }, "Heading 4"), hAsync("zero-text", { textStyle: "sub-heading-4" }, "Sub-Heading 4")), hAsync("zero-text", { textStyle: "heading-5" }, "Heading 5"), hAsync("zero-text", { textStyle: "heading-6" }, "Heading 6")), hAsync("zero-container", { spacing: 2 }, hAsync("zero-container", { backgroundTranslucency: 0, padding: 2.5, roundedCorners: 2, spacing: 1, followAmount: 10, edgeGlow: 0.3, edgeThickness: 0.1, elevation: 5, shadowProminence: 0.15 }, hAsync("zero-text", { textStyle: "sub-heading-4" }, "Some preview content."), hAsync("zero-text", { textStyle: "heading-5" }, "Regular Paragraph"), hAsync("zero-text", { textStyle: "paragraph" }, "Deserunt ad cupidatat irure eiusmod et incididunt dolore. Duis eiusmod deserunt est pariatur officia proident et pariatur velit dolor. Do fugiat cupidatat sint in officia. Amet labore tempor anim sunt cillum in sit."), hAsync("zero-text", { textStyle: "footnote" }, "- THIS IS A FOOTNOTE -")), hAsync("zero-container", { backgroundTranslucency: 0, padding: 2.5, roundedCorners: 2, spacing: 1, followAmount: 10, edgeGlow: 0.3, edgeThickness: 0.1, elevation: 5, shadowProminence: 0.15 }, hAsync("zero-text", { textStyle: "display-1" }, "Display 1"), hAsync("zero-text", { textStyle: "display-2" }, "Display 2"), hAsync("zero-text", { textStyle: "display-3" }, "Display 3"), hAsync("zero-text", { textStyle: "display-4" }, "Display 4"))))));
-  }
-  static get cmpMeta() { return {
-    "$flags$": 9,
-    "$tagName$": "typography-section",
-    "$members$": undefined,
-    "$listeners$": undefined,
-    "$lazyBundleId$": "-",
-    "$attrsToReflect$": []
-  }; }
-}
-
-const zeroBarCss = "/*!@:host*/.sc-zero-bar-h{width:100%}/*!@.bar-content*/.bar-content.sc-zero-bar{display:flex;align-items:center;justify-content:space-between;width:100%;box-sizing:border-box}/*!@.left-content*/.left-content.sc-zero-bar{padding:0.5rem;flex:1}";
-
-class ZeroBar {
-  constructor(hostRef) {
-    registerInstance(this, hostRef);
-    this.elevation = 0;
-    this.scrolled = false;
-  }
-  componentDidLoad() {
-    document.addEventListener('zero-scrolled', (event) => {
-      this.scrolled = event.detail.scrolled;
+function colorSchemeFor(nameOrColor) {
+  var _a;
+  if (nameOrColor.startsWith('#')) {
+    return new ColorScheme({
+      name: 'Custom',
+      color: new Color({ hex: nameOrColor }),
     });
   }
-  render() {
-    return (hAsync("div", { class: "bar" }, hAsync("zero-container", { elevation: this.elevation, roundedCorners: this.scrolled ? 0 : 0.6, background: "var(--color-background, #fff)", backgroundTranslucency: 0.2, backgroundBlur: 8, padding: 0.8, edgeBrightness: 0.1, edgeGlow: 0.15, glowAmount: 0, fill: true }, hAsync("div", { class: "bar-content" }, hAsync("slot", { name: "leftside" }, hAsync("div", { class: "left-content" }, this.titleText ? (hAsync("zero-text", { weight: 600, size: 1.25, letterSpacing: -0.02 }, this.titleText)) : null)), hAsync("slot", { name: "rightside" })))));
+  else {
+    return ((_a = colorSchemes.find((scheme) => normalizeName(scheme.name) === normalizeName(nameOrColor))) !== null && _a !== void 0 ? _a : new ColorScheme({
+      name: 'Fallback',
+      color: new Color({ hex: '#fafafa' }),
+      scaffold: new Color({ hex: '#f2efef' }),
+    }));
   }
-  static get style() { return zeroBarCss; }
-  static get cmpMeta() { return {
-    "$flags$": 9,
-    "$tagName$": "zero-bar",
-    "$members$": {
-      "elevation": [2],
-      "titleText": [1, "title-text"],
-      "scrolled": [32]
-    },
-    "$listeners$": undefined,
-    "$lazyBundleId$": "-",
-    "$attrsToReflect$": []
-  }; }
 }
 
-const buttonCss = "/*!@:host*/.sc-zero-button-h{padding:0;margin:0;font-size:0}/*!@.zero-button*/.zero-button.sc-zero-button{display:inline-block;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0;padding:0;font-size:0;box-sizing:border-box;transition:opacity 0.15s ease-in-out, transform 0.15s ease-in-out}/*!@.background*/.background.sc-zero-button{position:absolute;top:0;left:0;height:100%;width:100%;background:var(--color-primary, transparent);border-radius:var(--rounded-corners, 0);overflow:hidden;transition:transform 0.1s ease-in-out}/*!@.zero-button:hover .background*/.zero-button.sc-zero-button:hover .background.sc-zero-button{transform:scale(1.02)}/*!@.zero-button:active .background*/.zero-button.sc-zero-button:active .background.sc-zero-button{transform:scale(0.98)}/*!@.pulse*/.pulse.sc-zero-button{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);border-radius:1000px;background:radial-gradient(\n    circle,\n    rgba(220, 220, 220, 0) 0%,\n    rgba(220, 220, 220, 0.8) 100%\n  );opacity:0}/*!@.zero-button:hover .pulse*/.zero-button.sc-zero-button:hover .pulse.sc-zero-button{-webkit-animation:pulse 0.7s;animation:pulse 0.7s}@-webkit-keyframes pulse{0%{opacity:0;height:10px;width:10px}60%{opacity:0.6}100%{opacity:0;height:200px;width:200px}}@keyframes pulse{0%{opacity:0;height:10px;width:10px}60%{opacity:0.6}100%{opacity:0;height:200px;width:200px}}";
-
-class ZeroButton {
-  constructor(hostRef) {
-    registerInstance(this, hostRef);
-    // Button properties
-    this.fontFamily = 'Inter';
-    this.weight = 500;
-    this.size = 1;
-    // Basic Layout
-    this.padding = 0.7;
-    this.paddingRatio = 1.2;
-    this.spacing = 0;
-    this.fill = false;
-    this.flex = true;
-    this.direction = 'column';
-    // Rounded Corners
-    this.roundedCorners = 0.6;
-    // Shadows
-    this.shadowProminence = 0.2;
-    this.elevation = 0;
-    this.neuness = 0;
-    // Glow
-    this.glowAmount = 0;
-    // Edges
-    this.edgeBrightness = 0;
-    this.edgeThickness = 0;
-    this.edgeGlow = 0;
-    this.internalElevation = 0;
-  }
-  componentWillLoad() {
-    this.internalElevation = this.elevation;
-  }
-  render() {
-    return (hAsync("div", { class: "zero-button", onMouseEnter: () => (this.internalElevation = this.elevation * 1.5), onMouseLeave: () => (this.internalElevation = this.elevation), onMouseDown: () => (this.internalElevation = 0), onMouseUp: () => (this.internalElevation = this.elevation * 1.5), style: {
-        '--button-size': `${this.size}rem`,
-      }, onClick: () => {
-        if (this.action) {
-          this.action();
-        }
-        if (this.targetElement) {
-          document.querySelector(this.targetElement).scrollIntoView({
-            behavior: 'smooth',
-            inline: 'center',
-            block: 'center',
-          });
-        }
-        else if (this.link) {
-          window.open(this.link, '_blank');
-        }
-      } }, hAsync("zero-container", { roundedCorners: this.roundedCorners, lightScheme: this.lightScheme, darkScheme: this.darkScheme, elevation: this.internalElevation, shadowProminence: this.shadowProminence, neuness: this.neuness }, hAsync("div", { class: "button-content" }, hAsync("div", { class: "background" }, hAsync("div", { class: "pulse" })), hAsync("slot", null, hAsync("zero-container", { padding: this.padding, paddingRatio: this.paddingRatio, spacing: this.spacing, direction: "horizontal", background: "transparent" }, hAsync("zero-text", { family: this.fontFamily, weight: this.weight, size: this.size, icon: this.icon }, this.label)))))));
-  }
-  static get style() { return buttonCss; }
-  static get cmpMeta() { return {
-    "$flags$": 9,
-    "$tagName$": "zero-button",
-    "$members$": {
-      "fontFamily": [1, "font-family"],
-      "weight": [2],
-      "label": [1],
-      "size": [2],
-      "icon": [1],
-      "action": [16],
-      "targetElement": [1, "target-element"],
-      "link": [1],
-      "padding": [2],
-      "paddingRatio": [2, "padding-ratio"],
-      "spacing": [2],
-      "fill": [4],
-      "flex": [4],
-      "direction": [1],
-      "roundedCorners": [2, "rounded-corners"],
-      "lightScheme": [1, "light-scheme"],
-      "darkScheme": [1, "dark-scheme"],
-      "shadowProminence": [2, "shadow-prominence"],
-      "elevation": [2],
-      "neuness": [2],
-      "glowAmount": [2, "glow-amount"],
-      "edgeBrightness": [2, "edge-brightness"],
-      "edgeThickness": [2, "edge-thickness"],
-      "edgeGlow": [2, "edge-glow"],
-      "internalElevation": [32]
-    },
-    "$listeners$": undefined,
-    "$lazyBundleId$": "-",
-    "$attrsToReflect$": []
-  }; }
-}
-
-const containerCss = "/*!@:host*/.sc-zero-container-h{perspective:5000px;transform-style:preserve-3d;flex:1}/*!@.zero-container*/.zero-container.sc-zero-container{display:var(--display, block);position:relative;box-sizing:border-box;border-radius:var(--rounded-corners, 0);transition:border-radius 0.2s ease-in-out 0.15s, box-shadow 120ms;padding:calc(var(--edge-thickness, 0) * 1rem);width:var(--width, auto);height:var(--height, auto);max-width:var(--max-width, 100%);max-height:var(--max-height, 100%);min-width:var(--min-width, unset);min-height:var(--min-height, unset)}/*!@.zero-container.blurred*/.zero-container.blurred.sc-zero-container{-webkit-backdrop-filter:blur(var(--background-blur, 0));backdrop-filter:blur(var(--background-blur, 0))}/*!@.zero-container.follows-mouse*/.zero-container.follows-mouse.sc-zero-container{transition:transform 0.15s ease-out;transform-origin:center}/*!@.zero-container.mouse-inside.follows-mouse*/.zero-container.mouse-inside.follows-mouse.sc-zero-container{transform:rotateY(var(--cursor-x-rotate, 0deg))\n    rotateX(var(--cursor-y-rotate, 0deg))}/*!@.zero-container.has-shadow*/.zero-container.has-shadow.sc-zero-container{box-shadow:calc(var(--elevation) * 1) calc(var(--elevation) * 1)\n    calc(var(--elevation) * 3) calc(var(--elevation) * 0.2)\n    rgba(\n      var(--color-shadows-dark, #000),\n      calc(var(--shadow-prominence, 0) * 0.6)\n    )}/*!@.zero-container.has-shadow.is-neu*/.zero-container.has-shadow.is-neu.sc-zero-container{box-shadow:calc(var(--elevation) * -1) calc(var(--elevation) * -1)\n      var(--elevation, 0) var(--elevation, 0)\n      rgba(\n        var(--color-shadows-light, #fff),\n        calc(var(--shadow-prominence, 0.5) * var(--shadow-neuness, 1))\n      ),\n    calc(var(--elevation) * 1) calc(var(--elevation) * 1)\n      calc(var(--elevation) * 3) calc(var(--elevation) * 0.2)\n      rgba(\n        var(--color-shadows-dark, #000),\n        calc(var(--shadow-prominence, 0.5) * 0.6)\n      )}/*!@.edge-background*/.edge-background.sc-zero-container{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background:var(--background, #000000);border-radius:inherit;overflow:hidden}/*!@.edge-background::before*/.edge-background.sc-zero-container::before{content:'';position:absolute;inset:0px;background:radial-gradient(\n    600px circle at var(--cursor-x, 0px) var(--cursor-y, 0px),\n    rgba(255, 255, 255, var(--edge-glow, 0)) 0%,\n    rgba(255, 255, 255, 0) 60%\n  )}/*!@.edge*/.edge.sc-zero-container{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;background:#fff;opacity:var(--edge-brightness, 0);border-radius:inherit;overflow:hidden}/*!@.container*/.container.sc-zero-container{position:relative;border-radius:calc(\n    var(--rounded-corners, 0.5rem) - (var(--edge-thickness, 0)) * 1rem\n  );transition:border-radius 0.2s ease-in-out 0.15s}/*!@.content*/.content.sc-zero-container{position:relative;display:var(--flex, flex);flex-direction:var(--flex-direction, column);gap:var(--spacing, 1rem);justify-content:var(--flex-align, space-between);box-sizing:border-box;padding:var(--padding-vertical, 1rem) var(--padding-horizontal, 1rem);z-index:30;flex:1}/*!@.background*/.background.sc-zero-container{position:absolute;top:0;left:0;height:100%;width:100%;background:var(--background, transparent);z-index:10;opacity:var(--background-opacity, 0);border-radius:inherit;overflow:hidden}/*!@.zero-container.glows .glow*/.zero-container.glows.sc-zero-container .glow.sc-zero-container{position:absolute;z-index:20;top:0;left:0;width:100%;height:100%;overflow:hidden;opacity:0;border-radius:inherit;background:radial-gradient(\n    var(--glow-size, 600px) circle at var(--cursor-x, 0px) var(--cursor-y, 0px),\n    rgba(255, 255, 255, var(--glow-amount, 0)) 0%,\n    transparent 100%\n  );transition:opacity 0.3s ease-in-out}/*!@.zero-container.glows:hover .glow*/.zero-container.glows.sc-zero-container:hover .glow.sc-zero-container{opacity:1}";
+const containerCss = "/*!@:host*/.sc-zero-container-h{perspective:5000px;transform-style:preserve-3d;flex:1}/*!@.zero-container*/.zero-container.sc-zero-container{display:var(--display, block);position:relative;box-sizing:border-box;border-radius:var(--rounded-corners, 0);transition:border-radius 0.2s ease-in-out 0.15s, box-shadow 120ms;padding:calc(var(--edge-thickness, 0) * 1rem);width:var(--width, auto);height:var(--height, auto);max-width:var(--max-width, 100%);max-height:var(--max-height, 100%);min-width:var(--min-width, unset);min-height:var(--min-height, unset);overflow:var(--overflow, visible)}/*!@.zero-container.blurred*/.zero-container.blurred.sc-zero-container{-webkit-backdrop-filter:blur(var(--background-blur, 0));backdrop-filter:blur(var(--background-blur, 0))}/*!@.zero-container.follows-mouse*/.zero-container.follows-mouse.sc-zero-container{transition:transform 0.15s ease-out;transform-origin:center}/*!@.zero-container.mouse-inside.follows-mouse*/.zero-container.mouse-inside.follows-mouse.sc-zero-container{transform:rotateY(var(--cursor-x-rotate, 0deg))\n    rotateX(var(--cursor-y-rotate, 0deg))}/*!@.zero-container.has-shadow*/.zero-container.has-shadow.sc-zero-container{box-shadow:calc(var(--elevation) * 1) calc(var(--elevation) * 1)\n    calc(var(--elevation) * 3) calc(var(--elevation) * 0.2)\n    rgba(\n      var(--color-shadows-dark, #000),\n      calc(var(--shadow-prominence, 0) * 0.6)\n    )}/*!@.zero-container.has-shadow.is-neu*/.zero-container.has-shadow.is-neu.sc-zero-container{box-shadow:calc(var(--elevation) * -1) calc(var(--elevation) * -1)\n      var(--elevation, 0) var(--elevation, 0)\n      rgba(\n        var(--color-shadows-light, #fff),\n        calc(var(--shadow-prominence, 0.5) * var(--shadow-neuness, 1))\n      ),\n    calc(var(--elevation) * 1) calc(var(--elevation) * 1)\n      calc(var(--elevation) * 3) calc(var(--elevation) * 0.2)\n      rgba(\n        var(--color-shadows-dark, #000),\n        calc(var(--shadow-prominence, 0.5) * 0.6)\n      )}/*!@.edge-background*/.edge-background.sc-zero-container{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;background:var(--background, #000000);border-radius:inherit;overflow:hidden}/*!@.edge-background::before*/.edge-background.sc-zero-container::before{content:'';position:absolute;inset:0px;background:radial-gradient(\n    600px circle at var(--cursor-x, 0px) var(--cursor-y, 0px),\n    rgba(255, 255, 255, var(--edge-glow, 0)) 0%,\n    rgba(255, 255, 255, 0) 60%\n  )}/*!@.edge*/.edge.sc-zero-container{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;background:#fff;opacity:var(--edge-brightness, 0);border-radius:inherit;overflow:hidden}/*!@.container*/.container.sc-zero-container{position:relative;border-radius:calc(\n    var(--rounded-corners, 0.5rem) - (var(--edge-thickness, 0)) * 1rem\n  );transition:border-radius 0.2s ease-in-out 0.15s}/*!@.content*/.content.sc-zero-container{position:relative;display:var(--flex, flex);flex-direction:var(--flex-direction, column);gap:var(--spacing, 1rem);justify-content:var(--flex-align, space-between);align-items:var(--flex-item-align, unset);box-sizing:border-box;padding:var(--padding-vertical, 1rem) var(--padding-horizontal, 1rem);z-index:30;flex:1}/*!@.background*/.background.sc-zero-container{position:absolute;top:0;left:0;height:100%;width:100%;background:var(--background, transparent);z-index:10;opacity:var(--background-opacity, 0);border-radius:inherit;overflow:hidden}/*!@.zero-container.glows .glow*/.zero-container.glows.sc-zero-container .glow.sc-zero-container{position:absolute;z-index:20;top:0;left:0;width:100%;height:100%;overflow:hidden;opacity:0;border-radius:inherit;background:radial-gradient(\n    var(--glow-size, 600px) circle at var(--cursor-x, 0px) var(--cursor-y, 0px),\n    rgba(255, 255, 255, var(--glow-amount, 0)) 0%,\n    transparent 100%\n  );transition:opacity 0.3s ease-in-out}/*!@.zero-container.glows:hover .glow*/.zero-container.glows.sc-zero-container:hover .glow.sc-zero-container{opacity:1}";
 
 class ZeroContainer {
   constructor(hostRef) {
@@ -6130,6 +6057,7 @@ class ZeroContainer {
     this.flexFill = true;
     this.direction = 'vertical';
     this.align = 'space-between';
+    this.itemAlign = 'unset';
     // Size
     this.width = 'auto';
     this.height = 'auto';
@@ -6137,6 +6065,7 @@ class ZeroContainer {
     this.maxWidth = '100%';
     this.minHeight = 'unset';
     this.maxHeight = '100%';
+    this.overflow = 'visible';
     // Rounded Corners
     this.roundedCorners = 0;
     // Background
@@ -6206,9 +6135,15 @@ class ZeroContainer {
       '--padding-horizontal': `${this.padding * this.paddingRatio}rem`,
       '--spacing': `${this.spacing}rem`,
       '--display': this.fill ? 'block' : 'unset',
-      '--flex': this.flex ? 'flex' : 'block',
+      '--flex': typeof this.flex === 'string'
+        ? this.flex
+        : this.flex === true
+          ? 'flex'
+          : 'block',
       '--flex-direction': this.direction === 'horizontal' ? 'row' : 'column',
       '--flex-align': this.align,
+      '--flex-item-align': this.itemAlign,
+      '--overflow': this.overflow,
       // rounded corners
       '--rounded-corners': `${this.roundedCorners}rem`,
       // Size
@@ -6296,16 +6231,18 @@ class ZeroContainer {
       "paddingRatio": [2, "padding-ratio"],
       "spacing": [2],
       "fill": [4],
-      "flex": [4],
+      "flex": [8],
       "flexFill": [4, "flex-fill"],
       "direction": [1],
       "align": [1],
+      "itemAlign": [1, "item-align"],
       "width": [1],
       "height": [1],
       "minWidth": [1, "min-width"],
       "maxWidth": [1, "max-width"],
       "minHeight": [1, "min-height"],
       "maxHeight": [1, "max-height"],
+      "overflow": [1],
       "roundedCorners": [2, "rounded-corners"],
       "lightScheme": [1, "light-scheme"],
       "darkScheme": [1, "dark-scheme"],
@@ -6361,6 +6298,29 @@ class ZeroDivider {
   }; }
 }
 
+const zeroFooterCss = "/*!@footer*/footer.sc-zero-footer{margin-top:4rem;width:100%;background:var(--color-background)}";
+
+class ZeroFooter {
+  constructor(hostRef) {
+    registerInstance(this, hostRef);
+    this.copyright = `Copyright © ${new Date().getFullYear()} OneZero Company. All rights reserved.`;
+  }
+  render() {
+    return (hAsync("footer", null, hAsync("zero-container", { padding: 2, align: "center" }, hAsync("zero-text", { textStyle: "footnote" }, this.copyright))));
+  }
+  static get style() { return zeroFooterCss; }
+  static get cmpMeta() { return {
+    "$flags$": 9,
+    "$tagName$": "zero-footer",
+    "$members$": {
+      "copyright": [1]
+    },
+    "$listeners$": undefined,
+    "$lazyBundleId$": "-",
+    "$attrsToReflect$": []
+  }; }
+}
+
 const gridCss = "/*!@.zero-grid*/.zero-grid.sc-zero-grid{display:grid;grid-template-columns:repeat(\n    auto-fill,\n    minmax(var(--min-width, 300px), 1fr)\n  );gap:var(--spacing, 1rem)}";
 
 class ZeroGrid {
@@ -6389,15 +6349,22 @@ class ZeroGrid {
   }; }
 }
 
-const zeroHeaderCss = "/*!@.zero-header*/.zero-header.sc-zero-header{z-index:100;position:relative;width:100%;overflow:hidden;background:var(--color-primary, #2a2a2a)}/*!@.content*/.content.sc-zero-header{position:relative;z-index:100;max-height:100%;max-width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12rem 2rem;min-height:70vh;margin-top:4rem;box-sizing:border-box}/*!@.background*/.background.sc-zero-header{width:100%;height:100%}/*!@.background img,\n.background video,\n.background iframe,\n.background object,\n::slotted(img),\n::slotted(video),\n::slotted(iframe),\n::slotted(object)*/.background.sc-zero-header img.sc-zero-header,.background.sc-zero-header video.sc-zero-header,.background.sc-zero-header iframe.sc-zero-header,.background.sc-zero-header object.sc-zero-header,.sc-zero-header-s>img,.sc-zero-header-s>video,.sc-zero-header-s>iframe,.sc-zero-header-s>object{position:absolute;top:0;left:0;display:block;width:100%;height:100%;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center}/*!@.fadeout*/.fadeout.sc-zero-header{position:absolute;top:0;left:0;z-index:10;height:100%;width:100%;background:linear-gradient(\n    to bottom,\n    transparent 30%,\n    var(--color-scaffold, transparent) 100%\n  )}/*!@.header-card*/.header-card.sc-zero-header{position:relative}/*!@.card-content*/.card-content.sc-zero-header{display:inline-block}";
+const zeroHeaderCss = "/*!@.zero-header*/.zero-header.sc-zero-header{z-index:100;position:relative;width:100%;overflow:hidden;background:var(--color-primary, #2a2a2a)}/*!@.content*/.content.sc-zero-header{position:relative;z-index:100;max-height:60vh;max-width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12rem 2rem;margin-top:10vh;margin-bottom:10vh;box-sizing:border-box}/*!@.background*/.background.sc-zero-header{width:100%;height:100%}/*!@.background img,\n.background video,\n.background iframe,\n.background object,\n::slotted(img),\n::slotted(video),\n::slotted(iframe),\n::slotted(object)*/.background.sc-zero-header img.sc-zero-header,.background.sc-zero-header video.sc-zero-header,.background.sc-zero-header iframe.sc-zero-header,.background.sc-zero-header object.sc-zero-header,.sc-zero-header-s>img,.sc-zero-header-s>video,.sc-zero-header-s>iframe,.sc-zero-header-s>object{position:absolute;top:0;left:0;display:block;width:100%;height:100%;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center}/*!@.fadeout*/.fadeout.sc-zero-header{position:absolute;top:0;left:0;z-index:10;height:100%;width:100%;background:linear-gradient(\n    to bottom,\n    transparent 30%,\n    var(--color-scaffold, transparent) 100%\n  )}/*!@.content*/.content.sc-zero-header{display:flex;justify-content:center;align-items:center}/*!@.header-card*/.header-card.sc-zero-header{position:relative;top:var(--card-offset, 0px)}/*!@.card-content*/.card-content.sc-zero-header{display:inline-block}";
 
 class ZeroHeader {
   constructor(hostRef) {
     registerInstance(this, hostRef);
     this.backgroundOpacity = 0.9;
+    this.scrollPosition = 0;
+  }
+  componentDidLoad() {
+    document.addEventListener('scroll', () => {
+      this.scrollPosition =
+        document.documentElement.scrollTop || document.body.scrollTop;
+    });
   }
   render() {
-    return (hAsync("div", { class: "zero-header" }, hAsync("div", { class: "background", style: {
+    return (hAsync("div", { class: "zero-header", style: { '--card-offset': `${this.scrollPosition * 0.25}px` } }, hAsync("div", { class: "background", style: {
         opacity: this.backgroundOpacity.toString(),
       } }, hAsync("slot", { name: "background" }, this.backgroundImage && !this.backgroundVideo ? (hAsync("img", { src: this.backgroundImage, alt: "header" })) : null, this.backgroundVideo ? (hAsync("video", { autoPlay: true, loop: true, muted: true, playsInline: true }, hAsync("source", { src: this.backgroundVideo, type: "video/mp4" }))) : null)), hAsync("div", { class: "content" }, hAsync("slot", { name: "content" }, hAsync("zero-container", { class: "header-card", backgroundBlur: 15, padding: 4, paddingRatio: 1.3, roundedCorners: 1, backgroundTranslucency: 0.7, lightScheme: "dark", followAmount: 10, fill: false, flex: false, flexFill: false }, hAsync("div", { class: "card-content" }, hAsync("slot", { name: "card-content" }))))), hAsync("div", { class: "fadeout" })));
   }
@@ -6408,7 +6375,8 @@ class ZeroHeader {
     "$members$": {
       "backgroundOpacity": [2, "background-opacity"],
       "backgroundImage": [1, "background-image"],
-      "backgroundVideo": [1, "background-video"]
+      "backgroundVideo": [1, "background-video"],
+      "scrollPosition": [32]
     },
     "$listeners$": undefined,
     "$lazyBundleId$": "-",
@@ -6440,7 +6408,7 @@ function validateUrl(value) {
   return regex.test(value);
 }
 
-const inputCss = "/*!@label,\np.value*/label.sc-zero-input,p.value.sc-zero-input{color:var(--color-text, #000);font-family:var(--font, 'sans-serif');font-weight:600;letter-spacing:0.02rem;font-size:0.8rem;text-transform:capitalize;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0;padding:0}/*!@input*/input.sc-zero-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;border:none;background:transparent;border-radius:0;font-size:1.1rem;font-weight:500;color:var(--color-text, #000);width:100%;max-width:var(--max-width, 100%);box-sizing:border-box;outline:none;font-family:var(--font, 'sans-serif');padding:0;margin:0}/*!@input[type='color']*/input[type='color'].sc-zero-input{padding:0;border:none;background:transparent;border-radius:1rem;-webkit-appearance:none;-moz-appearance:none;appearance:none}/*!@input[type='color']::-webkit-color-swatch*/input[type='color'].sc-zero-input::-webkit-color-swatch{border:none;border-radius:0.25rem;cursor:pointer}/*!@input[type='range']*/input[type='range'].sc-zero-input{margin:0;width:100%;height:0.5rem;border-radius:1rem;background:var(--color-scaffold, #fff);margin-top:0.5rem}/*!@input[type='range']::-webkit-slider-thumb*/input[type='range'].sc-zero-input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;background:var(--color-text, #000);border-radius:100%;width:1rem;height:1rem;cursor:pointer}/*!@input[type='checkbox']*/input[type='checkbox'].sc-zero-input{position:relative;margin:0;width:1.4rem;height:1.4rem;border:2px solid var(--color-text, #000);-webkit-appearance:none;-moz-appearance:none;appearance:none;border-radius:0.25rem;cursor:pointer}/*!@input[type='checkbox']:checked::after*/input[type='checkbox'].sc-zero-input:checked::after{content:'';position:absolute;top:15%;left:28%;border-width:0 2px 2px 0;border-color:var(--color-text, #000);border-style:solid;height:45%;width:30%;transform:rotate(45deg)}/*!@input[type='file']*/input[type='file'].sc-zero-input{display:none}/*!@input::-moz-placeholder*/input.sc-zero-input::-moz-placeholder{color:var(--color-text, #000);opacity:0.25;font-family:var(--font, 'sans-serif');font-weight:400;letter-spacing:0.02rem;font-size:1.1rem}/*!@input:-ms-input-placeholder*/input.sc-zero-input:-ms-input-placeholder{color:var(--color-text, #000);opacity:0.25;font-family:var(--font, 'sans-serif');font-weight:400;letter-spacing:0.02rem;font-size:1.1rem}/*!@input::placeholder*/input.sc-zero-input::placeholder{color:var(--color-text, #000);opacity:0.25;font-family:var(--font, 'sans-serif');font-weight:400;letter-spacing:0.02rem;font-size:1.1rem}/*!@input::-webkit-search-decoration,\ninput::-webkit-search-cancel-button,\ninput::-webkit-search-results-button,\ninput::-webkit-search-results-decoration,\ninput::-webkit-clear-button,\ninput::-webkit-inner-spin-button,\ninput::-webkit-outer-spin-button,\ninput::-webkit-calendar-picker-indicator*/input.sc-zero-input::-webkit-search-decoration,input.sc-zero-input::-webkit-search-cancel-button,input.sc-zero-input::-webkit-search-results-button,input.sc-zero-input::-webkit-search-results-decoration,input.sc-zero-input::-webkit-clear-button,input.sc-zero-input::-webkit-inner-spin-button,input.sc-zero-input::-webkit-outer-spin-button,input.sc-zero-input::-webkit-calendar-picker-indicator{display:none}/*!@.error*/.error.sc-zero-input{height:100%;max-height:0;opacity:0;transition:max-height 0.3s ease-in-out, opacity 0.3s ease-in-out}/*!@.show-error .error*/.show-error.sc-zero-input .error.sc-zero-input{max-height:4rem;opacity:1}";
+const inputCss = "/*!@:host*/.sc-zero-input-h{-webkit-appearance:none !important;-moz-appearance:none !important;appearance:none !important}/*!@label,\np.value*/label.sc-zero-input,p.value.sc-zero-input{color:var(--color-text, #000);font-family:var(--font, 'sans-serif');font-weight:600;letter-spacing:0.02rem;font-size:0.8rem;text-transform:capitalize;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;margin:0;padding:0}/*!@input*/input.sc-zero-input{-webkit-appearance:none;-moz-appearance:none;appearance:none;border:none;background:transparent;border-radius:0;font-size:1.1rem;font-weight:500;color:var(--color-text, #000);width:100%;max-width:var(--max-width, 100%);box-sizing:border-box;outline:none;font-family:var(--font, 'sans-serif');padding:0;margin:0}/*!@input[type='color']*/input[type='color'].sc-zero-input{padding:0;border:none;background:transparent;border-radius:1rem;-webkit-appearance:none;-moz-appearance:none;appearance:none}/*!@input[type='color']::-webkit-color-swatch*/input[type='color'].sc-zero-input::-webkit-color-swatch{border:none;border-radius:0.25rem;cursor:pointer}/*!@input[type='range']*/input[type='range'].sc-zero-input{margin:0;width:100%;height:0.5rem;border-radius:1rem;background:var(--color-scaffold, #fff);margin-top:0.5rem}/*!@input[type='range']::-webkit-slider-thumb*/input[type='range'].sc-zero-input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;background:var(--color-text, #000);border-radius:100%;width:1rem;height:1rem;cursor:pointer}/*!@input[type='checkbox']*/input[type='checkbox'].sc-zero-input{position:relative;margin:0;width:1.4rem;height:1.4rem;border:2px solid var(--color-text, #000);-webkit-appearance:none;-moz-appearance:none;appearance:none;border-radius:0.25rem;cursor:pointer}/*!@input[type='checkbox']:checked::after*/input[type='checkbox'].sc-zero-input:checked::after{content:'';position:absolute;top:15%;left:28%;border-width:0 2px 2px 0;border-color:var(--color-text, #000);border-style:solid;height:45%;width:30%;transform:rotate(45deg)}/*!@input[type='file']*/input[type='file'].sc-zero-input{display:none}/*!@input::-moz-placeholder*/input.sc-zero-input::-moz-placeholder{color:var(--color-text, #000);opacity:0.25;font-family:var(--font, 'sans-serif');font-weight:400;letter-spacing:0.02rem;font-size:1.1rem}/*!@input:-ms-input-placeholder*/input.sc-zero-input:-ms-input-placeholder{color:var(--color-text, #000);opacity:0.25;font-family:var(--font, 'sans-serif');font-weight:400;letter-spacing:0.02rem;font-size:1.1rem}/*!@input::placeholder*/input.sc-zero-input::placeholder{color:var(--color-text, #000);opacity:0.25;font-family:var(--font, 'sans-serif');font-weight:400;letter-spacing:0.02rem;font-size:1.1rem}/*!@input::-webkit-search-decoration,\ninput::-webkit-search-cancel-button,\ninput::-webkit-search-results-button,\ninput::-webkit-search-results-decoration,\ninput::-webkit-clear-button,\ninput::-webkit-inner-spin-button,\ninput::-webkit-outer-spin-button,\ninput::-webkit-calendar-picker-indicator*/input.sc-zero-input::-webkit-search-decoration,input.sc-zero-input::-webkit-search-cancel-button,input.sc-zero-input::-webkit-search-results-button,input.sc-zero-input::-webkit-search-results-decoration,input.sc-zero-input::-webkit-clear-button,input.sc-zero-input::-webkit-inner-spin-button,input.sc-zero-input::-webkit-outer-spin-button,input.sc-zero-input::-webkit-calendar-picker-indicator{display:none}/*!@.error*/.error.sc-zero-input{height:100%;max-height:0;opacity:0;transition:max-height 0.3s ease-in-out, opacity 0.3s ease-in-out}/*!@.show-error .error*/.show-error.sc-zero-input .error.sc-zero-input{max-height:4rem;opacity:1}";
 
 class ZeroInput {
   constructor(hostRef) {
@@ -6582,7 +6550,7 @@ class ZeroInput {
   }; }
 }
 
-const scaffoldCss = "@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap'); @import url('https://fonts.googleapis.com/css2?family=Vollkorn:wght@300;400;500;600;700;800&display=swap'); @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'); html{line-height:1.15;-webkit-text-size-adjust:100%;}body{margin:0}main{display:block}h1{font-size:2em;margin:0.67em 0}hr{box-sizing:content-box;height:0;overflow:visible;}pre{font-family:monospace, monospace;font-size:1em;}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted;}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace, monospace;font-size:1em;}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-0.25em}sup{top:-0.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0;}button,input{overflow:visible}button,select{text-transform:none}button,[type=\"button\"],[type=\"reset\"],[type=\"submit\"]{-webkit-appearance:button}button::-moz-focus-inner,[type=\"button\"]::-moz-focus-inner,[type=\"reset\"]::-moz-focus-inner,[type=\"submit\"]::-moz-focus-inner{border-style:none;padding:0}button:-moz-focusring,[type=\"button\"]:-moz-focusring,[type=\"reset\"]:-moz-focusring,[type=\"submit\"]:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:0.35em 0.75em 0.625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal;}progress{vertical-align:baseline}textarea{overflow:auto}[type=\"checkbox\"],[type=\"radio\"]{box-sizing:border-box;padding:0;}[type=\"number\"]::-webkit-inner-spin-button,[type=\"number\"]::-webkit-outer-spin-button{height:auto}[type=\"search\"]{-webkit-appearance:textfield;outline-offset:-2px;}[type=\"search\"]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit;}details{display:block}summary{display:list-item}template{display:none}[hidden]{display:none}html,body{width:100%;height:100%}#scaffold{display:block;width:100%;min-height:100vh}zero-bar{position:fixed;display:block;top:0;left:0;z-index:10000;padding:0;box-sizing:border-box;transition:padding 0.3s ease-in-out}.not-scrolled zero-bar{padding:2rem !important;--corner-radius:0 !important}.scaffold-content{display:flex;flex-direction:column;padding:3rem;max-width:1200px;margin:0 auto;box-sizing:border-box}";
+const scaffoldCss = "@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap'); @import url('https://fonts.googleapis.com/css2?family=Vollkorn:wght@300;400;500;600;700;800&display=swap'); @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'); html{line-height:1.15;-webkit-text-size-adjust:100%;}body{margin:0}main{display:block}h1{font-size:2em;margin:0.67em 0}hr{box-sizing:content-box;height:0;overflow:visible;}pre{font-family:monospace, monospace;font-size:1em;}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted;}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace, monospace;font-size:1em;}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-0.25em}sup{top:-0.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0;}button,input{overflow:visible}button,select{text-transform:none}button,[type=\"button\"],[type=\"reset\"],[type=\"submit\"]{-webkit-appearance:button}button::-moz-focus-inner,[type=\"button\"]::-moz-focus-inner,[type=\"reset\"]::-moz-focus-inner,[type=\"submit\"]::-moz-focus-inner{border-style:none;padding:0}button:-moz-focusring,[type=\"button\"]:-moz-focusring,[type=\"reset\"]:-moz-focusring,[type=\"submit\"]:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:0.35em 0.75em 0.625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal;}progress{vertical-align:baseline}textarea{overflow:auto}[type=\"checkbox\"],[type=\"radio\"]{box-sizing:border-box;padding:0;}[type=\"number\"]::-webkit-inner-spin-button,[type=\"number\"]::-webkit-outer-spin-button{height:auto}[type=\"search\"]{-webkit-appearance:textfield;outline-offset:-2px;}[type=\"search\"]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit;}details{display:block}summary{display:list-item}template{display:none}[hidden]{display:none}html,body{width:100%;height:100%}#scaffold{display:block;width:100%;min-height:100vh}zero-bar{position:fixed;display:block;top:0;left:0;z-index:100000 !important;padding:0;box-sizing:border-box;transition:padding 0.3s ease-in-out}.not-scrolled zero-bar{padding:2rem !important;--corner-radius:0 !important}.scaffold-content{display:flex;flex-direction:column;padding:3rem;max-width:1200px;margin:0 auto;box-sizing:border-box}";
 
 class ZeroScaffold {
   constructor(hostRef) {
@@ -6595,16 +6563,14 @@ class ZeroScaffold {
   }
   componentWillLoad() {
     document.addEventListener('scroll', () => {
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      this.el.style.setProperty('--scroll-position', `${scrollTop}px`);
-      if (scrollTop > 10 !== this.scrolled) {
-        this.scrolled = scrollTop > 10;
+      const position = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrolled = position > 20;
+      if (this.scrolled !== scrolled) {
+        this.scrolled = scrolled;
         document.dispatchEvent(new CustomEvent('zero-scrolled', {
           detail: {
             scrolled: this.scrolled,
           },
-          bubbles: true,
-          cancelable: true,
         }));
       }
     });
@@ -6820,7 +6786,7 @@ class ZeroText {
     return ((_a = this.icon) === null || _a === void 0 ? void 0 : _a.length) > 0;
   }
   render() {
-    return (hAsync("zero-container", { lightScheme: this.lightScheme, darkScheme: this.darkScheme, direction: "horizontal", spacing: this.spacing, class: this.classes, padding: this.padding, paddingRatio: this.paddingRatio, fill: false }, hAsync("p", { style: this.cssVars }, this.hasIcon && this.iconPosition === 'leading' ? (hAsync("span", { style: this.cssVars, class: "material-symbols-outlined" }, this.icon)) : null, hAsync("span", { class: "content" }, hAsync("slot", null)), this.hasIcon && this.iconPosition === 'trailing' ? (hAsync("span", { class: "material-symbols-outlined" }, this.icon)) : null)));
+    return (hAsync("zero-container", { lightScheme: this.lightScheme, darkScheme: this.darkScheme, direction: "horizontal", spacing: this.spacing, class: this.classes, padding: this.padding, paddingRatio: this.paddingRatio, fill: false, flex: "inline-flex" }, hAsync("p", { style: this.cssVars }, this.hasIcon && this.iconPosition === 'leading' ? (hAsync("span", { style: this.cssVars, class: "material-symbols-outlined" }, this.icon)) : null, hAsync("span", { class: "content" }, hAsync("slot", null)), this.hasIcon && this.iconPosition === 'trailing' ? (hAsync("span", { class: "material-symbols-outlined" }, this.icon)) : null)));
   }
   get el() { return getElement(this); }
   static get style() { return textCss; }
@@ -6856,16 +6822,11 @@ class ZeroText {
 }
 
 registerComponents([
-  ButtonsSection,
-  ColorsSection,
-  ContainerSection,
-  GradientsSection,
-  InputsSection,
-  TypographySection,
   ZeroBar,
   ZeroButton,
   ZeroContainer,
   ZeroDivider,
+  ZeroFooter,
   ZeroGrid,
   ZeroHeader,
   ZeroInput,

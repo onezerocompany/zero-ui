@@ -6,18 +6,6 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface ButtonsSection {
-    }
-    interface ColorsSection {
-    }
-    interface ContainerSection {
-    }
-    interface GradientsSection {
-    }
-    interface InputsSection {
-    }
-    interface TypographySection {
-    }
     interface ZeroBar {
         "elevation": number;
         "titleText"?: string;
@@ -61,17 +49,19 @@ export namespace Components {
         "edgeThickness": number;
         "elevation": number;
         "fill": boolean;
-        "flex": boolean;
+        "flex": boolean | string;
         "flexFill": boolean;
         "followAmount": number;
         "glowAmount": number;
         "height": string;
+        "itemAlign": string;
         "lightScheme"?: string;
         "maxHeight": string;
         "maxWidth": string;
         "minHeight": string;
         "minWidth": string;
         "neuness": number;
+        "overflow": string;
         "padding": number;
         "paddingRatio": number;
         "roundedCorners": number;
@@ -83,6 +73,9 @@ export namespace Components {
         "gradient"?: string;
         "spacing": number;
         "thickness": number;
+    }
+    interface ZeroFooter {
+        "copyright": string;
     }
     interface ZeroGrid {
         "minWidth": string;
@@ -146,43 +139,11 @@ export namespace Components {
         "weight"?: number;
     }
 }
+export interface ZeroInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLZeroInputElement;
+}
 declare global {
-    interface HTMLButtonsSectionElement extends Components.ButtonsSection, HTMLStencilElement {
-    }
-    var HTMLButtonsSectionElement: {
-        prototype: HTMLButtonsSectionElement;
-        new (): HTMLButtonsSectionElement;
-    };
-    interface HTMLColorsSectionElement extends Components.ColorsSection, HTMLStencilElement {
-    }
-    var HTMLColorsSectionElement: {
-        prototype: HTMLColorsSectionElement;
-        new (): HTMLColorsSectionElement;
-    };
-    interface HTMLContainerSectionElement extends Components.ContainerSection, HTMLStencilElement {
-    }
-    var HTMLContainerSectionElement: {
-        prototype: HTMLContainerSectionElement;
-        new (): HTMLContainerSectionElement;
-    };
-    interface HTMLGradientsSectionElement extends Components.GradientsSection, HTMLStencilElement {
-    }
-    var HTMLGradientsSectionElement: {
-        prototype: HTMLGradientsSectionElement;
-        new (): HTMLGradientsSectionElement;
-    };
-    interface HTMLInputsSectionElement extends Components.InputsSection, HTMLStencilElement {
-    }
-    var HTMLInputsSectionElement: {
-        prototype: HTMLInputsSectionElement;
-        new (): HTMLInputsSectionElement;
-    };
-    interface HTMLTypographySectionElement extends Components.TypographySection, HTMLStencilElement {
-    }
-    var HTMLTypographySectionElement: {
-        prototype: HTMLTypographySectionElement;
-        new (): HTMLTypographySectionElement;
-    };
     interface HTMLZeroBarElement extends Components.ZeroBar, HTMLStencilElement {
     }
     var HTMLZeroBarElement: {
@@ -206,6 +167,12 @@ declare global {
     var HTMLZeroDividerElement: {
         prototype: HTMLZeroDividerElement;
         new (): HTMLZeroDividerElement;
+    };
+    interface HTMLZeroFooterElement extends Components.ZeroFooter, HTMLStencilElement {
+    }
+    var HTMLZeroFooterElement: {
+        prototype: HTMLZeroFooterElement;
+        new (): HTMLZeroFooterElement;
     };
     interface HTMLZeroGridElement extends Components.ZeroGrid, HTMLStencilElement {
     }
@@ -244,16 +211,11 @@ declare global {
         new (): HTMLZeroTextElement;
     };
     interface HTMLElementTagNameMap {
-        "buttons-section": HTMLButtonsSectionElement;
-        "colors-section": HTMLColorsSectionElement;
-        "container-section": HTMLContainerSectionElement;
-        "gradients-section": HTMLGradientsSectionElement;
-        "inputs-section": HTMLInputsSectionElement;
-        "typography-section": HTMLTypographySectionElement;
         "zero-bar": HTMLZeroBarElement;
         "zero-button": HTMLZeroButtonElement;
         "zero-container": HTMLZeroContainerElement;
         "zero-divider": HTMLZeroDividerElement;
+        "zero-footer": HTMLZeroFooterElement;
         "zero-grid": HTMLZeroGridElement;
         "zero-header": HTMLZeroHeaderElement;
         "zero-input": HTMLZeroInputElement;
@@ -263,18 +225,6 @@ declare global {
     }
 }
 declare namespace LocalJSX {
-    interface ButtonsSection {
-    }
-    interface ColorsSection {
-    }
-    interface ContainerSection {
-    }
-    interface GradientsSection {
-    }
-    interface InputsSection {
-    }
-    interface TypographySection {
-    }
     interface ZeroBar {
         "elevation"?: number;
         "titleText"?: string;
@@ -318,17 +268,19 @@ declare namespace LocalJSX {
         "edgeThickness"?: number;
         "elevation"?: number;
         "fill"?: boolean;
-        "flex"?: boolean;
+        "flex"?: boolean | string;
         "flexFill"?: boolean;
         "followAmount"?: number;
         "glowAmount"?: number;
         "height"?: string;
+        "itemAlign"?: string;
         "lightScheme"?: string;
         "maxHeight"?: string;
         "maxWidth"?: string;
         "minHeight"?: string;
         "minWidth"?: string;
         "neuness"?: number;
+        "overflow"?: string;
         "padding"?: number;
         "paddingRatio"?: number;
         "roundedCorners"?: number;
@@ -340,6 +292,9 @@ declare namespace LocalJSX {
         "gradient"?: string;
         "spacing"?: number;
         "thickness"?: number;
+    }
+    interface ZeroFooter {
+        "copyright"?: string;
     }
     interface ZeroGrid {
         "minWidth"?: string;
@@ -358,7 +313,7 @@ declare namespace LocalJSX {
         "max"?: number;
         "min"?: number;
         "name"?: string;
-        "onValueChanged"?: (event: CustomEvent<string>) => void;
+        "onValueChanged"?: (event: ZeroInputCustomEvent<string>) => void;
         "padding"?: number;
         "paddingRatio"?: number;
         "placeholder"?: string;
@@ -404,16 +359,11 @@ declare namespace LocalJSX {
         "weight"?: number;
     }
     interface IntrinsicElements {
-        "buttons-section": ButtonsSection;
-        "colors-section": ColorsSection;
-        "container-section": ContainerSection;
-        "gradients-section": GradientsSection;
-        "inputs-section": InputsSection;
-        "typography-section": TypographySection;
         "zero-bar": ZeroBar;
         "zero-button": ZeroButton;
         "zero-container": ZeroContainer;
         "zero-divider": ZeroDivider;
+        "zero-footer": ZeroFooter;
         "zero-grid": ZeroGrid;
         "zero-header": ZeroHeader;
         "zero-input": ZeroInput;
@@ -426,16 +376,11 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "buttons-section": LocalJSX.ButtonsSection & JSXBase.HTMLAttributes<HTMLButtonsSectionElement>;
-            "colors-section": LocalJSX.ColorsSection & JSXBase.HTMLAttributes<HTMLColorsSectionElement>;
-            "container-section": LocalJSX.ContainerSection & JSXBase.HTMLAttributes<HTMLContainerSectionElement>;
-            "gradients-section": LocalJSX.GradientsSection & JSXBase.HTMLAttributes<HTMLGradientsSectionElement>;
-            "inputs-section": LocalJSX.InputsSection & JSXBase.HTMLAttributes<HTMLInputsSectionElement>;
-            "typography-section": LocalJSX.TypographySection & JSXBase.HTMLAttributes<HTMLTypographySectionElement>;
             "zero-bar": LocalJSX.ZeroBar & JSXBase.HTMLAttributes<HTMLZeroBarElement>;
             "zero-button": LocalJSX.ZeroButton & JSXBase.HTMLAttributes<HTMLZeroButtonElement>;
             "zero-container": LocalJSX.ZeroContainer & JSXBase.HTMLAttributes<HTMLZeroContainerElement>;
             "zero-divider": LocalJSX.ZeroDivider & JSXBase.HTMLAttributes<HTMLZeroDividerElement>;
+            "zero-footer": LocalJSX.ZeroFooter & JSXBase.HTMLAttributes<HTMLZeroFooterElement>;
             "zero-grid": LocalJSX.ZeroGrid & JSXBase.HTMLAttributes<HTMLZeroGridElement>;
             "zero-header": LocalJSX.ZeroHeader & JSXBase.HTMLAttributes<HTMLZeroHeaderElement>;
             "zero-input": LocalJSX.ZeroInput & JSXBase.HTMLAttributes<HTMLZeroInputElement>;

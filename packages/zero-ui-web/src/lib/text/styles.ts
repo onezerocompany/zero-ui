@@ -38,13 +38,13 @@ export function styleForName(styleName: string) {
 
 // add the heading styles
 
-const subSizeMultiplier = {
+const subSizeMultiplier: { [key: string]: number } = {
   'Pre-Heading': 0.4,
   'Heading': 1,
   'Sub-Heading': 0.6,
 };
 
-const subSizeColor = {
+const subSizeColor: { [key: string]: string } = {
   'Pre-Heading': 'var(--color-text-tertiary)',
   'Heading': 'var(--color-text-primary)',
   'Sub-Heading': 'var(--color-text-secondary)',

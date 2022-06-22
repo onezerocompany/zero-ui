@@ -3,11 +3,17 @@ import {
   ZeroBar,
   ZeroButton,
   ZeroContainer,
+  ZeroFooter,
   ZeroHeader,
   ZeroScaffold,
   ZeroText,
 } from "@onezerocompany/zero-ui-react";
-import ContainerSection from "../components/preview-sections/ContainerSection";
+import ContainerSection from "../components/previews/ContainerSection";
+import ColorsSection from "../components/previews/ColorsSection";
+import GradientsSection from "../components/previews/GradientsSection";
+import TypographySection from "../components/previews/TypographySection";
+import ButtonsSection from "../components/previews/ButtonsSection";
+import InputsSection from "../components/previews/InputsSections";
 
 // markup
 const IndexPage = () => {
@@ -26,6 +32,7 @@ const IndexPage = () => {
               icon="code"
               lightScheme="purple"
               darkScheme="purple"
+              link="https://github.com/onezerocompany/zero-ui"
             ></ZeroButton>
           </ZeroContainer>
         </ZeroBar>
@@ -40,7 +47,13 @@ const IndexPage = () => {
       </div>
       <ZeroContainer spacing={10} slot="content">
         <ContainerSection />
+        <ColorsSection />
+        <GradientsSection />
+        <TypographySection />
+        <ButtonsSection />
+        <InputsSection />
       </ZeroContainer>
+      <ZeroFooter slot="footer" />
     </ZeroScaffold>
   );
 };

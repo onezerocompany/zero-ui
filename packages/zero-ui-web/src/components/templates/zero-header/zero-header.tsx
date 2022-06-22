@@ -1,4 +1,4 @@
-import { Component, Prop, h } from '@stencil/core';
+import { Component, Prop, h, State } from '@stencil/core';
 
 @Component({
   tag: 'zero-header',
@@ -10,9 +10,21 @@ export class ZeroHeader {
   @Prop() backgroundImage?: string;
   @Prop() backgroundVideo?: string;
 
+  @State() scrollPosition = 0;
+
+  componentDidLoad() {
+    document.addEventListener('scroll', () => {
+      this.scrollPosition =
+        document.documentElement.scrollTop || document.body.scrollTop;
+    });
+  }
+
   render() {
     return (
-      <div class="zero-header">
+      <div
+        class="zero-header"
+        style={{ '--card-offset': `${this.scrollPosition * 0.25}px` }}
+      >
         <div
           class="background"
           style={{

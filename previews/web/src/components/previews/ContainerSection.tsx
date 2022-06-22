@@ -94,6 +94,7 @@ class ContainerSection extends React.Component {
       >
         <ZeroGrid spacing={2} minWidth="400px">
           <ZeroContainer
+            height="300px"
             elevation={this.state.elevation}
             edgeBrightness={this.state.edge}
             edgeThickness={this.state.edgeThickness}
@@ -122,7 +123,16 @@ class ContainerSection extends React.Component {
               Use the sliders to change the appearance
             </ZeroText>
           </ZeroContainer>
-          <ZeroContainer spacing={0.5}>
+          <ZeroContainer
+            spacing={0.5}
+            height="300px"
+            overflow="scroll"
+            padding={1}
+            backgroundTranslucency={0}
+            roundedCorners={1}
+            elevation={5}
+            shadowProminence={0.3}
+          >
             {variables.map((variable) => (
               <ZeroInput
                 type="range"
@@ -131,7 +141,7 @@ class ContainerSection extends React.Component {
                 min={variable.min}
                 max={variable.max}
                 value={this.state[variable.value]}
-                onValueChanged={(e) => {
+                onValueChanged={(e: any) => {
                   const value = Number(e.detail);
                   this.setState({
                     [variable.value]: value,

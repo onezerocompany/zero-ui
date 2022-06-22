@@ -10,10 +10,9 @@ export class ZeroBar {
   @Prop() titleText?: string;
 
   @State() scrolled = false;
-
-  componentDidLoad() {
-    document.addEventListener('zero-scrolled', (event: any) => {
-      this.scrolled = event.detail.scrolled;
+  componentWillLoad() {
+    document.addEventListener('zero-scrolled', (event: CustomEvent) => {
+      this.scrolled = event.detail.scrolled ?? false;
     });
   }
 

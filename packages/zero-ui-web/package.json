@@ -27,21 +27,21 @@
     "generate": "stencil generate"
   },
   "dependencies": {
-    "@stencil/core": "^2.13.0",
+    "@stencil/core": "^2.17.0",
     "@stencil/react-output-target": "^0.3.1",
     "normalize.css": "^8.0.1"
   },
   "devDependencies": {
-    "@onezerocompany/eslint-config": "^1.3.11",
-    "@onezerocompany/prettier-config": "^1.3.11",
-    "@onezerocompany/tsconfig": "^1.3.11",
+    "@onezerocompany/eslint-config": "^1.3.12",
+    "@onezerocompany/prettier-config": "^1.3.12",
+    "@onezerocompany/tsconfig": "^1.3.12",
     "@stencil/postcss": "^2.1.0",
-    "@types/jest": "^27.0.3",
+    "@types/jest": "^28.1.3",
     "autoprefixer": "^10.4.7",
-    "jest": "^27.4.5",
-    "jest-cli": "^27.4.5",
-    "prettier": "^2.6.2",
-    "puppeteer": "^10.0.0",
+    "jest": "^28.1.1",
+    "jest-cli": "^28.1.1",
+    "prettier": "^2.7.1",
+    "puppeteer": "^14.4.1",
     "workbox-build": "^6.5.3"
   },
   "prettier": "@onezerocompany/prettier-config",

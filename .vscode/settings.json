@@ -9,7 +9,10 @@
     "**/node_modules": true,
     "**/dist": true,
     "**/loader": true,
-    "**/www": true
+    "**/www": true,
+    "**/.cache": true,
+    "**/public": true,
+    "**/components.d.ts": true
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
