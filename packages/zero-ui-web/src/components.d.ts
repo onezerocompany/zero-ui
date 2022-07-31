@@ -143,6 +143,10 @@ export namespace Components {
         "weight"?: number;
     }
 }
+export interface ZeroInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLZeroInputElement;
+}
 declare global {
     interface HTMLButtonsSectionElement extends Components.ButtonsSection, HTMLStencilElement {
     }
@@ -353,7 +357,7 @@ declare namespace LocalJSX {
         "max"?: number;
         "min"?: number;
         "name"?: string;
-        "onValueChanged"?: (event: CustomEvent<string>) => void;
+        "onValueChanged"?: (event: ZeroInputCustomEvent<string>) => void;
         "padding"?: number;
         "paddingRatio"?: number;
         "placeholder"?: string;
