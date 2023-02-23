@@ -1,0 +1,8 @@
+.divider {
+  display: block;
+  width: 100%;
+  background: var(--gradient, var(--color-text, #fff));
+  height: var(--thickness, 2px);
+  margin: var(--spacing, 1rem) 0;
+  border-radius: 10rem;
+}

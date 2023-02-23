@@ -1,0 +1,33 @@
+name: onezero_ui_catalog
+description: A new Flutter project.
+
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+version: 1.0.0
+
+environment:
+  sdk: ">=2.18.6 <3.0.0"
+
+dependencies:
+  onezero_ui:
+    path: ../../packages/flutter
+  flutter:
+    sdk: flutter
+  google_fonts: ^4.0.3
+  flutter_riverpod: ^2.2.0
+  firebase_auth: ^4.2.6
+  firebase_core: ^2.5.0
+  cloud_firestore: ^4.4.2
+  cloud_functions: ^4.0.10
+  cross_file: ^0.3.3+4
+  go_router: ^6.0.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/images/

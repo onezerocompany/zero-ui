@@ -1,0 +1,17 @@
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* padding: 6rem 0; */
+  width: 100%;
+}
+
+.section-header {
+  display: inline-flex;
+  flex-direction: column;
+  padding-bottom: 2rem;
+}
+
+.section-content {
+  width: 100%;
+}

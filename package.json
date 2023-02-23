@@ -1,6 +1,10 @@
 {
   "workspaces": [
-    "zero-ui-web",
-    "zero-ui-react"
-  ]
+    "packages/zero-ui-web",
+    "packages/zero-ui-react",
+    "previews/web"
+  ],
+  "scripts": {
+    "build": "npm run -ws build"
+  }
 }

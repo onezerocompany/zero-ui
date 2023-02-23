@@ -1,0 +1,52 @@
+name: zero_flutter
+description: A new Flutter package project.
+
+environment:
+  sdk: ">=2.18.6 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  crypto: ^3.0.2
+  flutter:
+    sdk: flutter
+  flutter_svg: ^1.1.6
+  google_sign_in: ^5.4.3
+  sign_in_with_apple: ^4.3.0
+  smooth_corner: ^1.1.0
+  camera: ^0.10.1
+  image_picker: ^0.8.6
+  extended_image: ^6.3.4
+  image: ^4.0.11
+  go_router: ^6.0.1
+  flutter_riverpod: ^2.1.3
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  cloud_firestore_odm: ^1.0.0-dev.46
+  json_annotation: ^4.8.0
+  firebase_auth: ^4.2.6
+  cloud_functions: ^4.0.10
+  cloud_firestore: ^4.4.2
+  firebase_remote_config: ^3.0.10
+  url_launcher: ^6.1.9
+
+dev_dependencies:
+  test: ^1.22.0
+  flutter_test:
+    sdk: flutter
+  onezero_flutter_lints:
+    git:
+      url: https://github.com/onezerocompany/coding.git
+      path: packages/onezero_flutter_lints
+
+flutter:
+  generate: true
+  uses-material-design: false
+  fonts:
+    - family: MaterialSymbolsRounded
+      fonts:
+        - asset: assets/fonts/material-symbols-rounded.ttf
+  assets:
+    - assets/icons/
+    - assets/fonts/
+    - assets/flags/

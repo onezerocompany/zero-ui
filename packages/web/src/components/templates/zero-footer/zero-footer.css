@@ -1,0 +1,16 @@
+footer {
+  margin-top: 4rem;
+  width: 100%;
+  background: var(--color-background);
+}
+
+/* .fadein {
+  height: 4rem;
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    var(--color-scaffold) 0%,
+    var(--color-background) 100%
+  );
+  opacity: 0.75;
+} */

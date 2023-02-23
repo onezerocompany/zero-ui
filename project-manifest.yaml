@@ -1,0 +1,23 @@
+main_branch: main
+release:
+  tag_template: "{major}.{minor}.{patch}"
+  commit_url: https://github.com/onezerocompany/strijthagencup/commit/{{commit}}
+  release_url: https://github.com/onezerocompany/strijthagencup/releases/tag/{{release}}
+  changelog_fallback: This update contains minor improvements and fixes.
+
+users:
+  - username: lucasilverentand
+    assign_issue: true
+    environments:
+      - id: zero_flutter
+        deploy: true
+        edit_changelog: true
+
+environments:
+  - id: zero_flutter
+    github_name: zero_flutter
+    type: github-npm-registry
+    auto_deploy: true
+    version_template: "{major}.{minor}.{patch}"
+    changelog:
+      generate: true
