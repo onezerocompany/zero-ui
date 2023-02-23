@@ -54,6 +54,17 @@ class InputsController extends ChangeNotifier {
     return registration.state.value;
   }
 
+  /// Get indidiual input field state.
+  /// If the input field with the given [id] is not found, `null` is returned.
+  InputState<ValueType>? getState<ValueType>(String id) {
+    final InputFieldRegistration<ValueType>? registration =
+        _getRegistration<ValueType>(id);
+    if (registration == null) {
+      return null;
+    }
+    return registration.state;
+  }
+
   /// Creates a map of the values of the input fields.
   /// The map is created by mapping the [InputField] widgets' [InputField.id]s
   /// to their current values.
@@ -63,6 +74,7 @@ class InputsController extends ChangeNotifier {
   /// This is called by the [InputField] widget when it is built.
   InputFieldRegistration<ValueType>? register<ValueType>(
     InputField<ValueType> input,
+    FocusNode focusNode,
   ) {
     final InputFieldRegistration<ValueType>? existingRegistration =
         _getRegistration<ValueType>(input.id);
@@ -73,6 +85,7 @@ class InputsController extends ChangeNotifier {
 
     final registration = InputFieldRegistration<ValueType>(
       input: input,
+      focusNode: focusNode,
       state: InputState<ValueType>(
         storedValue: storedValues[input.id] ?? input.defaultValue(),
         value: storedValues[input.id] ?? input.defaultValue(),
@@ -126,6 +139,19 @@ class InputsController extends ChangeNotifier {
     onSaved?.call(values);
 
     return true;
+  }
+
+  /// Moves to the next invalid input field in the form.
+  /// If all input fields are valid, saves the form.
+  void nextFieldOrSave() {
+    for (final InputFieldRegistration registration in _inputs) {
+      if (!registration.state.valid) {
+        registration.focusNode.requestFocus();
+        return;
+      }
+    }
+
+    save();
   }
 
   /// Whether the form is dirty.

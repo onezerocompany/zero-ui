@@ -4,9 +4,11 @@ class InputFieldRegistration<ValueType> extends ChangeNotifier {
   InputFieldRegistration({
     required this.input,
     required this.state,
+    required this.focusNode,
   });
 
   final InputField<ValueType> input;
+  final FocusNode focusNode;
   InputState<ValueType> state;
 
   /// Updates the value of the input field with the given [id].

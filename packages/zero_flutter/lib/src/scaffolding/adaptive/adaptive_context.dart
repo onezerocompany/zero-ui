@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
 class AdaptiveContext extends InheritedWidget {

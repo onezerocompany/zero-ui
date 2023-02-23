@@ -26,6 +26,9 @@ class InputsPage extends Page {
           maxWidth: 400,
           child: InputsForm(
             storedValues: const {"name": "John Doe"},
+            onSaved: (values) {
+              showSnackbar(context, title: "Saved form");
+            },
             builder: (context, controller, dirty, valid) => Section(
               icon: Icons.draw,
               title: "Inputs",
@@ -81,7 +84,6 @@ class InputsPage extends Page {
                   leading: Icons.person,
                   label: "Name",
                   placeholder: "Enter your name",
-                  textInputAction: TextInputAction.next,
                   sanitizer: (value, forStoring) {
                     if (value.length < 2) return value.toUpperCase();
                     // make sure every word is capitalized
@@ -107,7 +109,6 @@ class InputsPage extends Page {
                   label: "Name",
                   alignment: InputFieldAlignment.end,
                   placeholder: "Enter your name",
-                  textInputAction: TextInputAction.next,
                   sanitizer: (value, forStoring) {
                     if (value.length < 2) return value.toUpperCase();
                     // make sure every word is capitalized
@@ -133,7 +134,6 @@ class InputsPage extends Page {
                   label: "Name",
                   alignment: InputFieldAlignment.start,
                   placeholder: "Enter your name",
-                  textInputAction: TextInputAction.next,
                   sanitizer: (value, forStoring) {
                     if (value.length < 2) return value.toUpperCase();
                     // make sure every word is capitalized
