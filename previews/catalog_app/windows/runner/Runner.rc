@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "onezero_ui_catalog" "\0"
+            VALUE "FileDescription", "zero_flutter_catalog" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "onezero_ui_catalog" "\0"
+            VALUE "InternalName", "zero_flutter_catalog" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "onezero_ui_catalog.exe" "\0"
-            VALUE "ProductName", "onezero_ui_catalog" "\0"
+            VALUE "OriginalFilename", "zero_flutter_catalog.exe" "\0"
+            VALUE "ProductName", "zero_flutter_catalog" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

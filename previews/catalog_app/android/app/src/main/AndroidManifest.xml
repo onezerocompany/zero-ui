@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.onezero_ui_catalog">
+    package="com.example.zero_flutter_catalog">
    <application
-        android:label="onezero_ui_catalog"
+        android:label="zero_flutter_catalog"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

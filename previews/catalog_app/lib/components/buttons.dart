@@ -1,4 +1,4 @@
-// page of onezero_ui buttons
+// page of zero_flutter buttons
 import 'package:zero_flutter/zero_flutter.dart';
 
 class ButtonFlavor {

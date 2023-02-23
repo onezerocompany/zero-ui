@@ -15,7 +15,7 @@ class GoogleSignInButton extends StatelessWidget {
       child: Button(
         leading: SvgPicture.asset(
           "assets/icons/google.svg",
-          package: "onezero_ui",
+          package: "zero_flutter",
         ),
         label: ZeroUIAppLocalizations.of(context)!.googleSignInButtonLabel,
         config: Button.defaultConfig.copyWith(

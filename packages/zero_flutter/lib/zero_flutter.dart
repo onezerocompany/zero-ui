@@ -1,4 +1,4 @@
-library onezero_ui;
+library zero_flutter;
 
 // app
 export 'src/app/app.dart';

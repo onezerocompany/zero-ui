@@ -8,7 +8,7 @@ environment:
   sdk: ">=2.18.6 <3.0.0"
 
 dependencies:
-  onezero_ui:
+  zero_flutter:
     path: ../../packages/zero_flutter
   flutter:
     sdk: flutter

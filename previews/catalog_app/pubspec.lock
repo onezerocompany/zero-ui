@@ -533,7 +533,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
-  onezero_ui:
+  zero_flutter:
     dependency: "direct main"
     description:
       path: "../../packages/flutter"

@@ -15,7 +15,7 @@ class MaterialSymbolData extends IconData {
 
 class Icons {
   static const fontFamily = 'MaterialSymbolsRounded';
-  static const fontPackage = 'onezero_ui';
+  static const fontPackage = 'zero_flutter';
 
   static const symbol_10k = MaterialSymbolData(0xe951);
   static const symbol_10mp = MaterialSymbolData(0xe952);

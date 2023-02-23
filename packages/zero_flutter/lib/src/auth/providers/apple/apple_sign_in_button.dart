@@ -17,7 +17,7 @@ class AppleSignInButton extends StatelessWidget {
       child: Button(
         leading: SvgPicture.asset(
           "assets/icons/apple.svg",
-          package: "onezero_ui",
+          package: "zero_flutter",
           height: 22,
           color: Colors.white,
         ),
