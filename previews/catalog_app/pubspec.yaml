@@ -1,5 +1,5 @@
-name: onezero_ui_catalog
-description: A new Flutter project.
+name: zero_catalog
+description: Catalog of the Zero Flutter UI Kit
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0
@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   onezero_ui:
-    path: ../../packages/flutter
+    path: ../../packages/zero_flutter
   flutter:
     sdk: flutter
   google_fonts: ^4.0.3

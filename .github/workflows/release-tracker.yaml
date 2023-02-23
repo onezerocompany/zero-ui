@@ -27,6 +27,6 @@ jobs:
 
       # run the release-tracker action, it auto detects what to do
       - name: Release Tracker
-        uses: ./actions/release-tracker
+        uses: onezerocompany/coding/actions/release-tracker@main
         with:
           publish_token: ${{ secrets.RELEASE_TOKEN }}
