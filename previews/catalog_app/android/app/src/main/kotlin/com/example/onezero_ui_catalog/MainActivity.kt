@@ -1,4 +1,4 @@
-package com.example.zero_flutter_catalog
+package com.example.zero_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 

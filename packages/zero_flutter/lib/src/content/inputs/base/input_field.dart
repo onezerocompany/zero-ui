@@ -36,6 +36,7 @@ abstract class InputField<ValueType> extends StatefulWidget {
     this.fillColor,
     this.dense = false,
     this.padding = const EdgeInsets.all(16),
+    this.onSubmitted,
   });
 
   /// Optional [InputsController] for this input field.
@@ -109,6 +110,10 @@ abstract class InputField<ValueType> extends StatefulWidget {
   /// the input field before [trailing].
   final String? label;
 
+  /// Called when the input field is submitted.
+  /// e.g. when the user presses the enter key.
+  final Function(ValueType value)? onSubmitted;
+
   InputsController? effectiveController(BuildContext context) {
     return controller ?? InputsForm.controller(context);
   }
@@ -132,12 +137,23 @@ abstract class InputFieldState<ValueType,
     });
   }
 
+  void onSubmittedField(ValueType value) {
+    final state = widget.effectiveController(context)?.getState(widget.id);
+    if (state?.valid == true) {
+      widget.effectiveController(context)?.nextFieldOrSave();
+    } else {
+      fieldFocusNode.requestFocus();
+    }
+    widget.onSubmitted?.call(value);
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final registration =
-        widget.effectiveController(context)?.register<ValueType>(widget);
+    final registration = widget
+        .effectiveController(context)
+        ?.register<ValueType>(widget, fieldFocusNode);
 
     if (registration != null) {
       setState(() {

@@ -22,6 +22,7 @@ class TextInput extends InputField<String> {
     super.enabled = true,
     super.label,
     super.sanitizer,
+    super.onSubmitted,
 
     // TextInput specific
     this.placeholder,
@@ -31,7 +32,6 @@ class TextInput extends InputField<String> {
     this.autofillHints,
     this.keyboardType,
     this.inputFormatters,
-    this.onSubmitted,
   });
 
   @override
@@ -46,7 +46,6 @@ class TextInput extends InputField<String> {
   final Iterable<String>? autofillHints;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
-  final Function(String value)? onSubmitted;
 
   @override
   InputFieldState<String, TextInput> createState() {
@@ -113,7 +112,7 @@ class _TextInputState extends InputFieldState<String, TextInput> {
             .effectiveController(context)
             ?.updateValue<String>(widget.id, value);
       },
-      onSubmitted: widget.onSubmitted,
+      onSubmitted: (value) => onSubmittedField(value),
       decoration: InputDecoration.collapsed(
         hintText: widget.placeholder,
         hintStyle: text.bodyLarge?.copyWith(

@@ -22,6 +22,7 @@ class NumericInput extends InputField<num> {
     super.enabled = true,
     super.label,
     super.sanitizer,
+    super.onSubmitted,
 
     // NumericInput specific
     this.stepAmount = 1,
@@ -121,6 +122,9 @@ class _NumericInputState extends InputFieldState<num, NumericInput> {
                     RegExp(r'^[0-9.,]*$'),
                   ),
                 ],
+                onSubmitted: (value) => onSubmittedField(
+                  num.tryParse(value) ?? 0,
+                ),
                 // clamp value to min/max
                 onChanged: (value) {
                   final numValue = num.tryParse(value);

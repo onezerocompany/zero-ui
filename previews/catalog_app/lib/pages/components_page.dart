@@ -1,10 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:zero_flutter/zero_flutter.dart';
-import 'package:zero_flutter_catalog/components/buttons.dart';
-import 'package:zero_flutter_catalog/components/inputs.dart';
-import 'package:zero_flutter_catalog/components/loader.dart';
-import 'package:zero_flutter_catalog/components/text.dart';
-import 'package:zero_flutter_catalog/components/camera_page.dart';
+import 'package:zero_catalog/components/buttons.dart';
+import 'package:zero_catalog/components/inputs.dart';
+import 'package:zero_catalog/components/loader.dart';
+import 'package:zero_catalog/components/text.dart';
+import 'package:zero_catalog/components/camera_page.dart';
 
 List<Page> componentPages = [
   const TextPage(),

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart' hide Colors;
 import 'package:zero_flutter/zero_flutter.dart';
 
 class FadedContainer extends StatelessWidget {
