@@ -16,7 +16,26 @@
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "workbench.colorCustomizations": {
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#7c76fc",
+    "statusBar.background": "#4d44fb",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#7c76fc",
+    "statusBarItem.remoteBackground": "#4d44fb",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#4d44fb",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#4d44fb99",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#4d44fb",
+  "eslint.workingDirectories": ["packages/zero-functions", "functions"]
 }

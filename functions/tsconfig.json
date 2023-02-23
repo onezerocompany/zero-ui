@@ -1,0 +1,10 @@
+{
+  "extends": "@onezerocompany/tsconfig/bases/node18",
+  "compilerOptions": {
+    "outDir": "lib",
+    "sourceMap": true,
+    "strict": true
+  },
+  "compileOnSave": true,
+  "include": ["src"]
+}
