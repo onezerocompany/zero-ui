@@ -4,17 +4,17 @@ import 'package:zero_flutter/zero_flutter.dart';
 /// Shows a Firebase exception using the showError() function.
 ///
 showFirebaseError(
-  BuildContext context,
-  FirebaseException error, {
+  BuildContext context, {
+  FirebaseException? error,
   Map<String, String>? overrides,
 }) {
-  if (overrides?.containsKey(error.code) == true) {
-    showError(context, error: overrides![error.code]!);
+  if (overrides?.containsKey(error?.code ?? "") == true) {
+    showError(context, error: overrides![error?.code]!);
     return;
   }
 
   final ZeroUIAppLocalizations l10n = ZeroUIAppLocalizations.of(context)!;
-  switch (error.code) {
+  switch (error?.code) {
     case "auth/admin-restricted-operation":
       showError(context, error: l10n.authErrorAdminRestrictedOperation);
       break;
