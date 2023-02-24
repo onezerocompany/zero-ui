@@ -8,3 +8,4 @@ export 'statusbar_style.dart';
 export 'show_snackbar.dart';
 export 'first_where_or_null.dart';
 export 'animated_hider.dart';
+export 'show_firebase_error.dart';
