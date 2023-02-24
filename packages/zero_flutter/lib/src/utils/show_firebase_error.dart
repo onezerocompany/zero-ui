@@ -5,9 +5,9 @@ import 'package:zero_flutter/zero_flutter.dart';
 ///
 showFirebaseError(
   BuildContext context,
-  FirebaseException error,
+  FirebaseException error, {
   Map<String, String>? overrides,
-) {
+}) {
   if (overrides?.containsKey(error.code) == true) {
     showError(context, error: overrides![error.code]!);
     return;
