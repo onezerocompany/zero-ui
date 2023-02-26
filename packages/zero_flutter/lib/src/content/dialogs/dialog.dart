@@ -42,7 +42,7 @@ class Dialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              child,
+              Expanded(child: SingleChildScrollView(child: child)),
               SizedBox(
                 child: AnimatedGlass(
                   state: GlassState.translucent,

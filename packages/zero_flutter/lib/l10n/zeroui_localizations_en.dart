@@ -8,7 +8,7 @@ class ZeroUIAppLocalizationsEn extends ZeroUIAppLocalizations {
   String get confirmButton => 'Confirm';
 
   @override
-  String get omniSearchField => 'Search here...';
+  String get omniSearchField => 'Search...';
 
   @override
   String get passwordToggle => 'Sign in with password';
@@ -23,33 +23,6 @@ class ZeroUIAppLocalizationsEn extends ZeroUIAppLocalizations {
   String get appleSignInButtonLabel => 'Sign in with Apple';
 
   @override
-  String get emailAddressLabel => 'Email address';
-
-  @override
-  String get emailAddressPlaceholder => 'Enter your email address';
-
-  @override
-  String get nameLabel => 'Full Name';
-
-  @override
-  String get namePlaceholder => 'Enter your name';
-
-  @override
-  String get nameRequired => 'Please enter your name';
-
-  @override
-  String get phoneNumberLabel => 'Phone number';
-
-  @override
-  String get phoneNumberPlaceholder => 'Enter your phone number';
-
-  @override
-  String get passwordLabel => 'Password';
-
-  @override
-  String get passwordPlaceholder => 'Enter your password';
-
-  @override
   String get magicLinkSignInButton => 'Send magic link';
 
   @override
@@ -57,6 +30,21 @@ class ZeroUIAppLocalizationsEn extends ZeroUIAppLocalizations {
 
   @override
   String get forgotPasswordButton => 'Forgot password?';
+
+  @override
+  String get emailAddressLabel => 'Email address';
+
+  @override
+  String get emailAddressPlaceholder => 'Enter your email address';
+
+  @override
+  String get emailAddressRequired => 'Email address is required';
+
+  @override
+  String get passwordLabel => 'Password';
+
+  @override
+  String get passwordPlaceholder => 'Enter your password';
 
   @override
   String get returnToLoginButton => 'Back to login';
@@ -87,54 +75,6 @@ class ZeroUIAppLocalizationsEn extends ZeroUIAppLocalizations {
 
   @override
   String get goodNight => 'Good night';
-
-  @override
-  String get languageLabel => 'Language';
-
-  @override
-  String get languageSelectLabel => 'Select your language';
-
-  @override
-  String get saveChangesButton => 'Save changes';
-
-  @override
-  String get deleteAccountButton => 'Delete account';
-
-  @override
-  String get validateEmailTitle => 'Email verification';
-
-  @override
-  String get validateEmailBody => 'We sent a verification email to your email address. Please check your inbox and click the link to verify.';
-
-  @override
-  String get validateEmailButton => 'Resend verification email';
-
-  @override
-  String get validateEmailSent => 'Verification email sent';
-
-  @override
-  String get undoChangesButton => 'Undo changes';
-
-  @override
-  String get phoneNumberRequired => 'Please enter your phone number';
-
-  @override
-  String get phoneNumberInvalid => 'Please enter a valid phone number';
-
-  @override
-  String get emailAddressRequired => 'Please enter your email address';
-
-  @override
-  String get emailAddressInvalid => 'Please enter a valid email address';
-
-  @override
-  String get deleteAccountDialogTitle => 'Delete account';
-
-  @override
-  String get deleteAccountDialogMessage => 'Are you sure you want to delete your account? This action cannot be undone.';
-
-  @override
-  String get deleteAccountDialogButton => 'Delete account';
 
   @override
   String get goToSignInPage => 'Go to Sign In';

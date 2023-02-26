@@ -102,7 +102,7 @@ abstract class ZeroUIAppLocalizations {
   /// No description provided for @omniSearchField.
   ///
   /// In en, this message translates to:
-  /// **'Search here...'**
+  /// **'Search...'**
   String get omniSearchField;
 
   /// No description provided for @passwordToggle.
@@ -129,60 +129,6 @@ abstract class ZeroUIAppLocalizations {
   /// **'Sign in with Apple'**
   String get appleSignInButtonLabel;
 
-  /// No description provided for @emailAddressLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Email address'**
-  String get emailAddressLabel;
-
-  /// No description provided for @emailAddressPlaceholder.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your email address'**
-  String get emailAddressPlaceholder;
-
-  /// No description provided for @nameLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Full Name'**
-  String get nameLabel;
-
-  /// No description provided for @namePlaceholder.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your name'**
-  String get namePlaceholder;
-
-  /// No description provided for @nameRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your name'**
-  String get nameRequired;
-
-  /// No description provided for @phoneNumberLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Phone number'**
-  String get phoneNumberLabel;
-
-  /// No description provided for @phoneNumberPlaceholder.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your phone number'**
-  String get phoneNumberPlaceholder;
-
-  /// No description provided for @passwordLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Password'**
-  String get passwordLabel;
-
-  /// No description provided for @passwordPlaceholder.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your password'**
-  String get passwordPlaceholder;
-
   /// No description provided for @magicLinkSignInButton.
   ///
   /// In en, this message translates to:
@@ -200,6 +146,36 @@ abstract class ZeroUIAppLocalizations {
   /// In en, this message translates to:
   /// **'Forgot password?'**
   String get forgotPasswordButton;
+
+  /// No description provided for @emailAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email address'**
+  String get emailAddressLabel;
+
+  /// No description provided for @emailAddressPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address'**
+  String get emailAddressPlaceholder;
+
+  /// No description provided for @emailAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email address is required'**
+  String get emailAddressRequired;
+
+  /// No description provided for @passwordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get passwordLabel;
+
+  /// No description provided for @passwordPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get passwordPlaceholder;
 
   /// No description provided for @returnToLoginButton.
   ///
@@ -260,102 +236,6 @@ abstract class ZeroUIAppLocalizations {
   /// In en, this message translates to:
   /// **'Good night'**
   String get goodNight;
-
-  /// No description provided for @languageLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get languageLabel;
-
-  /// No description provided for @languageSelectLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Select your language'**
-  String get languageSelectLabel;
-
-  /// No description provided for @saveChangesButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Save changes'**
-  String get saveChangesButton;
-
-  /// No description provided for @deleteAccountButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete account'**
-  String get deleteAccountButton;
-
-  /// No description provided for @validateEmailTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Email verification'**
-  String get validateEmailTitle;
-
-  /// No description provided for @validateEmailBody.
-  ///
-  /// In en, this message translates to:
-  /// **'We sent a verification email to your email address. Please check your inbox and click the link to verify.'**
-  String get validateEmailBody;
-
-  /// No description provided for @validateEmailButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Resend verification email'**
-  String get validateEmailButton;
-
-  /// No description provided for @validateEmailSent.
-  ///
-  /// In en, this message translates to:
-  /// **'Verification email sent'**
-  String get validateEmailSent;
-
-  /// No description provided for @undoChangesButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Undo changes'**
-  String get undoChangesButton;
-
-  /// No description provided for @phoneNumberRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your phone number'**
-  String get phoneNumberRequired;
-
-  /// No description provided for @phoneNumberInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid phone number'**
-  String get phoneNumberInvalid;
-
-  /// No description provided for @emailAddressRequired.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your email address'**
-  String get emailAddressRequired;
-
-  /// No description provided for @emailAddressInvalid.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid email address'**
-  String get emailAddressInvalid;
-
-  /// No description provided for @deleteAccountDialogTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete account'**
-  String get deleteAccountDialogTitle;
-
-  /// No description provided for @deleteAccountDialogMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to delete your account? This action cannot be undone.'**
-  String get deleteAccountDialogMessage;
-
-  /// No description provided for @deleteAccountDialogButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete account'**
-  String get deleteAccountDialogButton;
 
   /// No description provided for @goToSignInPage.
   ///
