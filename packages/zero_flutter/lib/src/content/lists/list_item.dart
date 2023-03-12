@@ -40,7 +40,7 @@ class ListItem extends ButtonBase {
   );
 
   @override
-  Widget buildButton(BuildContext context, ButtonState state) {
+  Widget buildButton(BuildContext context, ButtonState state, WidgetRef ref) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
     Widget loadedIcon = icon is IconData
@@ -80,13 +80,11 @@ class ListItem extends ButtonBase {
               if (sublabel != null)
                 Text(
                   sublabel!,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.labelSmall?.copyWith(
-                    fontSize: config.textIconSize * 0.8,
-                    letterSpacing: 0.2,
+                  style: textTheme.titleSmall?.copyWith(
                     color: config.contentColor(context),
                     fontWeight: FontWeight.w500,
-                    height: 1,
                   ),
                 ),
             ],

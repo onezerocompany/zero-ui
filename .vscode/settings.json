@@ -12,7 +12,8 @@
     "**/www": true,
     "**/.cache": true,
     "**/public": true,
-    "**/components.d.ts": true
+    "**/components.d.ts": true,
+    "**/*.g.dart": true
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",

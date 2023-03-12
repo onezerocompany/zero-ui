@@ -2,10 +2,10 @@ import 'package:zero_flutter/globals.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
-class AnimatedSmoothCorner extends StatelessWidget {
+class AnimatedSmoothCorner extends ConsumerWidget {
   final Duration duration;
   final Curve curve;
-  final AdaptiveValue<BorderRadius> cornerRadius;
+  final BorderRadius cornerRadius;
   final Widget child;
   final Color? color;
   final BorderSide? side;
@@ -23,10 +23,7 @@ class AnimatedSmoothCorner extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final BreakPoint breakPoint = AdaptiveContext.breakpoint(context);
-    final cornerRadius = this.cornerRadius.value(breakPoint);
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return TweenAnimationBuilder<BorderRadius>(
       duration: duration,
       curve: curve,

@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/globals.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
@@ -14,13 +13,12 @@ class MultiPageScaffoldBuilder extends ConsumerWidget {
     BuildContext context,
     MultiScaffoldState state,
     Size size,
-    Widget? child,
   ) builder;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final level = AppConfig.router(context).level;
-    final panels = AdaptiveContext.panels(context);
+    final level = ref.watch(currentRouterLevelProvider);
+    final panels = ref.watch(panelsProvider);
 
     final currentState = MultiScaffoldState(
       multiPage: panels > 1 ? 1 : 0,
@@ -45,14 +43,8 @@ class MultiPageScaffoldBuilder extends ConsumerWidget {
               context,
               currentState,
               constraints.biggest,
-              null,
             );
           },
-          child: const Scaffold(
-            body: Center(
-              child: Text("Hello World"),
-            ),
-          ),
         );
       },
     );

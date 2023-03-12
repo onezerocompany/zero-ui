@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
 export 'multi_builder.dart';
@@ -10,11 +9,11 @@ class MultiPageScaffold extends ConsumerWidget {
   const MultiPageScaffold({
     super.key,
     required this.leftPage,
-    required this.rightPage,
+    this.rightPage,
   });
 
   final Widget leftPage;
-  final Widget rightPage;
+  final Widget? rightPage;
 
   // the width of the left panel (which can overflow)
   double leftPageWidth(
@@ -130,11 +129,10 @@ class MultiPageScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final breakpoints =
-        AdaptiveContext.of(context)?.breakPoints ?? const BreakPoints();
-    final maxScaffoldWidth = breakpoints.points[BreakPoint.lg] ?? 1280;
+    final style = ref.watch(styleConfigProvider);
+    final maxScaffoldWidth = style.breakpoints.points[BreakPoint.lg] ?? 1280;
     final screenSize = MediaQuery.of(context).size;
-    final level = AppConfig.router(context).level;
+    final level = ref.watch(currentRouterLevelProvider);
 
     return Center(
       child: ConstrainedBox(
@@ -146,7 +144,6 @@ class MultiPageScaffold extends ConsumerWidget {
             BuildContext context,
             MultiScaffoldState state,
             Size size,
-            Widget? child,
           ) {
             final leftPageWidth = this.leftPageWidth(
               screenSize,

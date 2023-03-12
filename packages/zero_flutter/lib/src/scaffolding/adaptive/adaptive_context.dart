@@ -1,57 +1,32 @@
 import 'package:zero_flutter/zero_flutter.dart';
 
-class AdaptiveContext extends InheritedWidget {
-  final BreakPoints breakPoints;
-  final BreakPoint _breakPoint;
+part 'adaptive_context.g.dart';
 
-  final int _panes;
-  final bool _sidebar;
-
-  const AdaptiveContext({
-    super.key,
-    required super.child,
-    required BreakPoint breakpoint,
-    required int panes,
-    required bool showSidebar,
-    required this.breakPoints,
-  })  : _breakPoint = breakpoint,
-        _panes = panes,
-        _sidebar = showSidebar;
-
+// screen size riverpod provider
+@Riverpod(keepAlive: true)
+class ScreenSize extends _$ScreenSize {
   @override
-  bool updateShouldNotify(AdaptiveContext oldWidget) {
-    return _breakPoint != oldWidget._breakPoint || _panes != oldWidget._panes;
+  Size build() {
+    return Size.zero;
   }
 
-  static AdaptiveContext? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AdaptiveContext>();
-  }
-
-  static BreakPoint breakpoint(BuildContext context) {
-    return AdaptiveContext.of(context)?._breakPoint ?? BreakPoint.xxs;
-  }
-
-  static int panels(BuildContext context) {
-    return AdaptiveContext.of(context)?._panes ?? 1;
-  }
-
-  static bool sidebar(BuildContext context) {
-    return AdaptiveContext.of(context)?._sidebar ?? false;
+  void set(Size value) {
+    state = value;
   }
 }
 
-class AdaptiveContextProvider extends StatelessWidget {
-  final Widget child;
-  final BreakPoints breakPoints;
+@Riverpod(keepAlive: true)
+BreakPoint breakPoint(BreakPointRef ref) {
+  final size = ref.watch(screenSizeProvider);
+  final style = ref.watch(styleConfigProvider);
+  return style.breakpoints.breakpoint(size.width);
+}
 
-  const AdaptiveContextProvider({
-    super.key,
-    required this.child,
-    this.breakPoints = const BreakPoints(),
-  });
-
-  static const panes = AdaptiveValue<int>(
-    defaultValue: 1,
+@riverpod
+int panels(PanelsRef ref) {
+  final breakpoint = ref.watch(breakPointProvider);
+  return const AdaptiveValue<int>(
+    fallbackValue: 1,
     values: [
       AdaptiveRangedValue(
         minBreakpoint: BreakPoint.md,
@@ -62,19 +37,5 @@ class AdaptiveContextProvider extends StatelessWidget {
         value: 3,
       ),
     ],
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final breakpoint = breakPoints.breakpoint(width);
-    final panes = AdaptiveContextProvider.panes.value(breakpoint);
-    return AdaptiveContext(
-      breakPoints: breakPoints,
-      breakpoint: breakpoint,
-      panes: panes,
-      showSidebar: panes > 1,
-      child: child,
-    );
-  }
+  ).value(breakpoint);
 }

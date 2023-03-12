@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
 var actionCodeSetting = ActionCodeSettings(
@@ -11,23 +10,22 @@ var actionCodeSetting = ActionCodeSettings(
   androidMinimumVersion: '1',
 );
 
-class LoginPage extends SignInScreen {
-  LoginPage({
-    super.key,
-  }) : super(
-          actionCodeSettings: actionCodeSetting,
-        );
+PageMetadata loginPageMetadata(Locale locale) {
+  return const PageMetadata(
+    icon: Icons.person,
+    name: "Login",
+    description: "Login to your account",
+    path: "/login",
+    hideOmniBar: true,
+  );
+}
 
-  @override
-  PageMetadata metadata(BuildContext context) {
-    return PageMetadata(
-      icon: Icons.person,
-      name: (context) => "Login",
-      description: (context) => "Login to your account",
-      path: "/login",
-      hideOmniBar: true,
-    );
-  }
+class LoginPage extends SignInScreen {
+  const LoginPage(
+    super.state, {
+    super.metadata = loginPageMetadata,
+    super.key,
+  });
 
   @override
   Widget? Function(BuildContext context, WidgetRef ref)? get heroBuilder =>

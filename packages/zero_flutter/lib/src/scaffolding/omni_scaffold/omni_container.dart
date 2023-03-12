@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/globals.dart';
+import 'package:zero_flutter/src/scaffolding/omni_scaffold/omni_bar_state.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
 final omnibarFocus = FocusNode();
@@ -10,7 +10,7 @@ class OmniContainer extends ConsumerWidget {
   OmniContainer({
     super.key,
     this.cornerRadius = const AdaptiveValue<BorderRadius>(
-      defaultValue: BorderRadius.all(Radius.circular(18)),
+      fallbackValue: BorderRadius.all(Radius.circular(18)),
       values: [
         AdaptiveRangedValue(
           minBreakpoint: BreakPoint.sm,
@@ -19,7 +19,7 @@ class OmniContainer extends ConsumerWidget {
       ],
     ),
     this.openCornerRadius = const AdaptiveValue<BorderRadius>(
-      defaultValue: BorderRadius.all(Radius.circular(22)),
+      fallbackValue: BorderRadius.all(Radius.circular(22)),
       values: [
         AdaptiveRangedValue(
           minBreakpoint: BreakPoint.sm,
@@ -35,15 +35,16 @@ class OmniContainer extends ConsumerWidget {
   final searchController = TextEditingController();
 
   static EdgeInsets position(
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref, {
     required Size size,
     required double openAmount,
     required double twoPanelAmount,
     required double keyboardHeight,
     required double barHeight,
   }) {
-    final style = AppConfig.style(context);
-    final breakpoint = AdaptiveContext.breakpoint(context);
+    final style = ref.watch(styleConfigProvider);
+    final breakpoint = ref.watch(breakPointProvider);
     final safeInsets = MediaQuery.of(context).padding;
     final gutter = style.gutters.value(breakpoint);
 
@@ -88,6 +89,7 @@ class OmniContainer extends ConsumerWidget {
     // final multiBottom = max(safeInsets.bottom + gutter, gutter);
     final multiBottom = PageContent.padding(
       context,
+      ref,
       extend: false,
       fadeEdges: true,
       layout: PageLayout.fullscreen,
@@ -120,27 +122,29 @@ class OmniContainer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isRoot = ref.watch(Router.isRoot);
-    final open = ref.watch(omniBarOpen) || isRoot;
-    final searching = ref.watch(omniSearching);
+    final state = ref.watch(omniBarStateProvider);
+    final level = ref.watch(currentRouterLevelProvider);
+    final isRoot = level == 0;
+    final open = state.open || isRoot;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final colors = Theme.of(context).colorScheme;
-    final panels = AdaptiveContext.panels(context);
-    final breakpoint = AdaptiveContext.breakpoint(context);
+    final panels = ref.watch(panelsProvider);
+    final breakpoint = ref.watch(breakPointProvider);
     final barHeight = OmniBar.resolvedHeight(
       context,
+      ref,
       open: open,
-      searching: searching,
+      searching: state.searching,
       docked: panels < 2,
       breakpoint: breakpoint,
     );
 
     final determinedCornerRadius = panels < 2
-        ? AdaptiveValue.fixed(BorderRadius.zero)
+        ? BorderRadius.zero
         : open
-            ? openCornerRadius
-            : cornerRadius;
+            ? openCornerRadius.value(breakpoint)
+            : cornerRadius.value(breakpoint);
 
     return AnimatedGlass(
       duration: OmniBar.transitionDuration,
@@ -173,9 +177,7 @@ class OmniContainer extends ConsumerWidget {
               duration: OmniBar.transitionDuration,
               curve: pageTransitionCurve,
               height: barHeight,
-              child: OmniBar(
-                height: barHeight,
-              ),
+              child: const OmniBar(),
             ),
           ),
         ],

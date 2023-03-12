@@ -4,7 +4,7 @@ import 'package:zero_flutter/zero_flutter.dart';
 
 class TransitionPage extends CustomTransitionPage {
   static const AdaptiveValue<bool> shouldTransition = AdaptiveValue<bool>(
-    defaultValue: false,
+    fallbackValue: false,
     values: [
       AdaptiveRangedValue(
         minBreakpoint: BreakPoint.md,
@@ -31,9 +31,9 @@ class TransitionPage extends CustomTransitionPage {
             secondaryAnimation,
             child,
           ) {
-            final shouldTransition = TransitionPage.shouldTransition
-                    .value(AdaptiveContext.breakpoint(context)) ||
-                level < 1;
+            final breakpoint = globalContainer.read(breakPointProvider);
+            final shouldTransition =
+                TransitionPage.shouldTransition.value(breakpoint) || level < 1;
             if (!shouldTransition) {
               return child;
             } else {

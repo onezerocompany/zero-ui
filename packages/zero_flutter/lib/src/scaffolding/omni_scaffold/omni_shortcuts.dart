@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zero_flutter/src/scaffolding/omni_scaffold/omni_bar_state.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
 class ToggleOmnibarIntent extends Intent {
@@ -35,13 +35,13 @@ class OmniBarShortcuts extends ConsumerWidget {
         actions: {
           ToggleOmnibarIntent: CallbackAction<ToggleOmnibarIntent>(
             onInvoke: (intent) {
-              ref.read(omniBarOpen.notifier).state = !ref.read(omniBarOpen);
+              ref.read(omniBarStateProvider.notifier).toggleOpen();
               return null;
             },
           ),
           CloseOmnibarIntent: CallbackAction<CloseOmnibarIntent>(
             onInvoke: (intent) {
-              ref.read(omniBarOpen.notifier).state = false;
+              ref.read(omniBarStateProvider.notifier).setOpen(false);
               return null;
             },
           ),

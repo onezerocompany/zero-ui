@@ -66,25 +66,27 @@ const flavors = [
   ),
 ];
 
+PageMetadata buttonsPageMetadata(Locale locale) {
+  return const PageMetadata(
+    path: "/buttons",
+    name: "Buttons",
+    description: "Buttons for performing actions",
+    icon: Icons.smart_button,
+  );
+}
+
 class ButtonsPage extends Page {
-  const ButtonsPage({super.key})
-      : super(
+  const ButtonsPage(
+    super.state, {
+    super.key,
+    super.metadata = buttonsPageMetadata,
+  }) : super(
           layout: PageLayout.card,
         );
 
   @override
-  PageMetadata metadata(BuildContext context) {
-    return PageMetadata(
-      path: "/buttons",
-      name: (context) => "Buttons",
-      description: (context) => "Buttons for performing actions",
-      icon: Icons.smart_button,
-    );
-  }
-
-  @override
   PageContentBuilder? get contentBuilder => (context, ref, landscape) {
-        BreakPoint breakpoint = AdaptiveContext.breakpoint(context);
+        BreakPoint breakpoint = ref.watch(breakPointProvider);
 
         return PageContent(
           child: Section(

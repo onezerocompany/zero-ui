@@ -2,8 +2,10 @@ import 'package:go_router/go_router.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
 class FallbackPage extends Page {
-  const FallbackPage({
+  const FallbackPage(
+    super.state, {
     super.key,
+    required super.metadata,
   });
 
   @override

@@ -1,66 +1,52 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/globals.dart';
+import 'package:zero_flutter/src/scaffolding/omni_scaffold/omni_bar_state.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
-class OmniBar extends ConsumerStatefulWidget {
+class OmniBar extends ConsumerWidget {
   const OmniBar({
     super.key,
-    required this.height,
   });
 
-  final double height;
-
-  static const padding = AdaptiveValue<double>(
-    defaultValue: 16,
-    values: [],
-  );
-
+  static const double padding = 16;
   static const Duration transitionDuration = Duration(milliseconds: 340);
 
   static double resolvedHeight(
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref, {
     required bool open,
     required bool searching,
     required bool docked,
     required BreakPoint breakpoint,
   }) {
-    final searchEnabled = AppConfig.of(context).searchEnabled();
-    final panels = AdaptiveContext.panels(context);
-    final breakpointPadding = padding.value(breakpoint);
-    final searchHeight = OmniSearch.height.value(breakpoint);
-    final buttonsHeight = OmniButtons.height.value(breakpoint);
+    final omniConfig = ref.watch(omniConfigProvider);
+    final panels = ref.watch(panelsProvider);
+
     final safePadding = (docked ? MediaQuery.of(context).padding.bottom : 0);
     final mobileBar = !open && panels < 2;
-    return (breakpointPadding *
-            (searching || mobileBar || !searchEnabled ? 2 : 3)) +
-        ((!mobileBar && searchEnabled) ? searchHeight : 0) +
-        (!searching ? buttonsHeight : 0) +
+    return (padding *
+            (searching || mobileBar || !omniConfig.searchEnabled ? 2 : 3)) +
+        ((!mobileBar && omniConfig.searchEnabled) ? OmniSearch.height : 0) +
+        (!searching ? OmniButtons.height : 0) +
         safePadding;
   }
 
   @override
-  OmniBarState createState() => OmniBarState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final level = ref.watch(currentRouterLevelProvider);
+    final isRoot = level == 0;
+    final open = ref.watch(omniBarStateProvider).open || isRoot;
+    final panels = ref.watch(panelsProvider);
+    final searching = ref.watch(omniSearchingProvider);
 
-class OmniBarState extends ConsumerState<OmniBar> {
-  @override
-  Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final text = Theme.of(context).textTheme;
-    final isRoot = ref.watch(Router.isRoot);
-    final open = ref.watch(omniBarOpen) || isRoot;
-    final breakpoint = AdaptiveContext.breakpoint(context);
-    final searching = ref.watch(omniSearching);
-    final panels = AdaptiveContext.panels(context);
-
-    final padding = OmniBar.padding.value(breakpoint);
-    final buttonsHeight = OmniButtons.height.value(breakpoint);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final searchEnabled = AppConfig.of(context).searchEnabled();
+
+    final omniConfig = ref.watch(omniConfigProvider);
+    final searchEnabled = omniConfig.searchEnabled;
 
     return AnimatedGlass(
       state: open ? GlassState.translucent : GlassState.invisible,
-      padding: EdgeInsets.all(padding),
+      padding: const EdgeInsets.all(padding),
       color: searching
           ? (isDark ? colors.surfaceVariant : colors.background)
           : colors.surface,
@@ -76,7 +62,7 @@ class OmniBarState extends ConsumerState<OmniBar> {
           children: [
             Positioned(
               top: 0,
-              height: buttonsHeight,
+              height: OmniButtons.height,
               left: 0,
               right: 0,
               child: AnimatedCrossFade(
@@ -101,9 +87,7 @@ class OmniBarState extends ConsumerState<OmniBar> {
                 duration: OmniBar.transitionDuration,
                 curve: pageTransitionCurve,
                 secondChild: const SizedBox.shrink(),
-                child: OmniSearch(
-                  text: text,
-                ),
+                child: const OmniSearch(),
               ),
             ),
           ],

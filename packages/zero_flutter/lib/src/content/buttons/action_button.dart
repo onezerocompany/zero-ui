@@ -48,6 +48,7 @@ class ActionButton extends ButtonBase {
   Widget buildButton(
     BuildContext context,
     ButtonState state,
+    WidgetRef ref,
   ) {
     Widget loadedIcon = icon is IconData
         ? Icon(

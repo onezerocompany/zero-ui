@@ -13,23 +13,19 @@ class AdaptiveRangedValue<T> {
 }
 
 class AdaptiveValue<T> {
-  final T defaultValue;
-  final List<AdaptiveRangedValue<T>> values;
   const AdaptiveValue({
-    required this.defaultValue,
+    required this.fallbackValue,
     required this.values,
   });
 
-  static fixed<T>(T value) {
-    return AdaptiveValue<T>(
-      defaultValue: value,
-      values: [],
-    );
-  }
+  final T fallbackValue;
+  final List<AdaptiveRangedValue<T>> values;
 
-  T value(BreakPoint breakpoint) {
+  T value(
+    BreakPoint breakpoint,
+  ) {
     int breakPointIndex = breakpoint.index;
-    T determinedValue = defaultValue;
+    T determinedValue = fallbackValue;
     for (var value in values) {
       int minBreakPointIndex = value.minBreakpoint?.index ?? 0;
       int maxBreakPointIndex =

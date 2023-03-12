@@ -153,7 +153,7 @@ class _CameraViewState extends State<CameraView> {
           child: AspectRatio(
             aspectRatio: 1,
             child: AnimatedSmoothCorner(
-              cornerRadius: AdaptiveValue.fixed(BorderRadius.circular(22)),
+              cornerRadius: BorderRadius.circular(22),
               child: CameraPreview(
                 controller: controller,
                 isReady: isReady,

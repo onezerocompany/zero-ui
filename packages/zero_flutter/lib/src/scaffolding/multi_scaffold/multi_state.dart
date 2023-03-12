@@ -38,4 +38,9 @@ class MultiScaffoldState {
       showingSecondPage: showingSecondPage / other,
     );
   }
+
+  @override
+  String toString() {
+    return 'MultiScaffoldState(multiPage: $multiPage, showingSecondPage: $showingSecondPage)';
+  }
 }

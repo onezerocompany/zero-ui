@@ -1,6 +1,0 @@
-arb-dir: lib/locales
-output-dir: lib/l10n
-template-arb-file: app_en.arb
-output-localization-file: zeroui_localizations.dart
-output-class: ZeroUIAppLocalizations
-synthetic-package: false

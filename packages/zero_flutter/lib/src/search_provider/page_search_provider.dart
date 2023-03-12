@@ -1,5 +1,7 @@
 import 'package:zero_flutter/zero_flutter.dart';
 
+import '../router/router_entry.dart';
+
 class PageSearchProviderItem {
   PageSearchProviderItem({
     this.icon,
@@ -17,47 +19,52 @@ class PageSearchProviderItem {
 }
 
 class PageSearchProvider extends SearchProvider {
-  PageSearchProvider(
-    BuildContext context, {
+  PageSearchProvider({
     super.type = OmniSearchObject.page,
     super.fetchMechanisms = const [
       SearchFetchMechanism.recommend,
       SearchFetchMechanism.recent,
       SearchFetchMechanism.instant,
     ],
-    required List<Page> pages,
-  }) : pages = pages.expand((page) => fromPage(context, page, null)).toList();
+    required List<RouterEntry> entries,
+  }) : entries = entries
+            .expand(
+              (entry) => fromEntry(
+                entry,
+                null,
+              ),
+            )
+            .toList();
 
-  static Iterable<PageSearchProviderItem> fromPage(
-    BuildContext context,
-    Page page,
-    Page? parent,
+  static Iterable<PageSearchProviderItem> fromEntry(
+    RouterEntry entry,
+    RouterEntry? parent,
   ) {
-    final metadata = page.metadata(context);
     return [
-      if (metadata.searchable)
+      if (entry.metadata.searchable)
         PageSearchProviderItem(
-          icon: metadata.icon,
-          name: metadata.name?.call(context),
-          description: metadata.description?.call(context),
-          url: metadata.resolvedPath(
-            context,
-            parent: parent,
-            fullPath: true,
-          ),
+          icon: entry.metadata.icon,
+          name: entry.metadata.name,
+          description: entry.metadata.description,
+          url: entry.fullPath,
         ),
-      ...metadata.subpages.expand((child) => fromPage(context, child, page))
+      ...entry.subentries.expand(
+        (subEntry) => fromEntry(
+          subEntry,
+          entry,
+        ),
+      )
     ];
   }
 
-  final List<PageSearchProviderItem> pages;
+  final List<PageSearchProviderItem> entries;
 
   @override
   Future<List<SearchResult>> recommend({
     int limit = 1000,
     int offset = 0,
   }) async {
-    return pages
+    return entries
         .map(
           (page) => SearchResult(
             icon: page.icon,
@@ -75,7 +82,7 @@ class PageSearchProvider extends SearchProvider {
     int limit = 10,
     int offset = 0,
   }) async {
-    List<SearchResult> results = pages
+    List<SearchResult> results = entries
         .where((page) => page.searchable)
         .map(
           (page) => SearchResult(

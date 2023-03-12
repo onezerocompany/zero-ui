@@ -22,7 +22,7 @@ class AnimatedGlass extends StatelessWidget {
   final Widget? child;
 
   final GlassState state;
-  final AdaptiveValue<BorderRadius> cornerRadius;
+  final BorderRadius cornerRadius;
   final Color? color;
   final double? blur;
   final double? transparency;
@@ -41,10 +41,7 @@ class AnimatedGlass extends StatelessWidget {
     this.blur,
     this.transparency,
     this.padding = EdgeInsets.zero,
-    this.cornerRadius = const AdaptiveValue<BorderRadius>(
-      defaultValue: BorderRadius.zero,
-      values: [],
-    ),
+    this.cornerRadius = BorderRadius.zero,
     this.clip = true,
     this.borderWidth = 0,
     this.borderColor,

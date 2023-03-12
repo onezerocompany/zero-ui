@@ -30,8 +30,11 @@ class Colors {
 
   // state colors
   static const Color success = material.Color.fromARGB(255, 38, 197, 126);
+  static const Color successful = success;
   static const Color warning = Color(0xFFFFAB00);
+  static const Color warn = warning;
   static const Color error = material.Color.fromARGB(255, 242, 14, 86);
+  static const Color destructive = error;
 
   get lightScheme {
     ColorScheme scheme = ColorScheme.fromSeed(

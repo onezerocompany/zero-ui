@@ -1,24 +1,23 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
 final loaderProgress = StateProvider.autoDispose<double>((ref) => 0.5);
 
-class LoaderPage extends Page {
-  const LoaderPage({
-    super.key,
-  }) : super(
-          layout: PageLayout.card,
-        );
+PageMetadata loaderPageMetadata(Locale locale) {
+  return const PageMetadata(
+    path: "/loader",
+    icon: Icons.percent,
+    name: "Loader",
+    description: "A circular loader with a progress indicator",
+  );
+}
 
-  @override
-  PageMetadata metadata(BuildContext context) {
-    return PageMetadata(
-      path: "/loader",
-      icon: Icons.percent,
-      name: (context) => "Loader",
-      description: (context) => "A circular loader with a progress indicator",
-    );
-  }
+class LoaderPage extends Page {
+  const LoaderPage(
+    super.state, {
+    super.metadata = loaderPageMetadata,
+    super.key,
+    super.layout = PageLayout.card,
+  });
 
   @override
   PageContentBuilder? get contentBuilder => (context, ref, landscape) {

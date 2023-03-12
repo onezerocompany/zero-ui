@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
@@ -20,8 +19,15 @@ enum PageLayout {
   fullscreenCard,
 }
 
+// page builder type definition
+typedef PageBuilder = Page Function(
+  GoRouterState? state,
+);
+
 class Page extends ConsumerWidget {
-  const Page({
+  const Page(
+    this.state, {
+    required this.metadata,
     super.key,
     this.layout = PageLayout.fullscreen,
     this.topBarBuilder,
@@ -30,20 +36,13 @@ class Page extends ConsumerWidget {
     this.color,
   });
 
+  final Localized<PageMetadata> metadata;
+  final GoRouterState? state;
   final PageLayout layout;
   final TopBarBuilder? topBarBuilder;
   final PageContentBuilder? contentBuilder;
   final Page? placeHolderChild;
   final Color Function(BuildContext context)? color;
-
-  PageMetadata metadata(BuildContext context) {
-    return PageMetadata(
-      path: "/",
-      name: (context) => "Page",
-      description: (context) => "A page",
-      icon: Icons.home,
-    );
-  }
 
   @protected
   Color backgroundColor(BuildContext context) {
@@ -62,14 +61,10 @@ class Page extends ConsumerWidget {
     WidgetRef ref,
     Color backgroundColor,
   ) {
-    final metadata = this.metadata(context);
+    final locale = ref.watch(currentLocaleProvider);
+    final metadata = this.metadata(locale);
     return (topBarBuilder?.call(context, ref) ??
-            (layout == PageLayout.card
-                ? TopBar(
-                    title: metadata.name?.call(context),
-                    subtitle: metadata.description?.call(context),
-                  )
-                : null))
+            (layout == PageLayout.card ? TopBar(title: metadata.name) : null))
         ?.copyWith(backgroundColor: backgroundColor);
   }
 
@@ -81,7 +76,7 @@ class Page extends ConsumerWidget {
     TopBar? topBar,
     bool landscape,
   ) {
-    final panels = AdaptiveContext.panels(context);
+    final panels = ref.watch(panelsProvider);
     final content = contentBuilder?.call(context, ref, landscape);
     final actualLayout = panels < 2
         ? (layout == PageLayout.card ? PageLayout.fullscreenCard : layout)
@@ -98,12 +93,18 @@ class Page extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final backgroundColor = this.backgroundColor(context);
-    final panels = AdaptiveContext.panels(context);
+    final panels = ref.watch(panelsProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final landscape = constraints.maxWidth > constraints.maxHeight;
-        TopBar? topBar = buildTopBar(context, ref, backgroundColor);
+
+        TopBar? topBar = buildTopBar(
+          context,
+          ref,
+          backgroundColor,
+        );
+
         PageContent? content = buildContent(
           context,
           ref,
@@ -137,70 +138,5 @@ class Page extends ConsumerWidget {
         );
       },
     );
-  }
-
-  RouteBase? route(
-    BuildContext context, {
-    Page? parent,
-    required int level,
-  }) {
-    final metadata = this.metadata(context);
-    final path = metadata.resolvedPath(
-      context,
-      parent: parent,
-    );
-    final subroutes = metadata.subroutes(
-      context,
-      parent: this,
-      level: level + 1,
-    );
-    if (subroutes.isNotEmpty == true) {
-      return ShellRoute(
-        pageBuilder: (context, state, child) => TransitionPage(
-          inDirection: AxisDirection.left,
-          outDirection: AxisDirection.left,
-          level: level,
-          key: ValueKey(state.path ?? path),
-          name: metadata.name?.call(context),
-          child: HeroControllerScope(
-            controller: HeroController(
-              createRectTween: (begin, end) =>
-                  MaterialRectArcTween(begin: begin, end: end),
-            ),
-            child: MultiPageScaffold(
-              key: ValueKey(state.path ?? path),
-              leftPage: this,
-              rightPage: child,
-            ),
-          ),
-        ),
-        routes: [
-          GoRoute(
-            path: path,
-            pageBuilder: (context, state) => TransitionPage(
-              inDirection: AxisDirection.up,
-              outDirection: AxisDirection.up,
-              level: level + 1,
-              key: ValueKey(state.path ?? path),
-              name: metadata.name?.call(context),
-              child: placeHolderChild ?? const SizedBox.expand(),
-            ),
-            routes: subroutes,
-          ),
-        ],
-      );
-    } else {
-      return GoRoute(
-        path: path,
-        pageBuilder: (context, state) => TransitionPage(
-          inDirection: AxisDirection.up,
-          outDirection: AxisDirection.up,
-          level: level,
-          key: ValueKey(state.path ?? path),
-          name: metadata.name?.call(context),
-          child: this,
-        ),
-      );
-    }
   }
 }

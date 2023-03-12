@@ -1,7 +1,4 @@
-import 'package:go_router/go_router.dart';
 import 'package:zero_flutter/zero_flutter.dart';
-
-typedef MetadataBuilder = PageMetadata Function();
 
 /// The metadata of a page
 ///
@@ -10,8 +7,9 @@ typedef MetadataBuilder = PageMetadata Function();
 @immutable
 class PageMetadata {
   const PageMetadata({
+    this.parent,
     required this.path,
-    this.name,
+    required this.name,
     this.description,
     this.icon,
     this.data = const {},
@@ -19,8 +17,11 @@ class PageMetadata {
     this.color,
     this.searchable = true,
     this.hideOmniBar = false,
-    this.requiredScopes = const [],
+    this.hasAccess = true,
   });
+
+  /// Parent to this page
+  final PageMetadata? parent;
 
   /// The path to the page
   /// e.g. /subpage
@@ -37,14 +38,14 @@ class PageMetadata {
   ///
   /// This is used to generate the title at the top of the page
   /// If the name is not specified, the page will not have a title
-  final String Function(BuildContext context)? name;
+  final String name;
 
   /// The description of the page
   /// e.g. 'This is a page that says hello world'
   ///
   /// This is used in link previews and search results
   /// If the description is not specified, the page will not have a description
-  final String Function(BuildContext context)? description;
+  final String? description;
 
   /// The icon of the page
   /// e.g. Iconsax.home
@@ -65,7 +66,7 @@ class PageMetadata {
   ///
   /// This is used in the router to generate the routes for the subpages
   /// If the subpages are not specified, the page will not have any subpages
-  final List<Page> subpages;
+  final List<PageBuilder> subpages;
 
   /// Color of the page, used for link previews
   final Color? color;
@@ -76,59 +77,11 @@ class PageMetadata {
   /// Defaults to true
   final bool searchable;
 
-  /// hides the omni bar
+  /// Hides the ombi search bar on the page
   final bool hideOmniBar;
 
-  /// Required auth scopes
-  /// e.g. ['admin', 'moderator']
-  final List<String> requiredScopes;
-
-  /// Resolves the path to a full path including the parent path
-  /// e.g. /page/subpage
-  String resolvedPath(
-    BuildContext context, {
-    Page? parent,
-    fullPath = false,
-  }) {
-    String resolved = path;
-    if (parent?.metadata(context).path == null) {
-      // add leading slash if it's not present
-      if (!resolved.startsWith('/')) resolved = '/$resolved';
-    } else {
-      if (fullPath) {
-        resolved = parent!.metadata(context).resolvedPath(context) + resolved;
-      } else if (resolved.startsWith('/')) {
-        resolved = resolved.substring(1);
-      }
-    }
-
-    // remove trailing slash
-    if (resolved.endsWith('/')) {
-      resolved = resolved.substring(0, resolved.length - 1);
-    }
-
-    return resolved;
-  }
-
-  /// Resolves the subpages to a list of routes
-  /// e.g. [Route1(), Route2()]
-  ///
-  /// This is used in the router to generate the routes for the subpages
-  /// If a subpage is not routable, it will not be included in the list
-  List<RouteBase> subroutes(
-    BuildContext context, {
-    Page? parent,
-    required int level,
-  }) {
-    return subpages
-        .map(
-          (page) => page.route(
-            context,
-            parent: parent,
-            level: level,
-          ),
-        )
-        .whereType<RouteBase>()
-        .toList();
-  }
+  /// Function that validates if the user is allowed to access the page
+  /// e.g. (context) => context.read(userProvider).isAdmin
+  /// e.g. (context) => context.read(userProvider).isModerator
+  final bool hasAccess;
 }

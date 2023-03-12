@@ -5,11 +5,12 @@ import 'package:zero_flutter/zero_flutter.dart';
 
 import 'google_signin.dart';
 
-class GoogleSignInButton extends StatelessWidget {
+class GoogleSignInButton extends ConsumerWidget {
   const GoogleSignInButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = ref.watch(zeroLocalizationsProvider);
     return SizedBox(
       width: double.infinity,
       child: Button(
@@ -17,7 +18,7 @@ class GoogleSignInButton extends StatelessWidget {
           "assets/icons/google.svg",
           package: "zero_flutter",
         ),
-        label: ZeroUIAppLocalizations.of(context)!.googleSignInButtonLabel,
+        label: t.login.signInWith.google,
         config: Button.defaultConfig.copyWith(
           fillWidth: true,
           fillColor: Colors.white,

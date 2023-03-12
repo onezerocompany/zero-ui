@@ -1,40 +1,48 @@
 import 'package:zero_flutter/globals.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
-class PageCardLayout extends StatelessWidget {
+part 'card_layout.g.dart';
+
+@riverpod
+BorderRadius pageCardCorner(PageCardCornerRef ref) {
+  final breakpoint = ref.watch(breakPointProvider);
+  return const AdaptiveValue<BorderRadius>(
+    fallbackValue: BorderRadius.zero,
+    values: [
+      AdaptiveRangedValue(
+        minBreakpoint: BreakPoint.md,
+        value: BorderRadius.all(Radius.circular(16)),
+      ),
+      AdaptiveRangedValue(
+        minBreakpoint: BreakPoint.xl,
+        value: BorderRadius.all(Radius.circular(24)),
+      ),
+    ],
+  ).value(breakpoint);
+}
+
+class PageCardLayout extends ConsumerWidget {
   const PageCardLayout({
     super.key,
     this.layout = PageLayout.fullscreen,
     required this.structure,
-    this.cornerRadius = const AdaptiveValue<BorderRadius>(
-      defaultValue: BorderRadius.zero,
-      values: [
-        AdaptiveRangedValue(
-          minBreakpoint: BreakPoint.md,
-          value: BorderRadius.all(Radius.circular(16)),
-        ),
-        AdaptiveRangedValue(
-          minBreakpoint: BreakPoint.xl,
-          value: BorderRadius.all(Radius.circular(24)),
-        ),
-      ],
-    ),
     required this.cardColor,
     required this.backgroundColor,
   });
 
   final PageStructure structure;
   final PageLayout layout;
-  final AdaptiveValue<BorderRadius> cornerRadius;
   final Color cardColor;
   final Color? backgroundColor;
 
   @override
-  Widget build(BuildContext context) {
-    final panels = AdaptiveContext.panels(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final panels = ref.watch(panelsProvider);
+    final cornerRadius = ref.watch(pageCardCornerProvider);
     if (layout == PageLayout.card || layout == PageLayout.fullscreenCard) {
       final padding = PageContent.padding(
         context,
+        ref,
         extend: structure.content?.extend ?? false,
         fadeEdges: false,
         layout: PageLayout.fullscreen,

@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
 // A widget that contains the actual content of the page
@@ -11,7 +10,7 @@ class PageContent extends ConsumerWidget {
     this.slivers,
     this.itemBuilder,
     this.itemSpacing = 12,
-    this.itemCount = 0,
+    this.itemCount,
     this.maxWidth = double.infinity,
     this.fadeEdges = true,
     this.extend = false,
@@ -27,9 +26,9 @@ class PageContent extends ConsumerWidget {
 
   final List<Widget>? slivers;
 
-  final IndexedWidgetBuilder? itemBuilder;
+  final NullableIndexedWidgetBuilder? itemBuilder;
   final double itemSpacing;
-  final int itemCount;
+  final int? itemCount;
 
   final bool fadeEdges;
   final bool extend;
@@ -78,33 +77,32 @@ class PageContent extends ConsumerWidget {
   }
 
   static EdgeInsets padding(
-    BuildContext context, {
+    BuildContext context,
+    WidgetRef ref, {
     required bool extend,
     required bool fadeEdges,
     required PageLayout layout,
   }) {
     if (extend) return EdgeInsets.zero;
-    final style = AppConfig.style(context);
-    final breakpoint = AdaptiveContext.breakpoint(context);
+    final style = ref.watch(styleConfigProvider);
+    final panels = ref.watch(panelsProvider);
+    final breakpoint = ref.watch(breakPointProvider);
     final contentPadding = style.contentPadding.value(breakpoint);
-    final gutter = style.gutters.value(breakpoint);
+    final gutters = style.gutters.value(breakpoint);
     final fullscreen =
         layout == PageLayout.fullscreen || layout == PageLayout.fullscreenCard;
-    final panels = AdaptiveContext.panels(context);
     final useGutter = fullscreen || (panels > 1 && layout != PageLayout.card);
+    final safeAreaInsets = MediaQuery.of(context).padding;
     return EdgeInsets.only(
       top: max(
-        (useGutter ? gutter : contentPadding) +
-            MediaQuery.of(context).padding.top,
+        (useGutter ? gutters : contentPadding.top) + safeAreaInsets.top,
         fadeEdges && layout == PageLayout.card ? 60 : 0,
       ),
-      left: (useGutter ? gutter : contentPadding) +
-          MediaQuery.of(context).padding.left,
-      right: (useGutter ? gutter : contentPadding) +
-          MediaQuery.of(context).padding.right,
+      left: (useGutter ? gutters : contentPadding.left) + safeAreaInsets.left,
+      right:
+          (useGutter ? gutters : contentPadding.right) + safeAreaInsets.right,
       bottom: max(
-        (useGutter ? gutter : contentPadding) +
-            MediaQuery.of(context).padding.bottom,
+        (useGutter ? gutters : contentPadding.bottom) + safeAreaInsets.bottom,
         fadeEdges && layout == PageLayout.card ? 60 : 0,
       ),
     );
@@ -113,15 +111,18 @@ class PageContent extends ConsumerWidget {
   @protected
   Widget wrappedChild(
     BuildContext context,
+    WidgetRef ref,
+    int panels,
+    StyleConfig style,
   ) {
+    Widget wrapped = Container();
     final padding = PageContent.padding(
       context,
+      ref,
       extend: extend,
       fadeEdges: fadeEdges,
       layout: layout,
     );
-
-    Widget wrapped = Container();
 
     if (child != null) {
       wrapped = scrollable
@@ -151,11 +152,18 @@ class PageContent extends ConsumerWidget {
         }).toList(),
       );
     } else if (itemBuilder != null) {
-      wrapped = ListView.separated(
+      wrapped = ListView.builder(
         padding: padding,
-        separatorBuilder: (context, index) => SizedBox(height: itemSpacing),
         itemCount: itemCount,
-        itemBuilder: itemBuilder!,
+        itemBuilder: (context, index) {
+          final item = itemBuilder!(context, index);
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: itemSpacing,
+            ),
+            child: item,
+          );
+        },
       );
     }
 
@@ -164,8 +172,11 @@ class PageContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final panels = ref.watch(panelsProvider);
+    final style = ref.watch(styleConfigProvider);
     final padding = PageContent.padding(
       context,
+      ref,
       extend: extend,
       fadeEdges: fadeEdges,
       layout: layout,
@@ -180,7 +191,12 @@ class PageContent extends ConsumerWidget {
               maxWidth: maxWidth + padding.horizontal,
               maxHeight: size.height,
             ),
-            child: wrappedChild(context),
+            child: wrappedChild(
+              context,
+              ref,
+              panels,
+              style,
+            ),
           ),
         );
       },

@@ -19,8 +19,8 @@ class Button extends ButtonBase {
 
   static const ButtonConfig defaultConfig = ButtonConfig(
     paddings: {
-      ButtonSize.small: EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-      ButtonSize.medium: EdgeInsets.symmetric(vertical: 16, horizontal: 18),
+      ButtonSize.small: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+      ButtonSize.medium: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
       ButtonSize.large: EdgeInsets.symmetric(vertical: 18, horizontal: 22),
     },
     cornerRadii: {
@@ -36,7 +36,11 @@ class Button extends ButtonBase {
   );
 
   @override
-  Widget buildButton(BuildContext context, ButtonState state) {
+  Widget buildButton(
+    BuildContext context,
+    ButtonState state,
+    WidgetRef ref,
+  ) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
     Widget loadedLeading = leading is IconData
@@ -77,11 +81,7 @@ class Button extends ButtonBase {
           ? MainAxisAlignment.start
           : MainAxisAlignment.spaceBetween,
       children: [
-        if (leading != null)
-          SizedBox.square(
-            dimension: config.textIconSize * 1.4,
-            child: loadedLeading,
-          ),
+        if (leading != null) loadedLeading,
         if (leading != null)
           SizedBox(
             width: config.textIconSize / 2,

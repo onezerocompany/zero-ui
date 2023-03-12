@@ -1,37 +1,29 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/globals.dart';
+import 'package:zero_flutter/src/scaffolding/omni_scaffold/omni_bar_state.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
-class OmniButtonData {
-  const OmniButtonData({
-    required this.icon,
-    this.onPressed,
-    this.link,
-  });
-  final IconData icon;
-  final VoidCallback? onPressed;
-  final String? link;
-}
+final nameProvider = StateProvider<String?>((ref) => null);
+final pictureProvider = StateProvider<Widget?>((ref) => null);
 
 class OmniButtons extends ConsumerWidget {
   const OmniButtons({
     super.key,
   });
 
-  static const height = AdaptiveValue<double>(
-    defaultValue: 52,
-    values: [],
-  );
+  static const double height = 52;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final t = ref.watch(zeroLocalizationsProvider);
+    final level = ref.watch(currentRouterLevelProvider);
+
     final colors = Theme.of(context).colorScheme;
-    final isRoot = ref.watch(Router.isRoot);
-    final open = ref.watch(omniBarOpen) || isRoot;
-    final breakpoint = AdaptiveContext.breakpoint(context);
-    final panels = AdaptiveContext.panels(context);
-    final authConfig = AppConfig.of(context).authConfig;
+    final isRoot = level == 0;
+    final open = ref.watch(omniBarStateProvider).open || isRoot;
+    final panels = ref.watch(panelsProvider);
+    final authConfig = ref.watch(authConfigProvider);
+    ref.watch(userIdProvider);
 
     final omniButton = AspectRatio(
       aspectRatio: 1,
@@ -42,12 +34,7 @@ class OmniButtons extends ConsumerWidget {
         ),
         icon: open ? Icons.expand_more : Icons.menu,
         onPressed: () {
-          if (open) {
-            ref.read(omniBarOpen.notifier).state = false;
-            omnibarFocus.unfocus();
-          } else {
-            ref.read(omniBarOpen.notifier).state = true;
-          }
+          ref.read(omniBarStateProvider.notifier).toggleOpen();
         },
       ),
     );
@@ -55,7 +42,7 @@ class OmniButtons extends ConsumerWidget {
     return AnimatedContainer(
       duration: OmniBar.transitionDuration,
       curve: pageTransitionCurve,
-      height: height.value(breakpoint),
+      height: height,
       child: SizedBox(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -63,10 +50,9 @@ class OmniButtons extends ConsumerWidget {
             if (FirebaseAuth.instance.currentUser == null)
               Button(
                 leading: Icons.person,
-                label: ZeroUIAppLocalizations.of(context)?.goToSignInPage ??
-                    "Go to Sign In",
+                label: t.scaffold.buttons.goToSignIn,
                 config: Button.defaultConfig.copyWith(
-                  fillColor: Theme.of(context).colorScheme.secondaryContainer,
+                  fillColor: Theme.of(context).colorScheme.primary,
                 ),
                 link: authConfig.signInLink,
               ),
@@ -87,7 +73,7 @@ class OmniButtons extends ConsumerWidget {
                   ),
                   icon: Icons.search,
                   onPressed: () {
-                    ref.read(omniBarOpen.notifier).state = true;
+                    ref.read(omniBarStateProvider.notifier).setOpen(true);
                     Future.delayed(
                       OmniBar.transitionDuration,
                       () => omniSearchFocus.requestFocus(),
@@ -124,9 +110,12 @@ class ProfileClickable extends ButtonBase {
   );
 
   @override
-  Widget buildButton(BuildContext context, ButtonState state) {
+  Widget buildButton(BuildContext context, ButtonState state, WidgetRef ref) {
+    final t = ref.watch(zeroLocalizationsProvider);
     final text = Theme.of(context).textTheme;
     final colors = Theme.of(context).colorScheme;
+
+    final name = ref.watch(nameProvider);
 
     return Row(
       children: [
@@ -157,13 +146,13 @@ class ProfileClickable extends ButtonBase {
               () {
                 final hour = DateTime.now().hour;
                 if (hour < 4) {
-                  return "${ZeroUIAppLocalizations.of(context)!.goodNight},";
+                  return "${t.scaffold.greetings.night},";
                 } else if (hour < 12) {
-                  return "${ZeroUIAppLocalizations.of(context)!.goodMorning},";
+                  return "${t.scaffold.greetings.morning},";
                 } else if (hour < 17) {
-                  return "${ZeroUIAppLocalizations.of(context)!.goodAfternoon},";
+                  return "${t.scaffold.greetings.afternoon},";
                 } else {
-                  return "${ZeroUIAppLocalizations.of(context)!.goodEvening},";
+                  return "${t.scaffold.greetings.evening},";
                 }
               }(),
               style: text.labelLarge?.copyWith(
@@ -174,7 +163,7 @@ class ProfileClickable extends ButtonBase {
             ),
             const SizedBox(height: 4),
             Text(
-              "Guest",
+              name ?? t.scaffold.guest,
               style: text.titleMedium?.copyWith(
                 height: 1,
                 fontWeight: FontWeight.w600,

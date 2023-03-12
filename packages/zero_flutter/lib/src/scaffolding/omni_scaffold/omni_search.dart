@@ -1,54 +1,59 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:zero_flutter/src/scaffolding/omni_scaffold/omni_bar_state.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 import 'package:flutter/material.dart' as material;
 
-class OmniSearch extends ConsumerStatefulWidget {
-  const OmniSearch({
-    super.key,
-    required this.text,
-  });
+part 'omni_search.g.dart';
 
-  final TextTheme text;
+final omniSearchFocus = FocusNode();
 
-  static const height = AdaptiveValue<double>(
-    defaultValue: 48,
-    values: [],
-  );
-
-  @override
-  ConsumerState<OmniSearch> createState() => _OmniSearchState();
+@riverpod
+bool omniSearching(OmniSearchingRef ref) {
+  return false;
 }
 
-class _OmniSearchState extends ConsumerState<OmniSearch> {
-  final controller = TextEditingController();
+@riverpod
+String omniSearchQuery(OmniSearchQueryRef ref) {
+  return '';
+}
 
-  @override
-  void initState() {
-    super.initState();
-    controller.text = ref.read(omniBarQuery);
+final omniRecommended = FutureProvider<List<SearchResult>>((ref) async {
+  final providers = ref.watch(omniConfigProvider).searchProviders;
+  var recommended = <SearchResult>[];
+  for (final provider in providers) {
+    recommended.addAll(await provider.recommend());
   }
+  return recommended;
+});
+
+class OmniSearch extends HookConsumerWidget {
+  const OmniSearch({super.key});
+
+  static const double height = 48;
 
   @override
-  Widget build(BuildContext context) {
-    final breakpoint = AdaptiveContext.breakpoint(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = ref.watch(zeroLocalizationsProvider);
+    final query = ref.watch(omniSearchQueryProvider);
+    final controller = useTextEditingController(text: query);
+
     final colors = Theme.of(context).colorScheme;
-    final searching = ref.watch(omniSearching);
+    final text = Theme.of(context).textTheme;
+    final searching = ref.watch(omniSearchingProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Focus(
       onFocusChange: (focus) {
         if (focus) {
-          ref.read(omniBarOpen.notifier).state = true;
+          ref.read(omniBarStateProvider.notifier).setOpen(true);
         }
       },
       child: SizedBox(
-        height: OmniSearch.height.value(breakpoint),
+        height: OmniSearch.height,
         child: AnimatedGlass(
           state: searching ? GlassState.invisible : GlassState.translucent,
           color: isDark ? colors.surface : colors.background,
           transparency: 0.8,
-          cornerRadius: AdaptiveValue.fixed(
-            BorderRadius.circular(12),
-          ),
+          cornerRadius: BorderRadius.circular(12),
           child: Row(
             children: [
               Padding(
@@ -67,7 +72,7 @@ class _OmniSearchState extends ConsumerState<OmniSearch> {
               Expanded(
                 child: Focus(
                   onFocusChange: (focus) {
-                    ref.read(omniSearching.notifier).state = focus;
+                    ref.read(omniBarStateProvider.notifier).setSearching(focus);
                   },
                   child: material.TextField(
                     clipBehavior: Clip.none,
@@ -79,26 +84,25 @@ class _OmniSearchState extends ConsumerState<OmniSearch> {
                       contentPadding: EdgeInsets.zero,
                       isDense: true,
                       border: InputBorder.none,
-                      hintStyle: widget.text.titleMedium?.copyWith(
+                      hintStyle: text.titleMedium?.copyWith(
                         color: colors.onSurface.withOpacity(0.5),
                         height: 1,
                         fontSize: 18,
                       ),
-                      hintText:
-                          ZeroUIAppLocalizations.of(context)!.omniSearchField,
+                      hintText: t.scaffold.search,
                     ),
                     cursorColor: colors.onSurface,
                     cursorHeight: 16,
                     maxLines: 1,
                     minLines: 1,
-                    style: widget.text.titleMedium?.copyWith(
+                    style: text.titleMedium?.copyWith(
                       color: colors.onSurface,
                       height: 1,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                     onChanged: (value) {
-                      ref.read(omniBarQuery.notifier).state = value;
+                      ref.read(omniBarStateProvider.notifier).setQuery(query);
                     },
                   ),
                 ),
@@ -118,10 +122,11 @@ class _OmniSearchState extends ConsumerState<OmniSearch> {
                       transparency: 1,
                     ),
                     onPressed: () {
-                      ref.read(omniBarQuery.notifier).state = "";
-                      setState(() {
-                        controller.text = "";
-                      });
+                      useEffect(
+                        () => () {
+                          ref.read(omniBarStateProvider.notifier).setQuery("");
+                        },
+                      );
                     },
                   ),
                 ),

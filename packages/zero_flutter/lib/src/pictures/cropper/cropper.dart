@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/zero_flutter.dart' hide Image;
 import 'package:zero_flutter/src/pictures/cropper/render_image.dart';
 
@@ -19,7 +18,9 @@ class Cropper extends Page {
   @override
   PageLayout get layout => PageLayout.card;
 
-  Cropper({
+  Cropper(
+    super.state, {
+    required super.metadata,
     super.key,
     required this.file,
     this.ratio,

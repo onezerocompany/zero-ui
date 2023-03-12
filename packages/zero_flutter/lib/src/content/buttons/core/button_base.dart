@@ -9,7 +9,7 @@ enum ButtonState {
   loading,
 }
 
-class ButtonBase extends StatefulWidget {
+class ButtonBase extends ConsumerStatefulWidget {
   final String? link;
   final VoidCallback? onPressed;
   final ButtonConfig config;
@@ -33,15 +33,16 @@ class ButtonBase extends StatefulWidget {
   Widget buildButton(
     BuildContext context,
     ButtonState state,
+    WidgetRef ref,
   ) {
     return Container();
   }
 
   @override
-  State<ButtonBase> createState() => ButtonBaseState();
+  ConsumerState<ButtonBase> createState() => ButtonBaseState();
 }
 
-class ButtonBaseState extends State<ButtonBase> {
+class ButtonBaseState extends ConsumerState<ButtonBase> {
   bool hover = false;
   bool pressed = false;
 
@@ -70,6 +71,8 @@ class ButtonBaseState extends State<ButtonBase> {
   @override
   Widget build(BuildContext context) {
     final fillColor = widget.config.fillColorForState(state, context);
+    final router = ref.watch(routerProvider);
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onHover: (_) {
@@ -98,10 +101,7 @@ class ButtonBaseState extends State<ButtonBase> {
           if (shouldRespond) {
             if (widget.config.haptic) HapticFeedback.lightImpact();
             widget.onPressed?.call();
-            if (widget.link != null &&
-                AppConfig.router(context).currentPath != widget.link) {
-              AppConfig.router(context).go(widget.link!);
-            }
+            if (widget.link != null) router.go(path: widget.link!);
           }
         },
         onTapCancel: () {
@@ -119,9 +119,7 @@ class ButtonBaseState extends State<ButtonBase> {
             curve: ButtonBase.animationCurve,
             borderWidth: widget.config.borderWidth,
             borderColor: widget.config.borderColor,
-            cornerRadius: AdaptiveValue.fixed<BorderRadius>(
-              widget.config.cornerRadius,
-            ),
+            cornerRadius: widget.config.cornerRadius,
             color: fillColor,
             transparency: fillColor.opacity,
             padding: widget.config.padding,
@@ -129,7 +127,7 @@ class ButtonBaseState extends State<ButtonBase> {
               duration: ButtonBase.animationDuration,
               curve: ButtonBase.animationCurve,
               opacity: widget.config.opacityForState(state),
-              child: widget.buildButton(context, state),
+              child: widget.buildButton(context, state, ref),
             ),
           ),
         ),

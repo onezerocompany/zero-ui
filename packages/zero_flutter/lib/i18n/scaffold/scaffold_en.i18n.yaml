@@ -1,0 +1,18 @@
+greetings:
+  morning: Good morning
+  afternoon: Good afternoon
+  evening: Good evening
+  night: Good night
+
+search: Search...
+guest: Guest
+
+fallbackPage:
+  title: Page not found
+  message: The page you are looking for does not exist.
+
+buttons:
+  goToSignIn: Go to sign in
+
+dialogs:
+  confirm: Confirm

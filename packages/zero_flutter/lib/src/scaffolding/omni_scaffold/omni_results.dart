@@ -1,5 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/globals.dart';
+import 'package:zero_flutter/src/scaffolding/omni_scaffold/omni_bar_state.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 
 class OmniResults extends ConsumerWidget {
@@ -15,7 +15,7 @@ class OmniResults extends ConsumerWidget {
     final colors = Theme.of(context).colorScheme;
     final recommended = ref.watch(omniRecommended);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final panels = AdaptiveContext.panels(context);
+    final panels = ref.read(panelsProvider);
 
     return Center(
       child: CustomScrollView(
@@ -46,8 +46,6 @@ class OmniResults extends ConsumerWidget {
                               maxWidth: 500,
                             ),
                             child: ListItem(
-                              disabled: result.url ==
-                                  AppConfig.router(context).currentPath,
                               config: ListItem.defaultConfig.copyWith(
                                 fillColor:
                                     isDark ? colors.surface : colors.background,
@@ -58,7 +56,9 @@ class OmniResults extends ConsumerWidget {
                               sublabel: result.excerpt,
                               link: result.url,
                               onPressed: () {
-                                ref.read(omniBarOpen.notifier).state = false;
+                                ref
+                                    .read(omniBarStateProvider.notifier)
+                                    .setOpen(false);
                                 omnibarFocus.unfocus();
                                 omniScaffoldFocus.requestFocus();
                               },

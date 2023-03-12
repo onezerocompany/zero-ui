@@ -6,31 +6,33 @@ import 'package:zero_catalog/components/loader.dart';
 import 'package:zero_catalog/components/text.dart';
 import 'package:zero_catalog/components/camera_page.dart';
 
-List<Page> componentPages = [
-  const TextPage(),
-  const ButtonsPage(),
-  const LoaderPage(),
-  const InputsPage(),
-  const CameraPage(),
+List<PageBuilder> componentPages = [
+  (state) => TextPage(state),
+  (state) => ButtonsPage(state),
+  (state) => LoaderPage(state),
+  (state) => InputsPage(state),
+  (state) => CameraPage(state),
 ];
 
+PageMetadata componentsPageMetadata(Locale locale) {
+  return PageMetadata(
+    path: "/catalog",
+    icon: Icons.home,
+    name: "Components",
+    subpages: componentPages,
+  );
+}
+
 class ComponentsPage extends Page {
-  const ComponentsPage({
+  const ComponentsPage(
+    super.state, {
     super.key,
+    super.metadata = componentsPageMetadata,
   });
 
   @override
-  PageMetadata metadata(BuildContext context) {
-    return PageMetadata(
-      path: "/catalog",
-      icon: Icons.home,
-      name: (context) => "Components",
-      subpages: componentPages,
-    );
-  }
-
-  @override
   PageContentBuilder? get contentBuilder => (context, ref, landscape) {
+        final locale = ref.watch(currentLocaleProvider);
         return PageContent(
           maxWidth: 500,
           itemCount: componentPages.length,
@@ -50,11 +52,12 @@ class ComponentsPage extends Page {
                 ),
               );
             }
-            PageMetadata metadata = componentPages[index].metadata(context);
+            PageMetadata metadata =
+                componentPages[index](null).metadata(locale);
             return ListItem(
               key: ValueKey(metadata.path),
-              label: metadata.name?.call(context) ?? "",
-              sublabel: metadata.description?.call(context),
+              label: metadata.name,
+              sublabel: metadata.description,
               icon: metadata.icon,
               trailingArrow: true,
               config: ListItem.defaultConfig.copyWith(

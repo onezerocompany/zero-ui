@@ -1,9 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zero_flutter/globals.dart';
 import 'package:zero_flutter/zero_flutter.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
-class TopBar extends StatelessWidget {
+class TopBar extends ConsumerWidget {
   final String? title;
   final String? subtitle;
   final bool backButton;
@@ -50,8 +49,8 @@ class TopBar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final panes = AdaptiveContext.panels(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final panels = ref.watch(panelsProvider);
     final height = MediaQuery.of(context).size.height;
     return SafeArea(
       bottom: false,
@@ -119,7 +118,7 @@ class TopBar extends StatelessWidget {
                         config: IconButton.defaultConfig.copyWith(
                           transparency: 1,
                         ),
-                        icon: panes >= 2 ? Icons.close : Icons.arrow_back,
+                        icon: panels >= 2 ? Icons.close : Icons.arrow_back,
                         onPressed: () {
                           Navigator.of(context).maybePop();
                         },

@@ -1,5 +1,9 @@
 include: package:onezero_flutter_lints/flutter.yaml
 
+analyzer:
+  plugins:
+    - custom_lint
+
 linter:
   rules:
     - require_trailing_commas

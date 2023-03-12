@@ -5,13 +5,14 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'apple_signin.dart';
 
-class AppleSignInButton extends StatelessWidget {
+class AppleSignInButton extends ConsumerWidget {
   const AppleSignInButton({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = ref.watch(zeroLocalizationsProvider);
     return SizedBox(
       width: double.infinity,
       child: Button(
@@ -19,9 +20,12 @@ class AppleSignInButton extends StatelessWidget {
           "assets/icons/apple.svg",
           package: "zero_flutter",
           height: 22,
-          color: Colors.white,
+          colorFilter: const ColorFilter.mode(
+            Colors.white,
+            BlendMode.srcIn,
+          ),
         ),
-        label: ZeroUIAppLocalizations.of(context)!.appleSignInButtonLabel,
+        label: t.login.signInWith.apple,
         config: Button.defaultConfig.copyWith(
           fillWidth: true,
           fillColor: Colors.black,

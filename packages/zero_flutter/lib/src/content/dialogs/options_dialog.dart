@@ -61,23 +61,20 @@ class _OptionsDialogState extends State<OptionsDialog> {
         currentIndex == -1 ? null : widget.options[currentIndex],
       ),
       onDismiss: () => Navigator.of(context).pop(),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxHeight: 500,
-          maxWidth: 380,
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 26,
+          vertical: 26,
         ),
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 22,
-          ),
-          shrinkWrap: true,
-          separatorBuilder: (context, index) => const SizedBox(
-            height: 12,
-          ),
-          itemBuilder: (context, index) {
-            final option = widget.options[index];
-            return ListItem(
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          // check if widget.options has this index
+          // if not, return null
+          if (index >= widget.options.length) return null;
+          final option = widget.options[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6.0),
+            child: ListItem(
               config: ListItem.defaultConfig.copyWith(
                 fillColor:
                     currentIndex == index ? colors.primary : colors.background,
@@ -100,10 +97,9 @@ class _OptionsDialogState extends State<OptionsDialog> {
                   },
                 );
               },
-            );
-          },
-          itemCount: widget.options.length,
-        ),
+            ),
+          );
+        },
       ),
     );
   }

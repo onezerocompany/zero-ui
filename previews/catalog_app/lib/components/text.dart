@@ -1,20 +1,21 @@
 import 'package:zero_flutter/zero_flutter.dart';
 
-class TextPage extends Page {
-  const TextPage({super.key})
-      : super(
-          layout: PageLayout.card,
-        );
+PageMetadata textPageMetadata(Locale locale) {
+  return const PageMetadata(
+    path: "/text",
+    icon: Icons.text_format,
+    name: "Text",
+    description: "Different text styles",
+  );
+}
 
-  @override
-  PageMetadata metadata(BuildContext context) {
-    return PageMetadata(
-      path: "/text",
-      icon: Icons.text_format,
-      name: (context) => "Text",
-      description: (context) => "Different text styles",
-    );
-  }
+class TextPage extends Page {
+  const TextPage(
+    super.state, {
+    super.metadata = textPageMetadata,
+    super.key,
+    super.layout = PageLayout.card,
+  });
 
   @override
   PageContentBuilder? get contentBuilder => (context, ref, landscape) {
