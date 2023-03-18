@@ -1,0 +1,8 @@
+buttons:
+  save: Änderungen speichern
+  undo: Änderungen rückgängig machen
+  create: Erstellen
+
+inputs:
+  list:
+    add: Hinzufügen

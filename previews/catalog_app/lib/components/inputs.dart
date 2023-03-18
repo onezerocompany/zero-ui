@@ -59,7 +59,8 @@ class InputsForm extends HookWidget {
               ),
             ),
             label: "Which one?",
-            options: const [
+            currentLabel: (value) => value,
+            options: () => const [
               InputOption<String>(
                 icon: Icons.lab_panel,
                 label: "Option 1",
@@ -304,7 +305,7 @@ class ListInputPreview extends HookWidget {
       state,
       title: "List of things",
       addLabel: "Add item",
-      itemBuilder: (context, ref, item, update, remove) => ListInputItem(
+      itemBuilder: (context, ref, index, item, update, remove) => ListInputItem(
         item,
         update,
         remove,
@@ -374,8 +375,8 @@ class ListInputItem extends HookWidget {
                 label: "Description",
               ),
               TextButton(
-                text: "Remove",
-                icon: Icons.delete,
+                label: "Remove",
+                leading: Icons.delete,
                 onPressed: remove,
               ),
             ],

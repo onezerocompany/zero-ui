@@ -1,0 +1,47 @@
+unknown: Er is iets misgegaan. Probeer het later opnieuw.
+
+https:
+  DeadlineExceeded: De bewerking is verlopen. Probeer het later opnieuw.
+  NotFound: Kon niet vinden waar u naar op zoek was. Probeer het opnieuw.
+  AlreadyExists: Dit bestaat al. Probeer het opnieuw met andere details.
+  PermissionDenied: U heeft geen toestemming om deze actie uit te voeren.
+  Unimplemented: Deze functie wordt momenteel niet ondersteund. Kom later terug.
+  Unavailable: De service is momenteel niet beschikbaar. Probeer het later opnieuw.
+  Unauthenticated: U bent niet geauthenticeerd. Log in of geef geldige inloggegevens om door te gaan.
+
+auth:
+  AdminRestrictedOperation: U bent niet gemachtigd om deze actie uit te voeren.
+  ArgumentError: Er is iets mis met de informatie die u heeft verstrekt.
+  AppNotInstalled: Installeer de app om verder te gaan.
+  CaptchaCheckFailed: Verifieer dat u geen robot bent.
+  CodeExpired: De code die u heeft ingevoerd is verlopen. Probeer het opnieuw.
+  CredentialAlreadyInUse: Het account is al in gebruik door een andere gebruiker.
+  CustomTokenMismatch: Er is een probleem met uw inloggegevens.
+  RequiresRecentLogin: U moet opnieuw inloggen om deze actie te voltooien.
+  DynamicLinkNotActivated: De link waartoe u probeert toegang te krijgen, is niet langer actief.
+  EmailChangeNeedsVerification: U moet uw nieuwe e-mailadres verifiëren om deze actie te voltooien.
+  EmailAlreadyInUse: Dit e-mailadres is al gekoppeld aan een account.
+  ExpiredActionCode: De code die u heeft ingevoerd is verlopen. Probeer het opnieuw.
+  CancelledPopupRequest: Het pop-upverzoek is geannuleerd.
+  InvalidVerificationCode: De verificatiecode is ongeldig. Probeer het opnieuw.
+  InvalidEmail: Het e-mailadres dat u heeft ingevoerd is ongeldig. Probeer het opnieuw.
+  UnauthorizedDomain: U heeft geen toestemming om toegang te krijgen tot dit domein.
+  WrongPassword: Het wachtwoord dat u heeft ingevoerd is onjuist. Probeer het opnieuw.
+  InvalidPhoneNumber: Het telefoonnummer dat u heeft ingevoerd is ongeldig. Probeer het opnieuw met een geldig telefoonnummer.
+  InvalidRecipientEmail: Het e-mailadres van de ontvanger is ongeldig. Probeer het opnieuw.
+  InvalidSender: De afzender is ongeldig. Probeer het opnieuw.
+  MultiFactorAuthRequired: Multi-factor authenticatie is vereist om dit te voltooien.
+  AccountExistsWithDifferentCredential: Er bestaat al een account met dit e-mailadres. Probeer in te loggen met een andere methode.
+  NetworkRequestFailed: Het netwerkverzoek is mislukt. Controleer uw internetverbinding en probeer het opnieuw.
+  OperationNotAllowed: U mag deze bewerking niet uitvoeren.
+  PopupBlocked: De pop-up is geblokkeerd. Sta pop-ups toe en probeer het opnieuw.
+  ProviderAlreadyLinked: De provider is al gekoppeld aan een ander account. Probeer het opnieuw.
+  SecondFactorAlreadyInUse: De tweede factor is al in gebruik. Probeer het opnieuw.
+  MaximumSecondFactorCountExceeded: Het maximale aantal tweede factoren is bereikt. Probeer het opnieuw.
+  Timeout: De bewerking is verlopen. Probeer het opnieuw.
+  TooManyRequests: Te veel verzoeken. Probeer het later opnieuw.
+  UnverifiedEmail: Het e-mailadres is niet geverifieerd. Controleer uw e-mail en volg de verificatielink.
+  UserNotFound: Het gebruikersaccount is niet gevonden. Probeer het opnieuw.
+  UserDisabled: Het gebruikersaccount is uitgeschakeld. Neem contact op met de ondersteuning voor hulp.
+  UserSignedOut: Het gebruikersaccount is afgemeld. Log opnieuw in om door te gaan.
+  WeakPassword: Het wachtwoord is te zwak. Kies een sterker wachtwoord.

@@ -42,5 +42,5 @@ Future<void> main() async {
       .read(currentAppConfigBuilderProvider.notifier)
       .set(configBuilder);
 
-  runApp(const App());
+  runApp(const ZeroApp());
 }

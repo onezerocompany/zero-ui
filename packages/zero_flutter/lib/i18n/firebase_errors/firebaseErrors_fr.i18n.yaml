@@ -1,0 +1,47 @@
+unknown: Quelque chose s'est mal passé. Veuillez réessayer plus tard.
+
+https:
+  DeadlineExceeded: L'opération a expiré. Veuillez réessayer plus tard.
+  NotFound: Nous n'avons pas trouvé ce que vous cherchiez. Veuillez réessayer.
+  AlreadyExists: Cela existe déjà. Veuillez réessayer avec d'autres détails.
+  PermissionDenied: Vous n'avez pas la permission d'effectuer cette action.
+  Unimplemented: Cette fonctionnalité n'est pas encore prise en charge. Veuillez revenir plus tard.
+  Unavailable: Le service est actuellement indisponible. Veuillez réessayer plus tard.
+  Unauthenticated: Vous n'êtes pas authentifié. Veuillez vous connecter ou fournir des informations d'identification valides pour continuer.
+
+auth:
+  AdminRestrictedOperation: Vous n'êtes pas autorisé à effectuer cette action.
+  ArgumentError: Quelque chose ne va pas avec les informations que vous avez fournies.
+  AppNotInstalled: Veuillez installer l'application pour continuer.
+  CaptchaCheckFailed: Veuillez vérifier que vous n'êtes pas un robot.
+  CodeExpired: Le code que vous avez saisi a expiré. Veuillez réessayer.
+  CredentialAlreadyInUse: Le compte est déjà utilisé par un autre utilisateur.
+  CustomTokenMismatch: Il y a un problème avec vos informations de connexion.
+  RequiresRecentLogin: Vous devez vous reconnecter pour effectuer cette action.
+  DynamicLinkNotActivated: Le lien auquel vous essayez d'accéder n'est plus actif.
+  EmailChangeNeedsVerification: Vous devez vérifier votre nouvelle adresse e-mail pour effectuer cette action.
+  EmailAlreadyInUse: Cet e-mail est déjà associé à un compte.
+  ExpiredActionCode: Le code que vous avez saisi a expiré. Veuillez réessayer.
+  CancelledPopupRequest: La demande de popup a été annulée.
+  InvalidVerificationCode: Le code de vérification est invalide. Veuillez réessayer.
+  InvalidEmail: L'adresse e-mail que vous avez saisie est invalide. Veuillez réessayer.
+  UnauthorizedDomain: Vous n'êtes pas autorisé à accéder à ce domaine.
+  WrongPassword: Le mot de passe que vous avez saisi est incorrect. Veuillez réessayer.
+  InvalidPhoneNumber: Le numéro de téléphone que vous avez saisi est invalide. Veuillez réessayer avec un numéro de téléphone valide.
+  InvalidRecipientEmail: L'adresse e-mail du destinataire est invalide. Veuillez réessayer.
+  InvalidSender: L'expéditeur est invalide. Veuillez réessayer.
+  MultiFactorAuthRequired: L'authentification à plusieurs facteurs est requise pour effectuer ceci.
+  AccountExistsWithDifferentCredential: Un compte existe déjà avec cette adresse e-mail. Veuillez essayer de vous connecter avec une autre méthode.
+  NetworkRequestFailed: La demande réseau a échoué. Veuillez vérifier votre connexion Internet et réessayer.
+  OperationNotAllowed: Vous n'êtes pas autorisé à effectuer cette opération.
+  PopupBlocked: Le popup a été bloqué. Veuillez autoriser les popups et réessayer.
+  ProviderAlreadyLinked: Le fournisseur est déjà lié à un autre compte. Veuillez réessayer.
+  SecondFactorAlreadyInUse: Le deuxième facteur est déjà utilisé. Veuillez réessayer.
+  MaximumSecondFactorCountExceeded: Le nombre maximal de seconds facteurs a été atteint. Veuillez réessayer.
+  Timeout: L'opération a expiré. Veuillez réessayer.
+  TooManyRequests: Trop de demandes. Veuillez réessayer plus tard.
+  UnverifiedEmail: L'adresse e-mail n'a pas été vérifiée. Veuillez vérifier votre e-mail et suivre le lien de vérification.
+  UserNotFound: Le compte utilisateur n'a pas été trouvé. Veuillez réessayer.
+  UserDisabled: Le compte utilisateur a été désactivé. Veuillez contacter le support pour obtenir de l'aide.
+  UserSignedOut: Le compte utilisateur a été déconnecté. Veuillez vous reconnecter pour continuer.
+  WeakPassword: Le mot de passe est trop faible. Veuillez choisir un mot de passe plus fort.

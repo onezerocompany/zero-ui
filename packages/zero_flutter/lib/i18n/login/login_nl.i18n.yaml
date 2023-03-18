@@ -1,0 +1,57 @@
+signInWith:
+  password: Inloggen met wachtwoord
+  magicLink: Inloggen met magische link
+  google: Inloggen met Google
+  apple: Inloggen met Apple
+
+fields:
+  email:
+    label: E-mailadres
+    enter: Voer uw e-mailadres in
+    required: E-mailadres is verplicht
+  password:
+    label: Wachtwoord
+    enter: Voer uw wachtwoord in
+    required: Wachtwoord is verplicht
+
+forgotPassword:
+  buttons:
+    forgot: Wachtwoord vergeten?
+    sendLink: Stuur wachtwoordherstel-link
+    inbox: Ga naar inbox
+  sent:
+    title: Wachtwoordherstel-link verzonden
+    message: Er is een link om uw wachtwoord opnieuw in te stellen naar uw e-mailadres gestuurd. Controleer uw inbox en volg de link om verder te gaan. Als u de e-mail niet heeft ontvangen, controleer dan uw spammap. Houd er rekening mee dat het enkele minuten kan duren voordat de e-mail arriveert, hoewel het meestal slechts enkele seconden is.
+  dialog:
+    title: Wachtwoord opnieuw instellen
+    message: Voer uw nieuwe wachtwoord in en herhaal het om te bevestigen. Klik vervolgens op de knop hieronder.
+    fields:
+      newPassword:
+        label: Nieuw wachtwoord
+        enter: Voer uw nieuwe wachtwoord in
+        required: Nieuw wachtwoord is vereist
+        short: Nieuw wachtwoord is te kort
+      confirmPassword:
+        label: Bevestig wachtwoord
+        enter: Bevestig uw nieuwe wachtwoord
+        required: Bevestiging van wachtwoord is vereist
+        mismatch: Wachtwoorden komen niet overeen
+    buttons:
+      update: Wachtwoord bijwerken
+    popups:
+      passwordMismatch: De ingevoerde wachtwoorden komen niet overeen. Voer uw wachtwoord opnieuw in.
+      codeExpired: De wachtwoordherstelcode is verlopen. Ga terug naar inloggen en stuur de wachtwoordherstel-link opnieuw.
+      updateSuccess: Uw wachtwoord is bijgewerkt. Log in met uw nieuwe wachtwoord.
+
+magicLink:
+  sent:
+    title: Magische link verzonden
+    message: Er is een magische link naar uw e-mailadres gestuurd. Controleer uw inbox en volg de link om verder te gaan. Als u de e-mail niet heeft ontvangen, controleer dan uw spammap. Houd er rekening mee dat het enkele minuten kan duren voordat de e-mail arriveert, hoewel het meestal slechts enkele seconden is.
+  buttons:
+    send: Stuur magische link
+    back: Terug naar inloggen
+    inbox: Ga naar inbox
+
+buttons:
+  back: Terug naar inloggen
+  signin: Inloggen

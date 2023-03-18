@@ -35,25 +35,8 @@ class ComponentsPage extends Page {
         final locale = ref.watch(currentLocaleProvider);
         return PageContent(
           maxWidth: 500,
-          itemCount: componentPages.length,
-          itemBuilder: (
-            BuildContext context,
-            int index,
-          ) {
-            if (index > componentPages.length - 1) {
-              return ListItem(
-                key: ValueKey(index),
-                label: "Tester $index",
-                icon: Icons.note,
-                trailingArrow: true,
-                config: ListItem.defaultConfig.copyWith(
-                  glassLike: true,
-                  fillColor: Theme.of(context).colorScheme.background,
-                ),
-              );
-            }
-            PageMetadata metadata =
-                componentPages[index](null).metadata(locale);
+          leadingItems: componentPages.map((page) {
+            PageMetadata metadata = page(null).metadata(locale);
             return ListItem(
               key: ValueKey(metadata.path),
               label: metadata.name,
@@ -70,7 +53,7 @@ class ComponentsPage extends Page {
                 );
               },
             );
-          },
+          }).toList(),
         );
       };
 }

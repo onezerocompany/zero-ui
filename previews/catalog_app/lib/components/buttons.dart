@@ -110,7 +110,7 @@ class ButtonsPage extends Page {
                         trailing:
                             flavor.trailingArrow ? Icons.arrow_forward : null,
                         loading: flavor.loading,
-                        disabled: !flavor.enabled,
+                        enabled: flavor.enabled,
                         config: Button.defaultConfig.copyWith(
                           fillColor: flavor.color,
                           size: flavor.size,
@@ -126,11 +126,11 @@ class ButtonsPage extends Page {
                 itemSpacing: 6,
                 children: flavors.map((flavor) {
                   return TextButton(
-                    text: flavor.text,
-                    icon: flavor.icon,
+                    label: flavor.text,
+                    leading: flavor.icon,
                     onPressed: flavor.enabled ? () {} : null,
                     loading: flavor.loading,
-                    disabled: !flavor.enabled,
+                    enabled: flavor.enabled,
                     config: TextButton.defaultConfig.copyWith(
                       fillColor: flavor.color,
                       size: flavor.size,
@@ -153,7 +153,7 @@ class ButtonsPage extends Page {
                           icon: flavor.icon,
                           onPressed: null,
                           loading: flavor.loading,
-                          disabled: !flavor.enabled,
+                          enabled: flavor.enabled,
                           config: IconButton.defaultConfig.copyWith(
                             fillColor: flavor.color,
                             size: flavor.size,
@@ -177,7 +177,7 @@ class ButtonsPage extends Page {
                         .map((flavor) {
                       return ActionButton(
                         icon: flavor.icon,
-                        disabled: !flavor.enabled,
+                        enabled: flavor.enabled,
                         onPressed: null,
                         loading: flavor.loading,
                         config: ActionButton.defaultConfig.copyWith(

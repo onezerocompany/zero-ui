@@ -1,0 +1,8 @@
+buttons:
+  save: Wijzigingen opslaan
+  undo: Wijzigingen ongedaan maken
+  create: Aanmaken
+
+inputs:
+  list:
+    add: Toevoegen

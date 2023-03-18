@@ -1,0 +1,8 @@
+buttons:
+  save: Enregistrer les modifications
+  undo: Annuler les modifications
+  create: Créer
+
+inputs:
+  list:
+    add: Ajouter
