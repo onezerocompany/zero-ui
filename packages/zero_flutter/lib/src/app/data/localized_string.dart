@@ -1,5 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:zero_flutter/zero_flutter.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'localized_string.g.dart';
+
+@firestoreSerializable
 class LocalizedString {
   LocalizedString({
     Map<String, String>? translations,
@@ -7,21 +12,42 @@ class LocalizedString {
 
   Map<String, String> translations;
 
-  String get(Locale locale) {
-    return translations[locale.languageCode] ?? translations['en'] ?? "";
+  String get(Locale locale, {bool fallback = true}) {
+    return translations[locale.languageCode] ??
+        (fallback ? translations['en'] ?? "" : "");
   }
 
   String set(Locale locale, String value) {
     return translations[locale.languageCode] = value;
   }
 
-  toJson() {
-    return translations.toString();
+  toJson() => translations;
+  factory LocalizedString.fromJson(Map<String, dynamic> json) =>
+      _$LocalizedStringFromJson({'translations': json});
+
+  @override
+  operator ==(other) {
+    if (other is! LocalizedString) {
+      return false;
+    }
+    return mapEquals(translations, other.translations);
   }
 
-  factory LocalizedString.fromJson(Map<String, dynamic> json) {
-    return LocalizedString(
-      translations: json.map((key, value) => MapEntry(key, value as String)),
-    );
+  @override
+  int get hashCode => translations.hashCode;
+
+  @override
+  toString() {
+    String result = "";
+    translations.forEach((key, value) {
+      result += "$key: $value, ";
+    });
+    return result;
   }
+
+  static LocalizedString fromMap(Map<String, String> map) {
+    return LocalizedString(translations: Map<String, String>.from(map));
+  }
+
+  toMap() => translations;
 }

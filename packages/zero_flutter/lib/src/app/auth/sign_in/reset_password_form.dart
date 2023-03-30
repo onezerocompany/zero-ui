@@ -14,8 +14,8 @@ class ResetPasswordForm extends ConsumerWidget {
     final t = ref.watch(zeroLocalizationsProvider);
     return InputForm(
       onSaved: (values, saved) async {
-        final password = values['password'] as String;
-        final confirmPassword = values['confirm_password'] as String;
+        final password = values.get<String>('password') ?? '';
+        final confirmPassword = values.get<String>('confirm_password') ?? '';
         if (password != confirmPassword) {
           showError(
             context,
@@ -114,7 +114,7 @@ class ResetPasswordForm extends ConsumerWidget {
                 id: 'confirm_password',
                 defaultValue: '',
                 validator: (value) {
-                  if (value != controller.values['password']) {
+                  if (value != controller.values.get<String>('password')) {
                     return "mismatch";
                   }
                   return null;

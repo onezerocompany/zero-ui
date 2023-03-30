@@ -2,6 +2,7 @@ import 'package:zero_flutter/zero_flutter.dart';
 
 class Button extends ButtonBase {
   final String label;
+  final String? sublabel;
   final dynamic leading;
   final dynamic trailing;
 
@@ -13,6 +14,7 @@ class Button extends ButtonBase {
     super.enabled = true,
     super.config = Button.defaultConfig,
     required this.label,
+    this.sublabel,
     this.leading,
     this.trailing,
   });
@@ -20,7 +22,7 @@ class Button extends ButtonBase {
   static const ButtonConfig defaultConfig = ButtonConfig(
     paddings: {
       ButtonSize.small: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-      ButtonSize.medium: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+      ButtonSize.medium: EdgeInsets.symmetric(vertical: 16, horizontal: 17),
       ButtonSize.large: EdgeInsets.symmetric(vertical: 18, horizontal: 22),
     },
     cornerRadii: {
@@ -74,6 +76,40 @@ class Button extends ButtonBase {
           ),
     );
 
+    final sublabelText = sublabel != null
+        ? Text(
+            sublabel ?? '',
+            textAlign: TextAlign.center,
+            style: textTheme.labelLarge?.copyWith(
+                  color: config.contentColor(context),
+                  fontSize: config.textIconSize * 0.8,
+                  height: 1,
+                ) ??
+                TextStyle(
+                  color: config.contentColor(context),
+                  fontSize: config.textIconSize * 0.8,
+                  height: 1,
+                ),
+          )
+        : null;
+
+    final labels = Section(
+      direction: Axis.horizontal,
+      itemSpacing: config.textIconSize * 0.8,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        if (leading != null) loadedLeading,
+        Section(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          itemSpacing: config.textIconSize * 0.3,
+          children: [
+            labelText,
+            if (sublabelText != null) sublabelText,
+          ],
+        ),
+      ],
+    );
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,12 +117,7 @@ class Button extends ButtonBase {
           ? MainAxisAlignment.start
           : MainAxisAlignment.spaceBetween,
       children: [
-        if (leading != null) loadedLeading,
-        if (leading != null)
-          SizedBox(
-            width: config.textIconSize / 2,
-          ),
-        if (config.fillWidth) Expanded(child: labelText) else labelText,
+        config.fillWidth ? Expanded(child: labels) : labels,
         if (trailing != null || state == ButtonState.loading)
           SizedBox(
             width: config.textIconSize / 2,

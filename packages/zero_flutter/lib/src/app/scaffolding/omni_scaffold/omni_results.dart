@@ -50,7 +50,7 @@ class OmniResults extends ConsumerWidget {
                                     isDark ? colors.surface : colors.background,
                                 transparency: 0.3,
                               ),
-                              icon: result.icon,
+                              leading: result.icon,
                               label: result.title,
                               sublabel: result.excerpt,
                               link: result.url,

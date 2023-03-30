@@ -15,6 +15,7 @@ class TransitionPage extends CustomTransitionPage {
 
   final AxisDirection? inDirection;
   final AxisDirection? outDirection;
+  final RouterEntry? entry;
 
   TransitionPage({
     required super.key,
@@ -23,7 +24,9 @@ class TransitionPage extends CustomTransitionPage {
     required int level,
     this.inDirection,
     this.outDirection,
+    this.entry,
   }) : super(
+          restorationId: entry?.fullPath ?? key.toString(),
           transitionDuration: pageTransitionDuration,
           transitionsBuilder: (
             context,

@@ -17,7 +17,7 @@ class PaginatedListView extends HookWidget {
     required this.query,
     required this.itemBuilder,
     this.listen = true,
-    this.pageSize = 2,
+    this.pageSize = 1000,
     this.itemSpacing = 12,
     this.padding = EdgeInsets.zero,
     this.leadingItems,
@@ -53,8 +53,10 @@ class PaginatedListView extends HookWidget {
         listen: listen,
         pageSize: pageSize,
       ),
+      [query],
     );
     useListenable(registry);
+    // reload the registry when the query changes
 
     return ListView.builder(
       padding: padding,

@@ -1,0 +1,45 @@
+signOut: Afmelden
+
+messages:
+  passwordUpdated: Wachtwoord succesvol bijgewerkt
+  passwordRemoved: Wachtwoord succesvol verwijderd
+
+page:
+  name: Mijn profiel
+  description: Beheer uw account, log in en persoonlijke gegevens
+
+deleteAccount:
+  button: Account verwijderen
+  warning: Weet u zeker dat u uw account wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.
+
+fields:
+  name:
+    label: Naam
+    enter: Voer uw naam in
+    required: Naam is verplicht
+  email:
+    label: E-mailadres
+    enter: Voer uw e-mailadres in
+    required: E-mailadres is verplicht
+    invalid: Ongeldig e-mailadres
+    notices:
+      change: Houd er rekening mee dat eventuele wijzigingen in uw e-mailadres pas worden toegepast nadat u op de verificatieknop in de e-mail hebt geklikt die we naar uw oude e-mailadres hebben gestuurd.
+      changeSent: Verifieer uw nieuwe e-mailadres door op de verificatielink te klikken die we naar uw oude e-mail hebben gestuurd. Het kan enkele minuten duren voordat de e-mail aankomt. Als u deze niet ziet, controleer dan uw spammap.
+  phone:
+    label: Telefoonnummer
+    enter: Voer uw telefoonnummer in
+    required: Telefoonnummer is verplicht
+    invalid: Ongeldig telefoonnummer
+  language:
+    label: Taal
+    select: Selecteer uw taal
+
+verifyEmailCard:
+  title: E-mailadres verificatie
+  message: Om uw account te gebruiken, moet u uw e-mailadres verifiëren. We hebben u een e-mail gestuurd met een verificatielink. Klik op de link om uw e-mailadres te verifiëren. Het kan enkele minuten duren voordat de e-mail aankomt. Als u de e-mail niet ziet, controleer dan uw spammap.
+  messages:
+    sent: Verificatie-e-mail verzonden
+  buttons:
+    resend: Verificatie-e-mail opnieuw verzenden
+    back: Terug naar login
+    inbox: Ga naar inbox

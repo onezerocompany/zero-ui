@@ -33,6 +33,7 @@ class Glass extends StatelessWidget {
   final bool clip;
   final double borderWidth;
   final Color? borderColor;
+  final double elevation;
 
   const Glass({
     super.key,
@@ -48,6 +49,7 @@ class Glass extends StatelessWidget {
     this.clip = true,
     this.borderWidth = 0,
     this.borderColor,
+    this.elevation = 0,
   });
 
   double get currentBlur {
@@ -82,6 +84,7 @@ class Glass extends StatelessWidget {
       curve: curve,
       cornerRadius: cornerRadius,
       clip: clip,
+      elevation: elevation,
       side: borderWidth == 0
           ? BorderSide.none
           : BorderSide(

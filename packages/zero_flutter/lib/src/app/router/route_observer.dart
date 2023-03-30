@@ -6,9 +6,10 @@ class RouterObserver extends NavigatorObserver {
   @override
   didPop(Route route, Route? previousRoute) {
     Future.delayed(Duration.zero, () {
-      final router = globalContainer.read(routerProvider);
-      final entry = router.entryForPaths([router.goRouter.location]);
-      globalContainer.read(currentRouterEntryProvider.notifier).update(entry);
+      final entry = (previousRoute?.settings as TransitionPage?)?.entry;
+      if (entry != null) {
+        globalContainer.read(currentRouterEntryProvider.notifier).update(entry);
+      }
     });
   }
 }

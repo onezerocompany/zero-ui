@@ -27,7 +27,7 @@ class AuthConfig {
 
   final Function(
     String uid,
-    Map<String, dynamic> values,
+    FormValues values,
   )? saveProfileDetails;
   final MailAction? sendMailVerification;
   final MailActionWithEmail? sendMagicLink;

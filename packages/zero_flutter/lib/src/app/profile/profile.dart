@@ -77,7 +77,7 @@ class ProfileForm extends HookConsumerWidget {
           await authConfig.saveProfileDetails?.call(uid, values);
 
           // if the email was changed, set mail sent
-          if (values["email"] != profile?.email) {
+          if (values.get<String>("email") != profile?.email) {
             sentChangeEmail.value = true;
           }
 

@@ -1,7 +1,7 @@
 import 'package:zero_flutter/zero_flutter.dart';
 
 class ListItem extends ButtonBase {
-  final dynamic icon;
+  final dynamic leading;
   final String label;
   final String? sublabel;
   final Widget? trailing;
@@ -14,7 +14,7 @@ class ListItem extends ButtonBase {
     super.loading = false,
     super.enabled = true,
     super.config = ListItem.defaultConfig,
-    this.icon,
+    this.leading,
     required this.label,
     this.sublabel,
     this.trailing,
@@ -24,10 +24,11 @@ class ListItem extends ButtonBase {
   static const ButtonConfig defaultConfig = ButtonConfig(
     transparency: 0.1,
     glassLike: true,
+    fillWidth: true,
     paddings: {
       ButtonSize.small: EdgeInsets.symmetric(vertical: 12, horizontal: 14),
       ButtonSize.medium: EdgeInsets.symmetric(vertical: 20, horizontal: 22),
-      ButtonSize.large: EdgeInsets.symmetric(vertical: 18, horizontal: 22),
+      ButtonSize.large: EdgeInsets.symmetric(vertical: 28, horizontal: 30),
     },
     cornerRadii: {
       ButtonSize.small: BorderRadius.all(Radius.circular(12)),
@@ -45,53 +46,55 @@ class ListItem extends ButtonBase {
   Widget buildButton(BuildContext context, ButtonState state, WidgetRef ref) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    Widget loadedIcon = icon is IconData
+    Widget loadedIcon = leading is IconData
         ? Icon(
-            icon: icon,
+            icon: leading,
             color: config.contentColor(context),
             size: config.textIconSize * 1.4,
           )
-        : icon ?? const SizedBox.shrink();
+        : leading ?? const SizedBox.shrink();
+
+    final labels = Section(
+      direction: Axis.horizontal,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      itemSpacing: config.textIconSize,
+      children: [
+        if (leading != null) loadedIcon,
+        Section(
+          itemSpacing: config.textIconSize * 0.3,
+          children: [
+            Text(
+              label,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: textTheme.displaySmall?.copyWith(
+                fontSize: config.textIconSize,
+                color: config.contentColor(context),
+                height: 1,
+              ),
+            ),
+            if (sublabel != null)
+              Text(
+                sublabel!,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: textTheme.titleSmall?.copyWith(
+                  fontSize: config.textIconSize * 0.9,
+                  color: config.contentColor(context),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
-          child: Section(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            itemSpacing: config.textIconSize * 0.4,
-            children: [
-              Section(
-                direction: Axis.horizontal,
-                itemSpacing: config.textIconSize * 0.4,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (icon != null) loadedIcon,
-                  Text(
-                    label,
-                    style: textTheme.displaySmall?.copyWith(
-                      fontSize: config.textIconSize * 1.15,
-                      color: config.contentColor(context),
-                      height: 1,
-                    ),
-                  ),
-                ],
-              ),
-              if (sublabel != null)
-                Text(
-                  sublabel!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: textTheme.titleSmall?.copyWith(
-                    color: config.contentColor(context),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-            ],
-          ),
-        ),
+        config.fillWidth ? Expanded(child: labels) : labels,
         if (trailing != null)
           Padding(
             padding: EdgeInsets.only(left: config.textIconSize * 0.7),

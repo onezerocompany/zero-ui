@@ -4,7 +4,7 @@ import 'package:zero_flutter/zero_flutter.dart';
 Future<void> performAction(
   BuildContext context,
   WidgetRef ref,
-  Map<String, dynamic> values,
+  FormValues values,
 ) async {
   final mode = ref.watch(loginModeProvider);
   final authConfig = ref.read(authConfigProvider);
@@ -12,15 +12,17 @@ Future<void> performAction(
     switch (mode) {
       case LoginMode.password:
         await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: values["email"],
-          password: values["password"],
+          email: values.get<String>("email") ?? "",
+          password: values.get<String>("password") ?? "",
         );
+
         break;
       case LoginMode.magicLink:
         ref.read(loginModeProvider.notifier).state = LoginMode.sendingMagicLink;
         try {
-          final response =
-              await authConfig.sendMagicLink?.call(values["email"]);
+          final response = await authConfig.sendMagicLink
+              ?.call(values.get<String>("email") ?? "");
+
           if (response?.sent == true) {
             ref.read(loginModeProvider.notifier).state =
                 LoginMode.sentMagicLink;
@@ -39,8 +41,9 @@ Future<void> performAction(
             LoginMode.sendingPasswordReset;
 
         try {
-          final response =
-              await authConfig.sendPasswordReset?.call(values["email"]);
+          final response = await authConfig.sendPasswordReset
+              ?.call(values.get<String>("email") ?? "");
+
           if (response?.sent == true) {
             ref.read(loginModeProvider.notifier).state =
                 LoginMode.sentPasswordReset;

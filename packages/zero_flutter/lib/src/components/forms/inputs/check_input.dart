@@ -7,9 +7,9 @@ class CheckInput extends InputField<bool> {
 
     // InputField specific
     super.errorBuilder,
-    super.alignment = InputFieldAlignment.start,
+    super.alignment = InputFieldAlignment.end,
     super.dense = false,
-    super.padding = const EdgeInsets.all(10),
+    super.padding = const EdgeInsets.all(14),
     super.fillColor,
     super.leading,
     super.trailing,

@@ -9,7 +9,12 @@ class SwitchInput extends InputField<bool> {
     super.errorBuilder,
     super.alignment = InputFieldAlignment.end,
     super.dense = false,
-    super.padding = const EdgeInsets.all(12),
+    super.padding = const EdgeInsets.only(
+      left: 22,
+      top: 12,
+      bottom: 12,
+      right: 12,
+    ),
     super.fillColor,
     super.leading,
     super.trailing,

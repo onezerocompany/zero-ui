@@ -165,11 +165,13 @@ class PageContent<ItemType> extends ConsumerWidget {
           return SliverPadding(
             padding: EdgeInsets.only(
               // only top padding on the first item
-              top: index == 0 ? padding.top : 0,
+              top: index == 0 ? padding.top : itemSpacing / 2,
               left: padding.left,
               right: padding.right,
               // only bottom padding on the last item
-              bottom: index == slivers!.length - 1 ? padding.bottom : 0,
+              bottom: index == slivers!.length - 1
+                  ? padding.bottom
+                  : itemSpacing / 2,
             ),
             sliver: item,
           );

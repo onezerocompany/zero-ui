@@ -1,0 +1,57 @@
+signInWith:
+  password: Se connecter avec un mot de passe
+  magicLink: Se connecter avec un lien magique
+  google: Se connecter avec Google
+  apple: Se connecter avec Apple
+
+fields:
+  email:
+    label: Adresse e-mail
+    enter: Entrez votre adresse e-mail
+    required: Adresse e-mail obligatoire
+  password:
+    label: Mot de passe
+    enter: Entrez votre mot de passe
+    required: Mot de passe obligatoire
+
+forgotPassword:
+  buttons:
+    forgot: Mot de passe oublié?
+    sendLink: Envoyer un lien de réinitialisation
+    inbox: Aller à la boîte de réception
+  sent:
+    title: Lien de réinitialisation envoyé
+    message: Un lien de réinitialisation a été envoyé à votre adresse e-mail. Veuillez vérifier votre boîte de réception et suivre le lien pour continuer. Si vous n'avez pas reçu l'e-mail, veuillez vérifier votre dossier de spam. Veuillez noter que cela peut prendre quelques minutes pour que l'e-mail arrive, bien que cela ne prenne généralement que quelques secondes.
+  dialog:
+    title: Réinitialiser le mot de passe
+    message: Veuillez entrer votre nouveau mot de passe et le confirmer en le saisissant à nouveau, puis cliquez sur le bouton ci-dessous.
+    fields:
+      newPassword:
+        label: Nouveau mot de passe
+        enter: Entrez votre nouveau mot de passe
+        required: Nouveau mot de passe obligatoire
+        short: Le nouveau mot de passe est trop court
+      confirmPassword:
+        label: Confirmer le mot de passe
+        enter: Confirmez votre nouveau mot de passe
+        required: Confirmation de mot de passe obligatoire
+        mismatch: Les mots de passe ne correspondent pas
+    buttons:
+      update: Mettre à jour le mot de passe
+    popups:
+      passwordMismatch: Les mots de passe que vous avez saisis ne correspondent pas. Veuillez ressaisir votre mot de passe.
+      codeExpired: Le code de réinitialisation du mot de passe a expiré. Veuillez retourner à la page de connexion et renvoyer le lien de réinitialisation du mot de passe.
+      updateSuccess: Votre mot de passe a été mis à jour. Veuillez vous connecter avec votre nouveau mot de passe.
+
+magicLink:
+  sent:
+    title: Lien magique envoyé
+    message: Un lien magique a été envoyé à votre adresse e-mail. Veuillez vérifier votre boîte de réception et suivre le lien pour continuer. Si vous n'avez pas reçu l'e-mail, veuillez vérifier votre dossier de spam. Veuillez noter que cela peut prendre quelques minutes pour que l'e-mail arrive, bien que cela ne prenne généralement que quelques secondes.
+  buttons:
+    send: Envoyer le lien magique
+    back: Retour à la page de connexion
+    inbox: Aller à la boîte de réception
+
+buttons:
+  back: Retour à la page de connexion
+  signin: Se connecter

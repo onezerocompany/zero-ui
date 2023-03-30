@@ -3,6 +3,8 @@ buttons:
   undo: Annuler les modifications
   create: Créer
 
+selectAnOption: Sélectionner une option
+
 inputs:
   list:
     add: Ajouter

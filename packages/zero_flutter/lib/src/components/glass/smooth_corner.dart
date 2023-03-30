@@ -10,6 +10,7 @@ class SmoothCorner extends ConsumerWidget {
   final Color? color;
   final BorderSide? side;
   final bool clip;
+  final double elevation;
 
   const SmoothCorner({
     super.key,
@@ -20,6 +21,7 @@ class SmoothCorner extends ConsumerWidget {
     this.color,
     this.side,
     this.clip = true,
+    this.elevation = 0,
   });
 
   @override

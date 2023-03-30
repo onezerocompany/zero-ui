@@ -53,13 +53,11 @@ class LocalizedTextInput extends InputField<LocalizedString> {
     final color = super.fillColor ??
         (isDark ? colors.background.withBrightness(1.5) : colors.surface);
     final foregroundColor = color.foreground;
-    final textController = useTextEditingController(
-      text: state.value.get(currentLocale),
-    );
+    final textController = useTextEditingController();
 
     useEffect(
       () {
-        final text = state.value.get(currentLocale);
+        final text = state.value.get(currentLocale, fallback: false);
         final previousText = textController.text;
         final previousSelection = textController.selection;
 
@@ -102,7 +100,13 @@ class LocalizedTextInput extends InputField<LocalizedString> {
         height: 1,
       ),
       onChanged: (value) {
-        state.value = state.value..set(currentLocale, value);
+        final newValue = LocalizedString.fromMap(
+          {
+            ...state.value.toMap(),
+            currentLocale.toString(): value,
+          },
+        );
+        state.value = newValue;
       },
       onSubmitted: (value) => onSubmittedField.call(state.value),
       decoration: InputDecoration.collapsed(

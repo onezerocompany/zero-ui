@@ -22,7 +22,7 @@ class PulsingWidget extends HookWidget {
     useEffect(
       () {
         animationController.repeat(reverse: true);
-        return () => animationController.dispose();
+        return null;
       },
       [animationController],
     );

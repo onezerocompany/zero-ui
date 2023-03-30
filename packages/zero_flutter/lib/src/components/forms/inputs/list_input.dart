@@ -23,11 +23,13 @@ class ListInput<ItemType> extends InputField<List<ItemType>> {
     this.itemSpacing = 14,
     this.title,
     this.addLabel,
+    this.canAdd = true,
   });
 
   final String? title;
   final String? addLabel;
   final double itemSpacing;
+  final bool canAdd;
 
   final Widget Function(
     BuildContext context,
@@ -55,7 +57,11 @@ class ListInput<ItemType> extends InputField<List<ItemType>> {
       children: [
         if (title != null)
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(
+              left: 8.0,
+              top: 8.0,
+              right: 8.0,
+            ),
             child: Text(title!, style: text.headlineMedium),
           ),
         for (var index = 0; index < state.value.length; index++)
@@ -75,26 +81,35 @@ class ListInput<ItemType> extends InputField<List<ItemType>> {
               state.value = list;
             },
           ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Center(
-            child: Button(
-              enabled: enabled,
-              config: Button.defaultConfig.copyWith(
-                fillWidth: true,
-                fillColor: Theme.of(context).colorScheme.surface,
-                size: ButtonSize.medium,
-              ),
-              label: addLabel ?? t.form.inputs.list.add,
-              leading: Icons.add,
-              onPressed: () {
-                final list = List<ItemType>.from(state.value);
-                list.add(newItem());
-                state.value = list;
-              },
-            ),
+        AnimatedHider(
+          visible: !state.valid && state.interacted,
+          child: InlineMessage(
+            message: super.errorBuilder?.call(context, state.errorCode) ?? "",
+            color: Colors.destructive,
+            icon: Icons.error,
           ),
         ),
+        if (canAdd)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Center(
+              child: Button(
+                enabled: enabled,
+                config: Button.defaultConfig.copyWith(
+                  fillWidth: true,
+                  fillColor: Theme.of(context).colorScheme.surface,
+                  size: ButtonSize.medium,
+                ),
+                label: addLabel ?? t.forms.inputs.list.add,
+                leading: Icons.add,
+                onPressed: () {
+                  final list = List<ItemType>.from(state.value);
+                  list.add(newItem());
+                  state.value = list;
+                },
+              ),
+            ),
+          ),
       ],
     );
   }

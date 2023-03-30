@@ -1,0 +1,18 @@
+greetings:
+  morning: Bonjour
+  afternoon: Bon après-midi
+  evening: Bonsoir
+  night: Bonne nuit
+
+search: Recherche...
+guest: Invité
+
+fallbackPage:
+  title: Page non trouvée
+  message: La page que vous cherchez n'existe pas.
+
+buttons:
+  goToSignIn: Aller à la connexion
+
+dialogs:
+  confirm: Confirmer

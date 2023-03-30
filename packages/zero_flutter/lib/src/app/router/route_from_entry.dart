@@ -44,17 +44,19 @@ RouteBase routeFromEntry({
       // if level is 0, use the full path
       path: level == 1 ? entry.fullPath : entry.subPath,
       pageBuilder: (context, state) => TransitionPage(
+        entry: entry,
         inDirection: AxisDirection.up,
         outDirection: AxisDirection.up,
         level: level,
-        key: ValueKey(entry.fullPath),
+        key: state.pageKey,
         name: entry.metadata.name,
-        child: level >= 1
-            ? entry.pageBuilder(state)
-            : MultiPageScaffold(
-                key: ValueKey('${entry.fullPath}-scaffold'),
-                leftPage: entry.pageBuilder(state),
-              ),
+        child:
+            entry.pageBuilder(null).layout == PageLayout.fullscreen || level > 1
+                ? entry.pageBuilder(state)
+                : MultiPageScaffold(
+                    key: ValueKey('${entry.fullPath}-scaffold'),
+                    leftPage: entry.pageBuilder(state),
+                  ),
       ),
       redirect: redirect,
     );
@@ -65,10 +67,11 @@ RouteBase routeFromEntry({
         RouterObserver(),
       ],
       pageBuilder: (context, state, child) => TransitionPage(
+        entry: entry,
         inDirection: AxisDirection.left,
         outDirection: AxisDirection.left,
         level: level,
-        key: ValueKey('${entry.fullPath}-shellroute'),
+        key: state.pageKey,
         name: entry.metadata.name,
         child: HeroControllerScope(
           controller: HeroController(
@@ -84,14 +87,13 @@ RouteBase routeFromEntry({
       ),
       routes: [
         GoRoute(
-          // TODO: fix no transition when going to a differnt entry of same path
-          // if level is 0, use the full path
           path: level == 1 ? entry.fullPath : entry.subPath,
           pageBuilder: (context, state) => TransitionPage(
+            entry: entry,
             inDirection: AxisDirection.up,
             outDirection: AxisDirection.up,
             level: level + 1,
-            key: ValueKey(entry.fullPath),
+            key: state.pageKey,
             name: entry.metadata.name,
             child: entry.pageBuilder(null).placeHolderChild ??
                 const SizedBox.expand(),

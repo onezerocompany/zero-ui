@@ -28,6 +28,8 @@ class SectionHeader extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(
         bottom: itemSpacing,
+        left: 8,
+        right: 8,
       ),
       child: Row(
         children: [

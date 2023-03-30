@@ -32,7 +32,7 @@ class FormButtons extends ConsumerWidget {
             fillColor: Colors.success,
           ),
           leading: Icons.save,
-          label: saveLabel ?? t.form.buttons.save,
+          label: saveLabel ?? t.forms.buttons.save,
           enabled: controller.canSave || canAlwaysSave,
           onPressed: controller.canSave ? controller.save : null,
         ),

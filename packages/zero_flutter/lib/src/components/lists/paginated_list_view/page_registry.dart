@@ -69,7 +69,6 @@ class PageRegistry extends ChangeNotifier {
       );
 
       pageStream.addListener(() {
-        if (pageStream.needsReload) reload();
         notifyListeners();
       });
       pages.add(pageStream);

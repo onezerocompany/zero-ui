@@ -25,7 +25,7 @@ class PasswordChangeDialog extends HookConsumerWidget {
       onSaved: (values, saved) async {
         try {
           if (hasPassword) {
-            final oldPassword = values["old_password"];
+            final oldPassword = values.get<String>("old_password");
             if (oldPassword != null) {
               final credential = EmailAuthProvider.credential(
                 email: FirebaseAuth.instance.currentUser?.email ?? "",
@@ -37,8 +37,9 @@ class PasswordChangeDialog extends HookConsumerWidget {
           }
 
           await FirebaseAuth.instance.currentUser?.updatePassword(
-            values["new_password"],
+            values.get<String>("new_password") ?? '',
           );
+
           if (context.mounted) {
             showSnackbar(
               context,
@@ -124,7 +125,8 @@ class PasswordChangeDialog extends HookConsumerWidget {
                       defaultValue: "",
                       validator: (String? value) {
                         if (value == null || value.isEmpty) return "required";
-                        if (controller.values["new_password"] != value) {
+                        if (controller.values.get<String>("new_password") !=
+                            value) {
                           return "passwords_mismatch";
                         }
                         return null;

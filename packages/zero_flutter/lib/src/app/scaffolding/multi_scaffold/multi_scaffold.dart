@@ -174,7 +174,6 @@ class MultiPageScaffold extends ConsumerWidget {
               leftViewportWidth,
               state.multiPage,
             );
-
             return Stack(
               children: [
                 Positioned(

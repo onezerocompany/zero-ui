@@ -1,7 +1,9 @@
 buttons:
   save: Wijzigingen opslaan
   undo: Wijzigingen ongedaan maken
-  create: Aanmaken
+  create: Creëren
+
+selectAnOption: Selecteer een optie
 
 inputs:
   list:

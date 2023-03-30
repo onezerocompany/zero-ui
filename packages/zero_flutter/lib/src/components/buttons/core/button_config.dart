@@ -55,7 +55,7 @@ class ButtonConfig {
       ),
       ButtonState.disabled: ButtonStateConfig(
         brightness: 1,
-        opacity: 0.1,
+        opacity: 0.3,
       ),
       ButtonState.loading: ButtonStateConfig(
         brightness: 0.9,

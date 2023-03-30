@@ -9,3 +9,4 @@ export 'section/section.dart';
 export 'messages/messages.dart';
 export 'loader/loader.dart';
 export 'selector/selector.dart';
+export 'text/text.dart';

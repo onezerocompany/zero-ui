@@ -46,10 +46,11 @@ GoRouter buildRouter(
       return null;
     },
     errorPageBuilder: (context, state) => TransitionPage(
+      entry: null,
       inDirection: AxisDirection.left,
       outDirection: AxisDirection.left,
       level: 0,
-      key: ValueKey(state.path),
+      key: state.pageKey,
       name: "Not Found",
       child: Scaffold(
         body: FallbackPage(
@@ -66,11 +67,11 @@ GoRouter buildRouter(
       ShellRoute(
         navigatorKey: omniNav,
         pageBuilder: (context, state, child) => TransitionPage(
+          entry: null,
           level: 0,
-          key: ValueKey(state.path),
+          key: state.pageKey,
           name: state.name,
           child: OmniScaffold(
-            key: ValueKey(state.path),
             child: child,
           ),
         ),
@@ -78,8 +79,9 @@ GoRouter buildRouter(
           GoRoute(
             path: "/",
             pageBuilder: (context, state) => TransitionPage(
+              entry: null,
               level: 1,
-              key: ValueKey(state.path),
+              key: state.pageKey,
               name: state.name,
               child: Container(),
             ),

@@ -8,18 +8,13 @@ class PageStream extends ChangeNotifier {
   List<DocumentSnapshot> documents;
   bool isLoading;
   int pageSize;
-  bool needsReload = false;
 
   PageStream(
     Stream<QuerySnapshot> page, {
-    this.pageSize = 2,
+    this.pageSize = 10,
   })  : documents = const [],
         isLoading = true {
     _subscription = page.listen((event) {
-      if (!isLoading) {
-        needsReload = event.docChanges.last.type == DocumentChangeType.added ||
-            event.docChanges.last.type == DocumentChangeType.removed;
-      }
       documents = event.docs.toList();
       isLoading = false;
       notifyListeners();

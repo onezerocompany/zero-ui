@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:zero_flutter/zero_flutter.dart';
+import 'package:collection/collection.dart';
 
 typedef InputStateValidator<ValueType> = String? Function(ValueType? value);
 typedef InputStateSanitizer<ValueType> = ValueType? Function(
@@ -16,6 +17,7 @@ class InputState<ValueType> extends ChangeNotifier {
     this.validator,
     this.sanitizer,
     this.autosave = false,
+    this.disabled = false,
   })  : _value = storedValue ?? defaultValue,
         _storedValue = storedValue {
     formController?.register(this);
@@ -43,8 +45,9 @@ class InputState<ValueType> extends ChangeNotifier {
   /// The current value of the input field.
   ValueType _value;
   ValueType get value => _value;
-  set value(ValueType newValue) {
-    final sanitizedValue = sanitizer?.call(newValue) ?? newValue;
+  set value(ValueType? newValue) {
+    final sanitizedValue =
+        sanitizer?.call(newValue) ?? newValue ?? defaultValue;
     interacted = true;
     final didUpdate = (sanitizedValue is List && _value is List)
         ? !listEquals(_value as List, sanitizedValue)
@@ -57,11 +60,12 @@ class InputState<ValueType> extends ChangeNotifier {
     }
   }
 
-  void silentValueUpdate(ValueType newValue) {
-    _value = newValue;
+  void silentValueUpdate(ValueType? newValue) {
+    _value = newValue ?? defaultValue;
   }
 
   /// The stored value of the input field.
+  /// TODO: This can be removed sinze we use useMemoized
   ValueType? _storedValue;
   ValueType? get storedValue => _storedValue;
   set storedValue(ValueType? newValue) {
@@ -78,6 +82,9 @@ class InputState<ValueType> extends ChangeNotifier {
   /// Autosave of the input field.
   final bool autosave;
 
+  /// Whether the input field is disabled
+  final bool disabled;
+
   /// Current error code of the input field.
   /// This is `null` if the input field is valid.
   String? get errorCode => validator?.call(_value);
@@ -93,9 +100,10 @@ class InputState<ValueType> extends ChangeNotifier {
 
   /// Whether the input field is dirty.
   /// Uses deep comparison to check if the value has changed.
-  bool get dirty => _value is List
-      ? !listEquals(_value as List?, _storedValue as List?)
-      : _value != _storedValue;
+  bool get dirty {
+    final deepEquals = const DeepCollectionEquality.unordered().equals;
+    return !deepEquals(_value, _storedValue);
+  }
 
   /// Whether the input field can be saved.
   bool get canSave => (valid || !hasBeenValid) && dirty;

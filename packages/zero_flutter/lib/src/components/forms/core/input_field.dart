@@ -23,8 +23,10 @@ abstract class InputField<ValueType> extends HookConsumerWidget {
 
     // widget related
     this.label,
+    this.labelTrailing,
     this.leading,
     this.trailing,
+    this.footer,
     this.enabled = true,
     this.alignment = InputFieldAlignment.center,
     this.fillColor,
@@ -32,6 +34,7 @@ abstract class InputField<ValueType> extends HookConsumerWidget {
     this.padding = EdgeInsets.zero,
     this.onSubmitted,
     this.errorBuilder,
+    this.focusHighlight = true,
   });
 
   /// The controller for the input field.
@@ -51,6 +54,15 @@ abstract class InputField<ValueType> extends HookConsumerWidget {
   /// This is displayed after the input field.
   /// It also accepts a [IconData] object.
   final dynamic trailing;
+
+  /// A pre-trailing widget for the input field.
+  /// This is displayed before the input field if [alignment] is `end`.
+  /// It also accepts a [IconData] object.
+  final dynamic labelTrailing;
+
+  /// Footer widget for the input field.
+  /// This is displayed below the input field.
+  final Widget? footer;
 
   /// Whether the input field is enabled.
   /// If this is `false`, the input field will be disabled.
@@ -77,13 +89,18 @@ abstract class InputField<ValueType> extends HookConsumerWidget {
   /// the input field before [trailing].
   final String? label;
 
+  /// Whether to add focus highlight to the input field.
+  final bool focusHighlight;
+
   /// Called when the input field is submitted.
   /// e.g. when the user presses the enter key.
   final Function(ValueType value)? onSubmitted;
 
   onSubmittedField(ValueType value) {
     onSubmitted?.call(value);
-    state.formController?.save();
+    if (state.formController?.saveUsingEnterKey == true) {
+      state.formController?.save();
+    }
   }
 
   /// Builder for the input field.
@@ -133,22 +150,20 @@ abstract class InputField<ValueType> extends HookConsumerWidget {
       ),
     );
 
-    final field = Flexible(
-      child: Column(
-        crossAxisAlignment: alignment == InputFieldAlignment.start ||
-                alignment == InputFieldAlignment.center
-            ? CrossAxisAlignment.start
-            : CrossAxisAlignment.end,
-        children: [
-          fieldBuilder(
-            context,
-            ref,
-            state: state,
-            focusNode: state.focusNode,
-          ),
-          error,
-        ],
-      ),
+    final field = Column(
+      crossAxisAlignment: alignment == InputFieldAlignment.start ||
+              alignment == InputFieldAlignment.center
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.end,
+      children: [
+        fieldBuilder(
+          context,
+          ref,
+          state: state,
+          focusNode: state.focusNode,
+        ),
+        error,
+      ],
     );
 
     return Focus(
@@ -164,14 +179,14 @@ abstract class InputField<ValueType> extends HookConsumerWidget {
               focusNode: state.focusNode,
             )
           : GestureDetector(
-              onTap: () => state.focusNode.requestFocus(),
+              onTap: () => enabled ? state.focusNode.requestFocus() : null,
               child: Glass(
                 state: GlassState.translucent,
                 color: color,
                 transparency: 0.9,
                 cornerRadius: BorderRadius.circular(12),
                 borderWidth: 2,
-                borderColor: state.focusNode.hasFocus
+                borderColor: state.focusNode.hasFocus && focusHighlight
                     ? colors.primary
                     : Colors.transparent,
                 padding: padding,
@@ -182,11 +197,15 @@ abstract class InputField<ValueType> extends HookConsumerWidget {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        if (alignment == InputFieldAlignment.start) field,
+                        if (alignment == InputFieldAlignment.start)
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: field,
+                          ),
                         if (leading != null)
                           Padding(
                             padding: EdgeInsets.only(
-                              right: padding.left * 0.6,
+                              right: (padding.left * 0.7).clamp(4, 28),
                             ),
                             child: leading is IconData
                                 ? Icon(
@@ -196,7 +215,8 @@ abstract class InputField<ValueType> extends HookConsumerWidget {
                                 : leading,
                           ),
                         alignment == InputFieldAlignment.center
-                            ? Expanded(
+                            ? Flexible(
+                                fit: FlexFit.loose,
                                 child: Column(
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
@@ -226,6 +246,27 @@ abstract class InputField<ValueType> extends HookConsumerWidget {
                                   height: 1,
                                 ),
                               ),
+                        if (labelTrailing != null)
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: (padding.left * 0.7).clamp(4, 28),
+                            ),
+                            child: labelTrailing is IconData
+                                ? Icon(
+                                    icon: labelTrailing,
+                                    color: foregroundColor,
+                                  )
+                                : labelTrailing,
+                          ),
+                        if (alignment == InputFieldAlignment.end)
+                          Flexible(
+                            child: field,
+                          ),
+                        if (alignment == InputFieldAlignment.end &&
+                            trailing != null)
+                          const SizedBox(
+                            width: 12,
+                          ),
                         if (trailing != null)
                           trailing is IconData
                               ? Icon(
@@ -233,13 +274,13 @@ abstract class InputField<ValueType> extends HookConsumerWidget {
                                   color: foregroundColor,
                                 )
                               : trailing!,
-                        if (alignment == InputFieldAlignment.end)
-                          const SizedBox(
-                            width: 12,
-                          ),
-                        if (alignment == InputFieldAlignment.end) field,
                       ],
                     ),
+                    if (footer != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 4),
+                        child: footer!,
+                      ),
                   ],
                 ),
               ),

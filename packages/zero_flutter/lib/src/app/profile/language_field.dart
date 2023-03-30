@@ -15,8 +15,7 @@ class LanguageField extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = ref.watch(zeroLocalizationsProvider);
     final config = ref.watch(appConfigProvider);
-
-    return OptionsInput(
+    return OptionsInput<String>(
       useMemoized(
         () => InputState<String>(
           id: "language",
@@ -26,22 +25,23 @@ class LanguageField extends HookConsumerWidget {
         ),
       ),
       label: t.profile.fields.language.label,
-      selectLabel: t.profile.fields.language.select,
       leading: Icons.language,
-      currentLabel: (value) => findLanguageForCode(value)?.nativeName ?? value,
-      options: () async => config.locales.map((locale) {
-        final language = findLanguageForCode(locale.languageCode);
-        return InputOption<String>(
-          label: language?.nativeName ?? locale.languageCode,
-          value: locale.languageCode,
-          icon: SvgPicture.asset(
-            "assets/flags/${locale.languageCode}.svg",
+      options: () =>
+          config.locales.map((locale) => locale.languageCode).toList(),
+      optionBuilder: (state) {
+        final language = findLanguageForCode(state.value ?? "en");
+        return Button(
+          config: state.templateButtonConfig,
+          label: language?.nativeName ?? state.value ?? "en",
+          leading: SvgPicture.asset(
+            "assets/flags/${state.value ?? "en"}.svg",
             package: "zero_flutter",
             width: 24,
             height: 24,
           ),
+          onPressed: state.pressed,
         );
-      }).toList(),
+      },
     );
   }
 }

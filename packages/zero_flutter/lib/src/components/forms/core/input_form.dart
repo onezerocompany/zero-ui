@@ -12,14 +12,16 @@ class InputForm extends HookConsumerWidget {
     this.saveButtonPosition = FormButtonsPosition.none,
     this.canUndo = true,
     this.canAlwaysSave = false,
+    this.saveUsingEnterKey = true,
     this.saveLabel,
   });
 
-  final Function(Map<String, dynamic> values, Function() saved)? onSaved;
+  final FormSavedCallback? onSaved;
 
   final FormButtonsPosition saveButtonPosition;
   final bool canUndo;
   final bool canAlwaysSave;
+  final bool saveUsingEnterKey;
   final String? saveLabel;
 
   final Widget Function(
@@ -32,6 +34,7 @@ class InputForm extends HookConsumerWidget {
     final controller = useMemoized(
       () => FormController(
         onSaved: onSaved,
+        saveUsingEnterKey: saveUsingEnterKey,
       ),
     );
     useListenable(controller);

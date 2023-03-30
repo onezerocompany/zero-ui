@@ -53,42 +53,43 @@ class Section extends StatelessWidget {
           ),
         // add the item spacing to the top of each child except the first
         Flex(
-          clipBehavior: Clip.none,
           direction: direction,
           mainAxisSize: mainAxisSize,
           mainAxisAlignment: mainAxisAlignment,
           crossAxisAlignment: crossAxisAlignment,
-          children: children.map((child) {
-            final index = children.indexOf(child);
-            final isHidden = child is AnimatedHider && !child.visible;
-            return Padding(
-              padding: EdgeInsets.only(
-                top: index == 0 || direction == Axis.horizontal
-                    ? 0
-                    : !isHidden
-                        ? (itemSpacing / 2)
-                        : 0,
-                left: index == 0 || direction == Axis.vertical
-                    ? 0
-                    : !isHidden
-                        ? (itemSpacing / 2)
-                        : 0,
-                bottom:
-                    index == children.length - 1 || direction == Axis.horizontal
-                        ? 0
-                        : !isHidden
-                            ? (itemSpacing / 2)
-                            : 0,
-                right:
-                    index == children.length - 1 || direction == Axis.vertical
-                        ? 0
-                        : !isHidden
-                            ? (itemSpacing / 2)
-                            : 0,
-              ),
-              child: child,
-            );
-          }).toList(),
+          children: children.map(
+            (child) {
+              final index = children.indexOf(child);
+              final isHidden = child is AnimatedHider && !child.visible;
+              return Padding(
+                padding: EdgeInsets.only(
+                  top: index == 0 || direction == Axis.horizontal
+                      ? 0
+                      : !isHidden
+                          ? (itemSpacing / 2)
+                          : 0,
+                  left: index == 0 || direction == Axis.vertical
+                      ? 0
+                      : !isHidden
+                          ? (itemSpacing / 2)
+                          : 0,
+                  bottom: index == children.length - 1 ||
+                          direction == Axis.horizontal
+                      ? 0
+                      : !isHidden
+                          ? (itemSpacing / 2)
+                          : 0,
+                  right:
+                      index == children.length - 1 || direction == Axis.vertical
+                          ? 0
+                          : !isHidden
+                              ? (itemSpacing / 2)
+                              : 0,
+                ),
+                child: child,
+              );
+            },
+          ).toList(),
         ),
         if (footer != null)
           SectionFooter(

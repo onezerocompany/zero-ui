@@ -27,6 +27,7 @@ class PageSearchProvider extends SearchProvider {
       SearchFetchMechanism.instant,
     ],
     required List<RouterEntry> entries,
+    this.fillParameters,
   }) : entries = entries
             .expand(
               (entry) => fromEntry(
@@ -44,8 +45,8 @@ class PageSearchProvider extends SearchProvider {
       if (entry.metadata.searchable)
         PageSearchProviderItem(
           icon: entry.metadata.icon,
-          name: entry.metadata.name,
-          description: entry.metadata.description,
+          name: entry.metadata.name.trim(),
+          description: entry.metadata.description?.trim(),
           url: entry.fullPath,
           searchable: entry.metadata.searchable,
           hasAccess: entry.metadata.hasAccess,
@@ -60,6 +61,7 @@ class PageSearchProvider extends SearchProvider {
   }
 
   final List<PageSearchProviderItem> entries;
+  final String Function(String path)? fillParameters;
 
   @override
   Future<List<SearchResult>> recommend({
@@ -73,7 +75,7 @@ class PageSearchProvider extends SearchProvider {
             icon: page.icon,
             title: page.name ?? page.url,
             excerpt: page.description,
-            url: page.url,
+            url: fillParameters != null ? fillParameters!(page.url) : page.url,
           ),
         )
         .toList();

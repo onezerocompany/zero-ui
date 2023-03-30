@@ -37,7 +37,6 @@ class PageCardLayout extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final panels = ref.watch(panelsProvider);
     final cornerRadius = ref.watch(pageCardCornerProvider);
     if (layout == PageLayout.card || layout == PageLayout.fullscreenCard) {
       final padding = PageContent.padding(
@@ -62,7 +61,6 @@ class PageCardLayout extends ConsumerWidget {
           state: GlassState.translucent,
           cornerRadius: cornerRadius,
           transparency: 0.8,
-          borderWidth: panels >= 2 ? 1 : 0,
           child: structure,
         ),
       );
