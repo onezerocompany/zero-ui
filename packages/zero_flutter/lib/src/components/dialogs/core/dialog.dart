@@ -33,11 +33,15 @@ class Dialog extends ConsumerWidget {
           child: ConstrainedBox(
             constraints: const BoxConstraints(
               maxWidth: 400,
+              maxHeight: 600,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SingleChildScrollView(child: child),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: child,
+                ),
                 SizedBox(
                   child: Glass(
                     state: GlassState.translucent,
