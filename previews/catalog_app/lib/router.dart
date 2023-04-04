@@ -1,5 +1,5 @@
 import 'package:zero_catalog/pages/components_page.dart';
-import 'package:zero_flutter/zero_flutter.dart';
+import 'package:zero_ui/zero_ui.dart';
 
 // pages
 import 'package:zero_catalog/pages/login.dart';

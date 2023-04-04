@@ -1,21 +1,21 @@
 name: zero_catalog
 description: Catalog of the Zero Flutter UI Kit
 
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0
 
 environment:
-  sdk: ">=2.18.6 <3.0.0"
+  sdk: '>=2.18.6 <3.0.0'
 
 dependencies:
-  zero_flutter:
-    path: ../../packages/zero_flutter
+  zero_ui:
+    path: ../../packages/flutter
   flutter:
     sdk: flutter
   google_fonts: ^4.0.3
   flutter_riverpod: ^2.2.0
-  firebase_auth: 4.1.5
-  firebase_core: 2.7.0
+  firebase_auth: ^4.1.5
+  firebase_core: ^2.7.0
   cloud_firestore: ^4.4.3
   cloud_functions: ^4.0.11
   cross_file: ^0.3.3+4

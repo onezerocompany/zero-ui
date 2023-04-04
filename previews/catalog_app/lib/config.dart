@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zero_catalog/router.dart';
-import 'package:zero_flutter/zero_flutter.dart';
+import 'package:zero_ui/zero_ui.dart';
 
 final configBuilder = AppConfigBuilder(
   appName: (locale) => "Zero Catalog",
@@ -36,6 +35,7 @@ final styleConfig = StyleConfig(
 
 AuthConfig authConfigBuilder(Locale locale) => AuthConfig(
       authMethods: [
+        AuthMethods.anonymous,
         AuthMethods.magicLink,
         AuthMethods.password,
         // AuthMethods.google,
@@ -43,12 +43,6 @@ AuthConfig authConfigBuilder(Locale locale) => AuthConfig(
       ],
       profileLink: "/catalog/profile",
       signInLink: "/login",
-      saveProfileDetails: (uid, values) async {
-        await FirebaseFirestore.instance
-            .collection("users")
-            .doc(uid)
-            .set(values);
-      },
       sendMailVerification: () async {
         final call = await FirebaseFunctions.instanceFor(region: "europe-west1")
             .httpsCallable(

@@ -1,4 +1,4 @@
-import 'package:zero_flutter/zero_flutter.dart';
+import 'package:zero_ui/zero_ui.dart';
 
 // state providers
 final nameProvider = StateProvider<String>((ref) => "");
@@ -59,27 +59,9 @@ class InputsForm extends HookWidget {
               ),
             ),
             label: "Which one?",
-            currentLabel: (value) => value,
-            options: () => const [
-              InputOption<String>(
-                icon: Icons.lab_panel,
-                label: "Option 1",
-                description: "This is option 1",
-                value: "option1",
-              ),
-              InputOption(
-                icon: Icons.lab_panel,
-                label: "Option 2",
-                description: "This is option 2",
-                value: "option2",
-              ),
-              InputOption(
-                icon: Icons.lab_panel,
-                label: "Option 3",
-                description: "This is option 3",
-                value: "option3",
-              ),
-            ],
+            options: () {
+              return List.generate(100, (index) => "option $index");
+            },
             selectLabel: 'Select an option',
           ),
           SwitchInput(
@@ -102,7 +84,7 @@ class InputsForm extends HookWidget {
             ),
             label: "Published on the web",
           ),
-          NumericInput(
+          NumberInput(
             useMemoized(
               () => InputState<num>(
                 id: "quantity",
@@ -114,7 +96,7 @@ class InputsForm extends HookWidget {
             leading: Icons.format_list_numbered,
             stepAmount: 1,
           ),
-          NumericInput(
+          NumberInput(
             useMemoized(
               () => InputState<num>(
                 id: "numeric-price",
@@ -129,20 +111,6 @@ class InputsForm extends HookWidget {
             leading: Icons.attach_money,
             stepAmount: 100,
           ),
-          // MonetaryInput(
-          //   useMemoized(
-          //     () => InputState<num>(
-          //       id: "price",
-          //       defaultValue: 0,
-          //       formController: controller,
-          //     ),
-          //   ),
-          //   label: "Price",
-          //   leading: Icons.attach_money,
-          //   currencySymbol: "€",
-          //   separator: ",",
-          //   thousandsSeparator: ".",
-          // ),
           TextInput(
             useMemoized(
               () => InputState<String>(
@@ -332,17 +300,13 @@ class ListInputItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedGlass(
+    return Glass(
       state: GlassState.opaque,
       transparency: 0.3,
       cornerRadius: BorderRadius.circular(12),
       padding: const EdgeInsets.all(16),
       child: InputForm(
         onSaved: (values, saved) {
-          update(ListInputItemData(
-            title: values["title"] ?? "",
-            description: values["description"] ?? "",
-          ));
           saved();
         },
         builder: (context, controller) {

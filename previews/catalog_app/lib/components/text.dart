@@ -1,4 +1,4 @@
-import 'package:zero_flutter/zero_flutter.dart';
+import 'package:zero_ui/zero_ui.dart';
 
 PageMetadata textPageMetadata(Locale locale) {
   return const PageMetadata(

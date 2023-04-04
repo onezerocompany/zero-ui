@@ -1,0 +1,11 @@
+include: package:onezero_ui_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - '**/*.g.dart'
+  plugins:
+    - custom_lint
+
+linter:
+  rules:
+    - require_trailing_commas

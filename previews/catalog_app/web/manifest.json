@@ -1,6 +1,6 @@
 {
-  "name": "zero_flutter",
-  "short_name": "zero_flutter",
+  "name": "zero_ui",
+  "short_name": "zero_ui",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0175C2",

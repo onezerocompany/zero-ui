@@ -1,4 +1,4 @@
-import 'package:zero_flutter/zero_flutter.dart';
+import 'package:zero_ui/zero_ui.dart';
 
 final loaderProgress = StateProvider.autoDispose<double>((ref) => 0.5);
 

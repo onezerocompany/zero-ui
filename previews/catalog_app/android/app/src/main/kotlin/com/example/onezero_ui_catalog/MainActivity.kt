@@ -1,4 +1,4 @@
-package com.example.zero_flutter
+package com.example.zero_ui
 
 import io.flutter.embedding.android.FlutterActivity
 

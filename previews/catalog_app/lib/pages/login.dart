@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:zero_flutter/zero_flutter.dart';
+import 'package:zero_ui/zero_ui.dart';
 
 var actionCodeSetting = ActionCodeSettings(
   url: 'https://onezero-ui.web.app',

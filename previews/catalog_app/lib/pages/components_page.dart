@@ -1,17 +1,15 @@
 import 'package:go_router/go_router.dart';
-import 'package:zero_flutter/zero_flutter.dart';
+import 'package:zero_ui/zero_ui.dart';
 import 'package:zero_catalog/components/buttons.dart';
 import 'package:zero_catalog/components/inputs.dart';
 import 'package:zero_catalog/components/loader.dart';
 import 'package:zero_catalog/components/text.dart';
-import 'package:zero_catalog/components/camera_page.dart';
 
 List<PageBuilder> componentPages = [
   (state) => TextPage(state),
   (state) => ButtonsPage(state),
   (state) => LoaderPage(state),
   (state) => InputsPage(state),
-  (state) => CameraPage(state),
 ];
 
 PageMetadata componentsPageMetadata(Locale locale) {
@@ -41,7 +39,7 @@ class ComponentsPage extends Page {
               key: ValueKey(metadata.path),
               label: metadata.name,
               sublabel: metadata.description,
-              icon: metadata.icon,
+              leading: metadata.icon,
               trailingArrow: true,
               config: ListItem.defaultConfig.copyWith(
                 glassLike: true,

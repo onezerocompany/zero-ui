@@ -1,5 +1,5 @@
-// page of zero_flutter buttons
-import 'package:zero_flutter/zero_flutter.dart';
+// page of zero_ui buttons
+import 'package:zero_ui/zero_ui.dart';
 
 class ButtonFlavor {
   final IconData? icon;
