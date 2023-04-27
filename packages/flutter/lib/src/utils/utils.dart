@@ -5,5 +5,4 @@ export 'validators/validators.dart';
 
 // misc
 export 'animated_hider.dart';
-export 'first_where_or_null.dart';
 export 'statusbar_helper.dart';

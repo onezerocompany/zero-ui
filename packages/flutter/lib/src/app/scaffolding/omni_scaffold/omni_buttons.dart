@@ -13,7 +13,6 @@ class OmniButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final t = ref.watch(zeroLocalizationsProvider);
     final level = ref.watch(currentRouterLevelProvider);
 
     final colors = Theme.of(context).colorScheme;

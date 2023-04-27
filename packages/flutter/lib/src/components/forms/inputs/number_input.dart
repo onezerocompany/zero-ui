@@ -315,10 +315,12 @@ class NumberInput<NumberType extends num> extends InputField<NumberType> {
                                     (currency ? 100 : 1);
                                 if (NumberType == int) {
                                   onSubmittedField(
-                                      number.toInt() as NumberType);
+                                    number.toInt() as NumberType,
+                                  );
                                 } else if (NumberType == double) {
                                   onSubmittedField(
-                                      number.toDouble() as NumberType);
+                                    number.toDouble() as NumberType,
+                                  );
                                 } else {
                                   onSubmittedField(number as NumberType);
                                 }

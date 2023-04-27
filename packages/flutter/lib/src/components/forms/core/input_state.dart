@@ -65,7 +65,6 @@ class InputState<ValueType> extends ChangeNotifier {
   }
 
   /// The stored value of the input field.
-  /// TODO: This can be removed sinze we use useMemoized
   ValueType? _storedValue;
   ValueType? get storedValue => _storedValue;
   set storedValue(ValueType? newValue) {

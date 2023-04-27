@@ -1,4 +1,4 @@
-import 'package:zero_ui/zero_ui.dart';
+import 'package:collection/collection.dart';
 
 class LanguageTag {
   const LanguageTag({

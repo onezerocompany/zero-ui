@@ -38,5 +38,5 @@
     "titleBar.inactiveForeground": "#e7e7e799"
   },
   "peacock.color": "#4d44fb",
-  "eslint.workingDirectories": ["packages/zero-functions", "functions"]
+  "eslint.workingDirectories": ["packages/react"]
 }

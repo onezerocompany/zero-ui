@@ -1,8 +1,4 @@
 {
-  "workspaces": [
-    "packages/zero-ui",
-    "previews/web"
-  ],
   "scripts": {
     "build": "npm run -ws build"
   },
