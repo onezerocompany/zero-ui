@@ -1,9 +1,0 @@
-{
-  "extends": "@onezerocompany/tsconfig/bases/next.json",
-  "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
-    "baseUrl": "src"
-  },
-  "include": ["src/**/*"]
-}

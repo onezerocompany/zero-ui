@@ -1,9 +1,0 @@
-{
-  "scripts": {
-    "build": "npm run -ws build"
-  },
-  "prettier": "@onezerocompany/prettier-config",
-  "devDependencies": {
-    "@onezerocompany/prettier-config": "^1.41.0"
-  }
-}

@@ -1,9 +1,0 @@
-analyzer:
-  exclude:
-    - '**/*.g.dart'
-  plugins:
-    - custom_lint
-
-linter:
-  rules:
-    - require_trailing_commas
