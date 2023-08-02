@@ -5,7 +5,7 @@ class Card extends StatelessWidget {
     super.key,
     this.colors,
     this.edgeRadius = 8,
-    this.edgeInset = 22,
+    this.edgeInset = 18,
     this.expanded = true,
     this.elevation = 0,
     this.title,
@@ -78,7 +78,7 @@ class Card extends StatelessWidget {
       );
     }
 
-    return ContainerColorsProvider(
+    return ContainerColorsScope(
       colors: cardColors,
       child: Container(
         padding: EdgeInsets.all(edgeInset),

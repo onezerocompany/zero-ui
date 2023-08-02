@@ -97,8 +97,10 @@ class _ScrollbarState extends RawScrollbarState<Scrollbar> {
     switch (direction) {
       case Axis.vertical:
         _pressStartAxisPosition = localPosition.dy;
+        break;
       case Axis.horizontal:
         _pressStartAxisPosition = localPosition.dx;
+        break;
     }
   }
 
@@ -127,11 +129,13 @@ class _ScrollbarState extends RawScrollbarState<Scrollbar> {
             (localPosition.dy - _pressStartAxisPosition).abs() > 0) {
           HapticFeedback.mediumImpact();
         }
+        break;
       case Axis.horizontal:
         if (velocity.pixelsPerSecond.dx.abs() < 10 &&
             (localPosition.dx - _pressStartAxisPosition).abs() > 0) {
           HapticFeedback.mediumImpact();
         }
+        break;
     }
   }
 

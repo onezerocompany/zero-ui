@@ -66,6 +66,7 @@ class ZeroPage {
     BuildContext context,
   ) {
     final theme = ZeroTheme.of(context);
+    final content = build(context, theme.colors.page, theme.typography);
     return Card(
       icon: icon,
       title: name,
@@ -73,7 +74,9 @@ class ZeroPage {
       colors: theme.colors.page,
       expanded: true,
       edgeRadius: 16,
-      child: build(context, theme.colors.page, theme.typography),
+      child: SingleChildScrollView(
+        child: content,
+      ),
     );
   }
 

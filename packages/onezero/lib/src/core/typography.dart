@@ -1,5 +1,6 @@
 import 'dart:ui' show FontFeature;
 import 'package:flutter/widgets.dart' as flutter show TextStyle, FontWeight;
+import 'package:meta/meta.dart';
 import 'package:onezero/onezero.dart';
 
 /// Defines the style of a font.
@@ -37,6 +38,24 @@ class FontStyle {
 
   /// The space between words.
   final double wordSpacing;
+
+  FontStyle copyWith({
+    String? family,
+    int? weight,
+    double? size,
+    double? iconSize,
+    double? letterSpacing,
+    double? wordSpacing,
+  }) {
+    return FontStyle(
+      family: family ?? this.family,
+      weight: weight ?? this.weight,
+      size: size ?? this.size,
+      iconSize: iconSize ?? this.iconSize,
+      letterSpacing: letterSpacing ?? this.letterSpacing,
+      wordSpacing: wordSpacing ?? this.wordSpacing,
+    );
+  }
 }
 
 /// Defines the style of a text.
@@ -48,6 +67,7 @@ class TypographyStyle {
   /// The font style to use.
   final FontStyle font;
 
+  @internal
   flutter.FontWeight fontWeight(int weight) {
     if (weight <= 0) {
       return flutter.FontWeight.w100;
@@ -92,26 +112,42 @@ class TypographyStyle {
       ],
     );
   }
+
+  TypographyStyle copyWith({
+    String? family,
+    int? weight,
+    double? size,
+    double? iconSize,
+    double? letterSpacing,
+    double? wordSpacing,
+  }) {
+    return TypographyStyle(
+      font: font.copyWith(
+        family: family,
+        weight: weight,
+        size: size,
+        iconSize: iconSize,
+        letterSpacing: letterSpacing,
+        wordSpacing: wordSpacing,
+      ),
+    );
+  }
+}
+
+enum TypographySize {
+  tiny,
+  small,
+  medium,
+  large,
+  huge,
 }
 
 class TypographyCategory {
   const TypographyCategory({
-    required this.pico,
-    required this.tiny,
-    required this.small,
-    required this.medium,
-    required this.large,
-    required this.huge,
-    required this.jumbo,
-  });
+    required this.sizes,
+  }) : assert(sizes.length == TypographySize.values.length);
 
-  final TypographyStyle pico;
-  final TypographyStyle tiny;
-  final TypographyStyle small;
-  final TypographyStyle medium;
-  final TypographyStyle large;
-  final TypographyStyle huge;
-  final TypographyStyle jumbo;
+  final Map<TypographySize, TypographyStyle> sizes;
 
   static TypographyCategory fromSizes(
     String family, {
@@ -128,112 +164,124 @@ class TypographyCategory {
     final size = baseSize * 2;
     final weight = baseWeight * 2;
     return TypographyCategory(
-      pico: TypographyStyle(
-        font: FontStyle(
-          family: family,
-          size: size * sizeCurve.transform(0.35),
-          iconSize: size * sizeCurve.transform(0.35) * iconSizeMultiplier,
-          weight: (weight * weightCurve.transform(0.47)).toInt(),
+      sizes: {
+        TypographySize.tiny: TypographyStyle(
+          font: FontStyle(
+            family: family,
+            size: size * sizeCurve.transform(0.4),
+            iconSize: size * sizeCurve.transform(0.4) * iconSizeMultiplier,
+            weight: (weight * weightCurve.transform(0.48)).toInt(),
+          ),
         ),
-      ),
-      tiny: TypographyStyle(
-        font: FontStyle(
-          family: family,
-          size: size * sizeCurve.transform(0.4),
-          iconSize: size * sizeCurve.transform(0.4) * iconSizeMultiplier,
-          weight: (weight * weightCurve.transform(0.48)).toInt(),
+        TypographySize.small: TypographyStyle(
+          font: FontStyle(
+            family: family,
+            size: size * sizeCurve.transform(0.45),
+            iconSize: size * sizeCurve.transform(0.45) * iconSizeMultiplier,
+            weight: (weight * weightCurve.transform(0.49)).toInt(),
+          ),
         ),
-      ),
-      small: TypographyStyle(
-        font: FontStyle(
-          family: family,
-          size: size * sizeCurve.transform(0.45),
-          iconSize: size * sizeCurve.transform(0.45) * iconSizeMultiplier,
-          weight: (weight * weightCurve.transform(0.49)).toInt(),
+        TypographySize.medium: TypographyStyle(
+          font: FontStyle(
+            family: family,
+            size: size * sizeCurve.transform(0.5),
+            iconSize: size * sizeCurve.transform(0.5) * iconSizeMultiplier,
+            weight: (weight * weightCurve.transform(0.5)).toInt(),
+          ),
         ),
-      ),
-      medium: TypographyStyle(
-        font: FontStyle(
-          family: family,
-          size: size * sizeCurve.transform(0.5),
-          iconSize: size * sizeCurve.transform(0.5) * iconSizeMultiplier,
-          weight: (weight * weightCurve.transform(0.5)).toInt(),
+        TypographySize.large: TypographyStyle(
+          font: FontStyle(
+            family: family,
+            size: size * sizeCurve.transform(0.55),
+            iconSize: size * sizeCurve.transform(0.55) * iconSizeMultiplier,
+            weight: (weight * weightCurve.transform(0.51)).toInt(),
+          ),
         ),
-      ),
-      large: TypographyStyle(
-        font: FontStyle(
-          family: family,
-          size: size * sizeCurve.transform(0.55),
-          iconSize: size * sizeCurve.transform(0.55) * iconSizeMultiplier,
-          weight: (weight * weightCurve.transform(0.51)).toInt(),
+        TypographySize.huge: TypographyStyle(
+          font: FontStyle(
+            family: family,
+            size: size * sizeCurve.transform(0.6),
+            iconSize: size * sizeCurve.transform(0.6) * iconSizeMultiplier,
+            weight: (weight * weightCurve.transform(0.52)).toInt(),
+          ),
         ),
-      ),
-      huge: TypographyStyle(
-        font: FontStyle(
-          family: family,
-          size: size * sizeCurve.transform(0.6),
-          iconSize: size * sizeCurve.transform(0.6) * iconSizeMultiplier,
-          weight: (weight * weightCurve.transform(0.52)).toInt(),
-        ),
-      ),
-      jumbo: TypographyStyle(
-        font: FontStyle(
-          family: family,
-          size: size * sizeCurve.transform(0.65),
-          iconSize: size * sizeCurve.transform(0.65) * iconSizeMultiplier,
-          weight: (baseWeight * weightCurve.transform(0.53)).toInt(),
-        ),
-      ),
+      },
     );
   }
+
+  TypographyStyle styleForSize(TypographySize size) {
+    return sizes[size]!;
+  }
+
+  TypographyStyle get tiny => styleForSize(TypographySize.tiny);
+  TypographyStyle get small => styleForSize(TypographySize.small);
+  TypographyStyle get medium => styleForSize(TypographySize.medium);
+  TypographyStyle get large => styleForSize(TypographySize.large);
+  TypographyStyle get huge => styleForSize(TypographySize.huge);
+}
+
+enum TypographyCategoryType {
+  display,
+  headline,
+  title,
+  body,
+  caption,
+  button,
 }
 
 class Typography {
   Typography({
-    required this.display,
-    required this.headline,
-    required this.title,
-    required this.body,
-    required this.caption,
-    required this.button,
-  });
+    required this.categories,
+  }) : assert(categories.length == TypographyCategoryType.values.length);
 
-  final TypographyCategory display;
-  final TypographyCategory headline;
-  final TypographyCategory title;
-  final TypographyCategory body;
-  final TypographyCategory caption;
-  final TypographyCategory button;
+  final Map<TypographyCategoryType, TypographyCategory> categories;
 
   static Typography generate({
     String family = 'Roboto',
     double baseSize = 14.0,
   }) {
     return Typography(
-      display: TypographyCategory.fromSizes(
-        family,
-        baseSize: baseSize * 1.5,
-      ),
-      headline: TypographyCategory.fromSizes(
-        family,
-        baseSize: baseSize * 1.3,
-      ),
-      title: TypographyCategory.fromSizes(
-        family,
-        baseSize: baseSize * 1.2,
-      ),
-      body: TypographyCategory.fromSizes(
-        family,
-        baseSize: baseSize,
-      ),
-      caption: TypographyCategory.fromSizes(
-        family,
-        baseSize: baseSize * 0.9,
-      ),
-      button: TypographyCategory.fromSizes(
-        family,
-        baseSize: baseSize * 1.05,
-      ),
+      categories: {
+        TypographyCategoryType.display: TypographyCategory.fromSizes(
+          family,
+          baseSize: baseSize * 2.5,
+        ),
+        TypographyCategoryType.headline: TypographyCategory.fromSizes(
+          family,
+          baseSize: baseSize * 2,
+        ),
+        TypographyCategoryType.title: TypographyCategory.fromSizes(
+          family,
+          baseSize: baseSize * 1.5,
+        ),
+        TypographyCategoryType.body: TypographyCategory.fromSizes(
+          family,
+          baseSize: baseSize,
+        ),
+        TypographyCategoryType.caption: TypographyCategory.fromSizes(
+          family,
+          baseSize: baseSize * 0.9,
+        ),
+        TypographyCategoryType.button: TypographyCategory.fromSizes(
+          family,
+          baseSize: baseSize * 1.05,
+        ),
+      },
     );
   }
+
+  TypographyCategory categoryForType(TypographyCategoryType type) {
+    return categories[type]!;
+  }
+
+  TypographyCategory get display =>
+      categoryForType(TypographyCategoryType.display);
+  TypographyCategory get headline =>
+      categoryForType(TypographyCategoryType.headline);
+  TypographyCategory get title => categoryForType(TypographyCategoryType.title);
+  TypographyCategory get body => categoryForType(TypographyCategoryType.body);
+  TypographyCategory get caption =>
+      categoryForType(TypographyCategoryType.caption);
+  TypographyCategory get button =>
+      categoryForType(TypographyCategoryType.button);
 }

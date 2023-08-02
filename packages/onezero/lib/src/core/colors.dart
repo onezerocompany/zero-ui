@@ -68,16 +68,16 @@ class DynamicColor {
       case ColorState.normal:
         break;
       case ColorState.hover:
-        light = lightRootColor.withBrightness(1.05);
-        dark = darkRootColor.withBrightness(0.95);
+        light = lightRootColor.withBrightness(0.9);
+        dark = darkRootColor.withBrightness(1.1);
         break;
       case ColorState.focus:
-        light = lightRootColor.withBrightness(1.1);
-        dark = darkRootColor.withBrightness(0.9);
+        light = lightRootColor.withBrightness(0.95);
+        dark = darkRootColor.withBrightness(1.1);
         break;
       case ColorState.active:
-        light = lightRootColor.withBrightness(0.95);
-        dark = darkRootColor.withBrightness(1.05);
+        light = lightRootColor.withBrightness(1.1);
+        dark = darkRootColor.withBrightness(0.95);
         break;
       case ColorState.disabled:
         light = lightRootColor.withBrightness(0.5);
@@ -108,13 +108,13 @@ class DynamicColor {
         };
       case ColorPriority.secondary:
         return {
-          ThemeBrightness.light: lightRootColor.withBrightness(1.05),
-          ThemeBrightness.dark: darkRootColor.withBrightness(0.95),
+          ThemeBrightness.light: lightRootColor.withBrightness(1.03),
+          ThemeBrightness.dark: darkRootColor.withBrightness(0.8),
         };
       case ColorPriority.tertiary:
         return {
-          ThemeBrightness.light: lightRootColor.withBrightness(1.1),
-          ThemeBrightness.dark: darkRootColor.withBrightness(0.9),
+          ThemeBrightness.light: lightRootColor.withBrightness(1.06),
+          ThemeBrightness.dark: darkRootColor.withBrightness(0.6),
         };
     }
   }
@@ -174,7 +174,7 @@ class ContainerColors {
   final DynamicColor edge;
 
   static ContainerColors of(BuildContext context) {
-    final view = ContainerColorsProvider.of(context);
+    final view = ContainerColorsScope.of(context);
     return view?.colors ??
         ContainerColors.fromRootColor(
           const Color(0xFF000000),
@@ -193,7 +193,7 @@ class ContainerColors {
         lightRootColor: color.inverted,
       ),
       divider: DynamicColor(
-        lightRootColor: color.withBrightness(1 + colorSpacing * 2),
+        lightRootColor: color.withBrightness(1 - colorSpacing * 2),
       ),
       edge: DynamicColor(
         lightRootColor: color.withBrightness(1 - (colorSpacing / 1.5)),
@@ -254,22 +254,21 @@ class ColorTheme {
   }
 }
 
-class ContainerColorsProvider extends InheritedWidget {
+class ContainerColorsScope extends InheritedWidget {
   final ContainerColors colors;
 
-  const ContainerColorsProvider({
+  const ContainerColorsScope({
     Key? key,
     required this.colors,
     required Widget child,
   }) : super(key: key, child: child);
 
-  static ContainerColorsProvider? of(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<ContainerColorsProvider>();
+  static ContainerColorsScope? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<ContainerColorsScope>();
   }
 
   @override
-  bool updateShouldNotify(ContainerColorsProvider oldWidget) {
+  bool updateShouldNotify(ContainerColorsScope oldWidget) {
     return colors != oldWidget.colors;
   }
 }

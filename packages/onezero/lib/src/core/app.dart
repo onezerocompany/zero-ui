@@ -15,13 +15,16 @@ class OneZeroApp extends HookConsumerWidget with WidgetsBindingObserver {
     return ProviderScope(
       child: ThemeScope(
         theme: theme ?? defaultTheme,
-        child: WidgetsApp.router(
-          key: GlobalObjectKey(this),
-          color: const Color.fromARGB(255, 98, 0, 238),
-          routerConfig: ZeroRouter(
-            pages: pages,
+        child: ContainerColorsScope(
+          colors: (theme ?? defaultTheme).colors.scaffold,
+          child: WidgetsApp.router(
+            key: GlobalObjectKey(this),
+            color: const Color.fromARGB(255, 98, 0, 238),
+            routerConfig: ZeroRouter(
+              pages: pages,
+            ),
+            debugShowCheckedModeBanner: false,
           ),
-          debugShowCheckedModeBanner: false,
         ),
       ),
     );
